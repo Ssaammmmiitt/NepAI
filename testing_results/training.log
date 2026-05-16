@@ -1,0 +1,2058 @@
+2026-05-16 06:00:00,471 [INFO] Config: {
+  "data_dir": "/kaggle/input/datasets/ibliss/nepai-stock/company-wise",
+  "seq_len": 60,
+  "forecast_horizon": 1,
+  "train_ratio": 0.7,
+  "val_ratio": 0.15,
+  "test_ratio": 0.15,
+  "batch_size": 64,
+  "epochs": 150,
+  "lr": 0.001,
+  "patience": 15,
+  "min_rows": 500,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "target": "close",
+  "scaler_type": "robust",
+  "hidden_size": 128,
+  "num_layers": 3,
+  "dropout": 0.3,
+  "cnn_filters": 64,
+  "cnn_kernel": 3,
+  "attention_heads": 4
+}
+2026-05-16 06:00:01,924 [INFO] Found 119 stocks with >= 500 rows out of 124 total
+2026-05-16 06:00:09,305 [INFO] 
+============================================================
+2026-05-16 06:00:09,307 [INFO] PHASE 1: Training all 3 models on 10 stocks (default hyperparameters)
+2026-05-16 06:00:09,308 [INFO] ============================================================
+2026-05-16 06:00:09,309 [INFO] 
+--- Stock: ADBL ---
+2026-05-16 06:00:09,846 [INFO] 
+============================================================
+2026-05-16 06:00:09,847 [INFO] Processing: ADBL
+2026-05-16 06:00:09,847 [INFO] ============================================================
+2026-05-16 06:00:09,871 [INFO]   Train: 2443, Val: 477, Test: 477
+2026-05-16 06:00:09,872 [INFO] 
+Training StackedLSTM_Attention on ADBL
+2026-05-16 06:00:15,341 [INFO] [ADBL][StackedLSTM_Attention] Epoch 1/150 Train: 0.044950 Val: 0.015544 LR: 1.00e-03
+2026-05-16 06:00:21,242 [INFO] [ADBL][StackedLSTM_Attention] Epoch 20/150 Train: 0.008802 Val: 0.001062 LR: 1.00e-03
+2026-05-16 06:00:27,488 [INFO] [ADBL][StackedLSTM_Attention] Epoch 40/150 Train: 0.006761 Val: 0.003147 LR: 5.00e-04
+2026-05-16 06:00:33,768 [INFO] [ADBL][StackedLSTM_Attention] Epoch 60/150 Train: 0.006772 Val: 0.001936 LR: 1.25e-04
+2026-05-16 06:00:35,032 [INFO] [ADBL][StackedLSTM_Attention] Early stopping at epoch 64
+2026-05-16 06:00:35,032 [INFO] [ADBL][StackedLSTM_Attention] Training done in 21.6s, best val: 0.000579
+2026-05-16 06:00:35,755 [INFO] 
+[ADBL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:00:35,756 [INFO]   MAE: 9.2429
+2026-05-16 06:00:35,757 [INFO]   MSE: 177.1855
+2026-05-16 06:00:35,758 [INFO]   RMSE: 13.3111
+2026-05-16 06:00:35,758 [INFO]   R2: 0.8694
+2026-05-16 06:00:35,759 [INFO]   MAPE: 2.7952
+2026-05-16 06:00:35,760 [INFO]   MAE_pct: 2.9831
+2026-05-16 06:00:35,760 [INFO]   RMSE_pct: 4.2962
+2026-05-16 06:00:35,761 [INFO]   Direction_Accuracy: 50.8403
+2026-05-16 06:00:37,071 [INFO] 
+Training CNN_LSTM on ADBL
+2026-05-16 06:00:38,289 [INFO] [ADBL][CNN_LSTM] Epoch 1/150 Train: 0.087416 Val: 0.005265 LR: 1.00e-03
+2026-05-16 06:00:42,759 [INFO] [ADBL][CNN_LSTM] Epoch 20/150 Train: 0.008420 Val: 0.005320 LR: 5.00e-04
+2026-05-16 06:00:43,721 [INFO] [ADBL][CNN_LSTM] Early stopping at epoch 24
+2026-05-16 06:00:43,722 [INFO] [ADBL][CNN_LSTM] Training done in 6.6s, best val: 0.002087
+2026-05-16 06:00:44,286 [INFO] 
+[ADBL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:00:44,287 [INFO]   MAE: 30.4570
+2026-05-16 06:00:44,288 [INFO]   MSE: 1967.3198
+2026-05-16 06:00:44,290 [INFO]   RMSE: 44.3545
+2026-05-16 06:00:44,291 [INFO]   R2: -0.4497
+2026-05-16 06:00:44,291 [INFO]   MAPE: 9.2301
+2026-05-16 06:00:44,292 [INFO]   MAE_pct: 9.8301
+2026-05-16 06:00:44,293 [INFO]   RMSE_pct: 14.3155
+2026-05-16 06:00:44,294 [INFO]   Direction_Accuracy: 49.3697
+2026-05-16 06:00:45,889 [INFO] 
+Training BiLSTM_Attention on ADBL
+2026-05-16 06:00:46,617 [INFO] [ADBL][BiLSTM_Attention] Epoch 1/150 Train: 0.060954 Val: 0.002605 LR: 1.00e-03
+2026-05-16 06:00:58,657 [INFO] [ADBL][BiLSTM_Attention] Epoch 20/150 Train: 0.008046 Val: 0.004331 LR: 5.00e-04
+2026-05-16 06:01:01,874 [INFO] [ADBL][BiLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:01:01,875 [INFO] [ADBL][BiLSTM_Attention] Training done in 16.0s, best val: 0.000736
+2026-05-16 06:01:02,546 [INFO] 
+[ADBL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:01:02,546 [INFO]   MAE: 12.5551
+2026-05-16 06:01:02,547 [INFO]   MSE: 524.1074
+2026-05-16 06:01:02,548 [INFO]   RMSE: 22.8934
+2026-05-16 06:01:02,548 [INFO]   R2: 0.6138
+2026-05-16 06:01:02,549 [INFO]   MAPE: 3.6882
+2026-05-16 06:01:02,549 [INFO]   MAE_pct: 4.0522
+2026-05-16 06:01:02,550 [INFO]   RMSE_pct: 7.3889
+2026-05-16 06:01:02,552 [INFO]   Direction_Accuracy: 50.2101
+2026-05-16 06:01:03,887 [INFO] 
+--- Stock: AHPC ---
+2026-05-16 06:01:03,943 [INFO] 
+============================================================
+2026-05-16 06:01:03,943 [INFO] Processing: AHPC
+2026-05-16 06:01:03,944 [INFO] ============================================================
+2026-05-16 06:01:03,969 [INFO]   Train: 2513, Val: 492, Test: 492
+2026-05-16 06:01:03,969 [INFO] 
+Training StackedLSTM_Attention on AHPC
+2026-05-16 06:01:04,416 [INFO] [AHPC][StackedLSTM_Attention] Epoch 1/150 Train: 0.049924 Val: 0.008399 LR: 1.00e-03
+2026-05-16 06:01:10,811 [INFO] [AHPC][StackedLSTM_Attention] Epoch 20/150 Train: 0.008142 Val: 0.004661 LR: 5.00e-04
+2026-05-16 06:01:17,602 [INFO] [AHPC][StackedLSTM_Attention] Epoch 40/150 Train: 0.006697 Val: 0.004120 LR: 2.50e-04
+2026-05-16 06:01:23,425 [INFO] [AHPC][StackedLSTM_Attention] Early stopping at epoch 57
+2026-05-16 06:01:23,425 [INFO] [AHPC][StackedLSTM_Attention] Training done in 19.5s, best val: 0.003187
+2026-05-16 06:01:24,018 [INFO] 
+[AHPC][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:01:24,019 [INFO]   MAE: 54.2072
+2026-05-16 06:01:24,019 [INFO]   MSE: 5339.9985
+2026-05-16 06:01:24,020 [INFO]   RMSE: 73.0753
+2026-05-16 06:01:24,020 [INFO]   R2: -1.4776
+2026-05-16 06:01:24,021 [INFO]   MAPE: 20.3417
+2026-05-16 06:01:24,021 [INFO]   MAE_pct: 20.9099
+2026-05-16 06:01:24,022 [INFO]   RMSE_pct: 28.1881
+2026-05-16 06:01:24,023 [INFO]   Direction_Accuracy: 51.7312
+2026-05-16 06:01:25,411 [INFO] 
+Training CNN_LSTM on AHPC
+2026-05-16 06:01:25,744 [INFO] [AHPC][CNN_LSTM] Epoch 1/150 Train: 0.080693 Val: 0.024995 LR: 1.00e-03
+2026-05-16 06:01:30,393 [INFO] [AHPC][CNN_LSTM] Epoch 20/150 Train: 0.009914 Val: 0.005877 LR: 1.00e-03
+2026-05-16 06:01:32,356 [INFO] [AHPC][CNN_LSTM] Early stopping at epoch 28
+2026-05-16 06:01:32,357 [INFO] [AHPC][CNN_LSTM] Training done in 6.9s, best val: 0.003870
+2026-05-16 06:01:32,992 [INFO] 
+[AHPC][CNN_LSTM] TEST Metrics:
+2026-05-16 06:01:32,992 [INFO]   MAE: 32.4723
+2026-05-16 06:01:32,993 [INFO]   MSE: 2751.7993
+2026-05-16 06:01:32,994 [INFO]   RMSE: 52.4576
+2026-05-16 06:01:32,994 [INFO]   R2: -0.2767
+2026-05-16 06:01:32,995 [INFO]   MAPE: 12.4128
+2026-05-16 06:01:32,996 [INFO]   MAE_pct: 12.5259
+2026-05-16 06:01:32,997 [INFO]   RMSE_pct: 20.2351
+2026-05-16 06:01:32,998 [INFO]   Direction_Accuracy: 50.7128
+2026-05-16 06:01:34,351 [INFO] 
+Training BiLSTM_Attention on AHPC
+2026-05-16 06:01:35,123 [INFO] [AHPC][BiLSTM_Attention] Epoch 1/150 Train: 0.055058 Val: 0.054080 LR: 1.00e-03
+2026-05-16 06:01:48,547 [INFO] [AHPC][BiLSTM_Attention] Epoch 20/150 Train: 0.007797 Val: 0.008236 LR: 5.00e-04
+2026-05-16 06:02:03,077 [INFO] [AHPC][BiLSTM_Attention] Epoch 40/150 Train: 0.006341 Val: 0.006673 LR: 1.25e-04
+2026-05-16 06:02:17,872 [INFO] [AHPC][BiLSTM_Attention] Epoch 60/150 Train: 0.005642 Val: 0.005914 LR: 1.25e-04
+2026-05-16 06:02:32,343 [INFO] [AHPC][BiLSTM_Attention] Epoch 80/150 Train: 0.005938 Val: 0.005227 LR: 6.25e-05
+2026-05-16 06:02:33,062 [INFO] [AHPC][BiLSTM_Attention] Early stopping at epoch 81
+2026-05-16 06:02:33,063 [INFO] [AHPC][BiLSTM_Attention] Training done in 58.7s, best val: 0.004301
+2026-05-16 06:02:33,702 [INFO] 
+[AHPC][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:02:33,703 [INFO]   MAE: 27.4038
+2026-05-16 06:02:33,703 [INFO]   MSE: 1710.7709
+2026-05-16 06:02:33,704 [INFO]   RMSE: 41.3615
+2026-05-16 06:02:33,705 [INFO]   R2: 0.2063
+2026-05-16 06:02:33,706 [INFO]   MAPE: 11.1788
+2026-05-16 06:02:33,706 [INFO]   MAE_pct: 10.5708
+2026-05-16 06:02:33,707 [INFO]   RMSE_pct: 15.9548
+2026-05-16 06:02:33,708 [INFO]   Direction_Accuracy: 50.9165
+2026-05-16 06:02:35,053 [INFO] 
+--- Stock: AKJCL ---
+2026-05-16 06:02:35,138 [INFO] 
+============================================================
+2026-05-16 06:02:35,139 [INFO] Processing: AKJCL
+2026-05-16 06:02:35,140 [INFO] ============================================================
+2026-05-16 06:02:35,164 [INFO]   Train: 1113, Val: 192, Test: 192
+2026-05-16 06:02:35,165 [INFO] 
+Training StackedLSTM_Attention on AKJCL
+2026-05-16 06:02:35,414 [INFO] [AKJCL][StackedLSTM_Attention] Epoch 1/150 Train: 0.063875 Val: 0.005666 LR: 1.00e-03
+2026-05-16 06:02:38,320 [INFO] [AKJCL][StackedLSTM_Attention] Epoch 20/150 Train: 0.006913 Val: 0.013457 LR: 5.00e-04
+2026-05-16 06:02:38,625 [INFO] [AKJCL][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:02:38,626 [INFO] [AKJCL][StackedLSTM_Attention] Training done in 3.5s, best val: 0.004537
+2026-05-16 06:02:39,198 [INFO] 
+[AKJCL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:02:39,199 [INFO]   MAE: 37.3447
+2026-05-16 06:02:39,199 [INFO]   MSE: 3233.8096
+2026-05-16 06:02:39,200 [INFO]   RMSE: 56.8666
+2026-05-16 06:02:39,201 [INFO]   R2: 0.5580
+2026-05-16 06:02:39,201 [INFO]   MAPE: 10.9411
+2026-05-16 06:02:39,202 [INFO]   MAE_pct: 14.2551
+2026-05-16 06:02:39,204 [INFO]   RMSE_pct: 21.7070
+2026-05-16 06:02:39,204 [INFO]   Direction_Accuracy: 53.4031
+2026-05-16 06:02:40,455 [INFO] 
+Training CNN_LSTM on AKJCL
+2026-05-16 06:02:40,623 [INFO] [AKJCL][CNN_LSTM] Epoch 1/150 Train: 0.091043 Val: 0.074857 LR: 1.00e-03
+2026-05-16 06:02:42,646 [INFO] [AKJCL][CNN_LSTM] Epoch 20/150 Train: 0.006715 Val: 0.012262 LR: 1.00e-03
+2026-05-16 06:02:43,834 [INFO] [AKJCL][CNN_LSTM] Early stopping at epoch 31
+2026-05-16 06:02:43,835 [INFO] [AKJCL][CNN_LSTM] Training done in 3.4s, best val: 0.004060
+2026-05-16 06:02:44,684 [INFO] 
+[AKJCL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:02:44,685 [INFO]   MAE: 52.7070
+2026-05-16 06:02:44,686 [INFO]   MSE: 7138.8970
+2026-05-16 06:02:44,686 [INFO]   RMSE: 84.4920
+2026-05-16 06:02:44,687 [INFO]   R2: 0.0243
+2026-05-16 06:02:44,688 [INFO]   MAPE: 14.8754
+2026-05-16 06:02:44,688 [INFO]   MAE_pct: 20.1192
+2026-05-16 06:02:44,689 [INFO]   RMSE_pct: 32.2521
+2026-05-16 06:02:44,691 [INFO]   Direction_Accuracy: 47.6440
+2026-05-16 06:02:45,995 [INFO] 
+Training BiLSTM_Attention on AKJCL
+2026-05-16 06:02:46,404 [INFO] [AKJCL][BiLSTM_Attention] Epoch 1/150 Train: 0.046773 Val: 0.006129 LR: 1.00e-03
+2026-05-16 06:02:51,254 [INFO] [AKJCL][BiLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:02:51,254 [INFO] [AKJCL][BiLSTM_Attention] Training done in 5.3s, best val: 0.004602
+2026-05-16 06:02:51,876 [INFO] 
+[AKJCL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:02:51,877 [INFO]   MAE: 33.7844
+2026-05-16 06:02:51,878 [INFO]   MSE: 2492.9688
+2026-05-16 06:02:51,878 [INFO]   RMSE: 49.9296
+2026-05-16 06:02:51,879 [INFO]   R2: 0.6593
+2026-05-16 06:02:51,880 [INFO]   MAPE: 10.1493
+2026-05-16 06:02:51,880 [INFO]   MAE_pct: 12.8961
+2026-05-16 06:02:51,881 [INFO]   RMSE_pct: 19.0590
+2026-05-16 06:02:51,882 [INFO]   Direction_Accuracy: 50.7853
+2026-05-16 06:02:53,108 [INFO] 
+--- Stock: AKPL ---
+2026-05-16 06:02:53,162 [INFO] 
+============================================================
+2026-05-16 06:02:53,162 [INFO] Processing: AKPL
+2026-05-16 06:02:53,163 [INFO] ============================================================
+2026-05-16 06:02:53,185 [INFO]   Train: 1358, Val: 244, Test: 245
+2026-05-16 06:02:53,186 [INFO] 
+Training StackedLSTM_Attention on AKPL
+2026-05-16 06:02:53,453 [INFO] [AKPL][StackedLSTM_Attention] Epoch 1/150 Train: 0.046030 Val: 0.001814 LR: 1.00e-03
+2026-05-16 06:02:57,059 [INFO] [AKPL][StackedLSTM_Attention] Epoch 20/150 Train: 0.007093 Val: 0.001245 LR: 1.00e-03
+2026-05-16 06:02:59,707 [INFO] [AKPL][StackedLSTM_Attention] Early stopping at epoch 34
+2026-05-16 06:02:59,708 [INFO] [AKPL][StackedLSTM_Attention] Training done in 6.5s, best val: 0.000857
+2026-05-16 06:03:00,310 [INFO] 
+[AKPL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:03:00,311 [INFO]   MAE: 7.7091
+2026-05-16 06:03:00,312 [INFO]   MSE: 110.2370
+2026-05-16 06:03:00,312 [INFO]   RMSE: 10.4994
+2026-05-16 06:03:00,313 [INFO]   R2: 0.6244
+2026-05-16 06:03:00,313 [INFO]   MAPE: 2.9118
+2026-05-16 06:03:00,314 [INFO]   MAE_pct: 2.9636
+2026-05-16 06:03:00,315 [INFO]   RMSE_pct: 4.0362
+2026-05-16 06:03:00,315 [INFO]   Direction_Accuracy: 49.5902
+2026-05-16 06:03:01,667 [INFO] 
+Training CNN_LSTM on AKPL
+2026-05-16 06:03:01,866 [INFO] [AKPL][CNN_LSTM] Epoch 1/150 Train: 0.080213 Val: 0.020678 LR: 1.00e-03
+2026-05-16 06:03:04,439 [INFO] [AKPL][CNN_LSTM] Epoch 20/150 Train: 0.007505 Val: 0.005839 LR: 5.00e-04
+2026-05-16 06:03:05,786 [INFO] [AKPL][CNN_LSTM] Early stopping at epoch 30
+2026-05-16 06:03:05,786 [INFO] [AKPL][CNN_LSTM] Training done in 4.1s, best val: 0.001869
+2026-05-16 06:03:06,429 [INFO] 
+[AKPL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:03:06,430 [INFO]   MAE: 21.6362
+2026-05-16 06:03:06,431 [INFO]   MSE: 1268.6204
+2026-05-16 06:03:06,431 [INFO]   RMSE: 35.6177
+2026-05-16 06:03:06,432 [INFO]   R2: -3.3224
+2026-05-16 06:03:06,433 [INFO]   MAPE: 8.0549
+2026-05-16 06:03:06,433 [INFO]   MAE_pct: 8.3175
+2026-05-16 06:03:06,434 [INFO]   RMSE_pct: 13.6922
+2026-05-16 06:03:06,435 [INFO]   Direction_Accuracy: 46.3115
+2026-05-16 06:03:07,775 [INFO] 
+Training BiLSTM_Attention on AKPL
+2026-05-16 06:03:08,263 [INFO] [AKPL][BiLSTM_Attention] Epoch 1/150 Train: 0.060616 Val: 0.016361 LR: 1.00e-03
+2026-05-16 06:03:15,245 [INFO] [AKPL][BiLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:03:15,245 [INFO] [AKPL][BiLSTM_Attention] Training done in 7.5s, best val: 0.001730
+2026-05-16 06:03:15,878 [INFO] 
+[AKPL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:03:15,879 [INFO]   MAE: 13.6751
+2026-05-16 06:03:15,879 [INFO]   MSE: 369.6254
+2026-05-16 06:03:15,880 [INFO]   RMSE: 19.2256
+2026-05-16 06:03:15,881 [INFO]   R2: -0.2594
+2026-05-16 06:03:15,881 [INFO]   MAPE: 5.1545
+2026-05-16 06:03:15,883 [INFO]   MAE_pct: 5.2570
+2026-05-16 06:03:15,883 [INFO]   RMSE_pct: 7.3908
+2026-05-16 06:03:15,884 [INFO]   Direction_Accuracy: 47.9508
+2026-05-16 06:03:17,186 [INFO] 
+--- Stock: ALICL ---
+2026-05-16 06:03:17,236 [INFO] 
+============================================================
+2026-05-16 06:03:17,237 [INFO] Processing: ALICL
+2026-05-16 06:03:17,237 [INFO] ============================================================
+2026-05-16 06:03:17,260 [INFO]   Train: 2408, Val: 469, Test: 470
+2026-05-16 06:03:17,261 [INFO] 
+Training StackedLSTM_Attention on ALICL
+2026-05-16 06:03:17,713 [INFO] [ALICL][StackedLSTM_Attention] Epoch 1/150 Train: 0.032484 Val: 0.001185 LR: 1.00e-03
+2026-05-16 06:03:24,308 [INFO] [ALICL][StackedLSTM_Attention] Epoch 20/150 Train: 0.003749 Val: 0.000548 LR: 1.00e-03
+2026-05-16 06:03:29,522 [INFO] [ALICL][StackedLSTM_Attention] Early stopping at epoch 35
+2026-05-16 06:03:29,522 [INFO] [ALICL][StackedLSTM_Attention] Training done in 12.3s, best val: 0.000548
+2026-05-16 06:03:30,155 [INFO] 
+[ALICL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:03:30,156 [INFO]   MAE: 22.6352
+2026-05-16 06:03:30,156 [INFO]   MSE: 967.5698
+2026-05-16 06:03:30,157 [INFO]   RMSE: 31.1058
+2026-05-16 06:03:30,158 [INFO]   R2: 0.9375
+2026-05-16 06:03:30,159 [INFO]   MAPE: 4.0604
+2026-05-16 06:03:30,159 [INFO]   MAE_pct: 3.7832
+2026-05-16 06:03:30,160 [INFO]   RMSE_pct: 5.1990
+2026-05-16 06:03:30,160 [INFO]   Direction_Accuracy: 53.7313
+2026-05-16 06:03:31,695 [INFO] 
+Training CNN_LSTM on ALICL
+2026-05-16 06:03:32,007 [INFO] [ALICL][CNN_LSTM] Epoch 1/150 Train: 0.032919 Val: 0.001836 LR: 1.00e-03
+2026-05-16 06:03:36,518 [INFO] [ALICL][CNN_LSTM] Epoch 20/150 Train: 0.003726 Val: 0.001625 LR: 5.00e-04
+2026-05-16 06:03:36,763 [INFO] [ALICL][CNN_LSTM] Early stopping at epoch 21
+2026-05-16 06:03:36,764 [INFO] [ALICL][CNN_LSTM] Training done in 5.1s, best val: 0.001020
+2026-05-16 06:03:37,486 [INFO] 
+[ALICL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:03:37,487 [INFO]   MAE: 49.6322
+2026-05-16 06:03:37,488 [INFO]   MSE: 3913.6335
+2026-05-16 06:03:37,488 [INFO]   RMSE: 62.5590
+2026-05-16 06:03:37,490 [INFO]   R2: 0.7472
+2026-05-16 06:03:37,490 [INFO]   MAPE: 8.9534
+2026-05-16 06:03:37,491 [INFO]   MAE_pct: 8.2954
+2026-05-16 06:03:37,492 [INFO]   RMSE_pct: 10.4560
+2026-05-16 06:03:37,493 [INFO]   Direction_Accuracy: 45.6290
+2026-05-16 06:03:38,798 [INFO] 
+Training BiLSTM_Attention on ALICL
+2026-05-16 06:03:39,553 [INFO] [ALICL][BiLSTM_Attention] Epoch 1/150 Train: 0.030123 Val: 0.009446 LR: 1.00e-03
+2026-05-16 06:03:52,550 [INFO] [ALICL][BiLSTM_Attention] Epoch 20/150 Train: 0.003430 Val: 0.001885 LR: 1.00e-03
+2026-05-16 06:04:06,129 [INFO] [ALICL][BiLSTM_Attention] Epoch 40/150 Train: 0.002530 Val: 0.001180 LR: 2.50e-04
+2026-05-16 06:04:19,716 [INFO] [ALICL][BiLSTM_Attention] Epoch 60/150 Train: 0.002271 Val: 0.000781 LR: 1.25e-04
+2026-05-16 06:04:22,443 [INFO] [ALICL][BiLSTM_Attention] Early stopping at epoch 64
+2026-05-16 06:04:22,444 [INFO] [ALICL][BiLSTM_Attention] Training done in 43.6s, best val: 0.000518
+2026-05-16 06:04:23,079 [INFO] 
+[ALICL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:04:23,079 [INFO]   MAE: 28.1753
+2026-05-16 06:04:23,080 [INFO]   MSE: 1477.9337
+2026-05-16 06:04:23,081 [INFO]   RMSE: 38.4439
+2026-05-16 06:04:23,081 [INFO]   R2: 0.9045
+2026-05-16 06:04:23,082 [INFO]   MAPE: 5.3974
+2026-05-16 06:04:23,083 [INFO]   MAE_pct: 4.7092
+2026-05-16 06:04:23,084 [INFO]   RMSE_pct: 6.4254
+2026-05-16 06:04:23,085 [INFO]   Direction_Accuracy: 49.0405
+2026-05-16 06:04:24,407 [INFO] 
+--- Stock: API ---
+2026-05-16 06:04:24,459 [INFO] 
+============================================================
+2026-05-16 06:04:24,459 [INFO] Processing: API
+2026-05-16 06:04:24,460 [INFO] ============================================================
+2026-05-16 06:04:24,482 [INFO]   Train: 1603, Val: 297, Test: 297
+2026-05-16 06:04:24,482 [INFO] 
+Training StackedLSTM_Attention on API
+2026-05-16 06:04:24,782 [INFO] [API][StackedLSTM_Attention] Epoch 1/150 Train: 0.037252 Val: 0.006194 LR: 1.00e-03
+2026-05-16 06:04:29,127 [INFO] [API][StackedLSTM_Attention] Epoch 20/150 Train: 0.006679 Val: 0.000713 LR: 5.00e-04
+2026-05-16 06:04:30,722 [INFO] [API][StackedLSTM_Attention] Early stopping at epoch 27
+2026-05-16 06:04:30,723 [INFO] [API][StackedLSTM_Attention] Training done in 6.2s, best val: 0.000431
+2026-05-16 06:04:31,336 [INFO] 
+[API][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:04:31,337 [INFO]   MAE: 5.7566
+2026-05-16 06:04:31,338 [INFO]   MSE: 57.8307
+2026-05-16 06:04:31,338 [INFO]   RMSE: 7.6046
+2026-05-16 06:04:31,339 [INFO]   R2: 0.8882
+2026-05-16 06:04:31,340 [INFO]   MAPE: 1.8998
+2026-05-16 06:04:31,340 [INFO]   MAE_pct: 1.9273
+2026-05-16 06:04:31,341 [INFO]   RMSE_pct: 2.5460
+2026-05-16 06:04:31,342 [INFO]   Direction_Accuracy: 48.3108
+2026-05-16 06:04:32,621 [INFO] 
+Training CNN_LSTM on API
+2026-05-16 06:04:32,862 [INFO] [API][CNN_LSTM] Epoch 1/150 Train: 0.087622 Val: 0.030691 LR: 1.00e-03
+2026-05-16 06:04:35,873 [INFO] [API][CNN_LSTM] Epoch 20/150 Train: 0.005813 Val: 0.002632 LR: 5.00e-04
+2026-05-16 06:04:36,348 [INFO] [API][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:04:36,349 [INFO] [API][CNN_LSTM] Training done in 3.7s, best val: 0.001087
+2026-05-16 06:04:36,917 [INFO] 
+[API][CNN_LSTM] TEST Metrics:
+2026-05-16 06:04:36,918 [INFO]   MAE: 20.4412
+2026-05-16 06:04:36,919 [INFO]   MSE: 488.6320
+2026-05-16 06:04:36,919 [INFO]   RMSE: 22.1050
+2026-05-16 06:04:36,920 [INFO]   R2: 0.0554
+2026-05-16 06:04:36,921 [INFO]   MAPE: 6.7584
+2026-05-16 06:04:36,922 [INFO]   MAE_pct: 6.8436
+2026-05-16 06:04:36,922 [INFO]   RMSE_pct: 7.4007
+2026-05-16 06:04:36,923 [INFO]   Direction_Accuracy: 41.5541
+2026-05-16 06:04:38,208 [INFO] 
+Training BiLSTM_Attention on API
+2026-05-16 06:04:38,728 [INFO] [API][BiLSTM_Attention] Epoch 1/150 Train: 0.060438 Val: 0.050468 LR: 1.00e-03
+2026-05-16 06:04:46,992 [INFO] [API][BiLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:04:46,992 [INFO] [API][BiLSTM_Attention] Training done in 8.8s, best val: 0.000726
+2026-05-16 06:04:47,634 [INFO] 
+[API][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:04:47,635 [INFO]   MAE: 4.9766
+2026-05-16 06:04:47,636 [INFO]   MSE: 47.4213
+2026-05-16 06:04:47,636 [INFO]   RMSE: 6.8863
+2026-05-16 06:04:47,637 [INFO]   R2: 0.9083
+2026-05-16 06:04:47,637 [INFO]   MAPE: 1.6279
+2026-05-16 06:04:47,638 [INFO]   MAE_pct: 1.6661
+2026-05-16 06:04:47,639 [INFO]   RMSE_pct: 2.3055
+2026-05-16 06:04:47,640 [INFO]   Direction_Accuracy: 50.3378
+2026-05-16 06:04:48,945 [INFO] 
+--- Stock: BARUN ---
+2026-05-16 06:04:48,993 [INFO] 
+============================================================
+2026-05-16 06:04:48,994 [INFO] Processing: BARUN
+2026-05-16 06:04:48,994 [INFO] ============================================================
+2026-05-16 06:04:49,016 [INFO]   Train: 1568, Val: 289, Test: 290
+2026-05-16 06:04:49,016 [INFO] 
+Training StackedLSTM_Attention on BARUN
+2026-05-16 06:04:49,339 [INFO] [BARUN][StackedLSTM_Attention] Epoch 1/150 Train: 0.044682 Val: 0.026550 LR: 1.00e-03
+2026-05-16 06:04:53,519 [INFO] [BARUN][StackedLSTM_Attention] Epoch 20/150 Train: 0.005284 Val: 0.013246 LR: 5.00e-04
+2026-05-16 06:04:54,180 [INFO] [BARUN][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:04:54,181 [INFO] [BARUN][StackedLSTM_Attention] Training done in 5.2s, best val: 0.001117
+2026-05-16 06:04:55,027 [INFO] 
+[BARUN][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:04:55,028 [INFO]   MAE: 25.2150
+2026-05-16 06:04:55,028 [INFO]   MSE: 1267.9318
+2026-05-16 06:04:55,029 [INFO]   RMSE: 35.6080
+2026-05-16 06:04:55,030 [INFO]   R2: 0.7984
+2026-05-16 06:04:55,030 [INFO]   MAPE: 6.6359
+2026-05-16 06:04:55,031 [INFO]   MAE_pct: 6.3138
+2026-05-16 06:04:55,032 [INFO]   RMSE_pct: 8.9162
+2026-05-16 06:04:55,032 [INFO]   Direction_Accuracy: 49.1349
+2026-05-16 06:04:56,388 [INFO] 
+Training CNN_LSTM on BARUN
+2026-05-16 06:04:56,607 [INFO] [BARUN][CNN_LSTM] Epoch 1/150 Train: 0.068788 Val: 0.013018 LR: 1.00e-03
+2026-05-16 06:04:59,493 [INFO] [BARUN][CNN_LSTM] Epoch 20/150 Train: 0.004535 Val: 0.009877 LR: 5.00e-04
+2026-05-16 06:04:59,494 [INFO] [BARUN][CNN_LSTM] Early stopping at epoch 20
+2026-05-16 06:04:59,495 [INFO] [BARUN][CNN_LSTM] Training done in 3.1s, best val: 0.004052
+2026-05-16 06:05:00,115 [INFO] 
+[BARUN][CNN_LSTM] TEST Metrics:
+2026-05-16 06:05:00,116 [INFO]   MAE: 67.3044
+2026-05-16 06:05:00,116 [INFO]   MSE: 6939.6821
+2026-05-16 06:05:00,117 [INFO]   RMSE: 83.3048
+2026-05-16 06:05:00,117 [INFO]   R2: -0.1032
+2026-05-16 06:05:00,118 [INFO]   MAPE: 16.6972
+2026-05-16 06:05:00,119 [INFO]   MAE_pct: 16.8529
+2026-05-16 06:05:00,120 [INFO]   RMSE_pct: 20.8594
+2026-05-16 06:05:00,120 [INFO]   Direction_Accuracy: 49.8270
+2026-05-16 06:05:01,503 [INFO] 
+Training BiLSTM_Attention on BARUN
+2026-05-16 06:05:02,040 [INFO] [BARUN][BiLSTM_Attention] Epoch 1/150 Train: 0.045072 Val: 0.038632 LR: 1.00e-03
+2026-05-16 06:05:10,440 [INFO] [BARUN][BiLSTM_Attention] Epoch 20/150 Train: 0.006276 Val: 0.006661 LR: 5.00e-04
+2026-05-16 06:05:10,888 [INFO] [BARUN][BiLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:05:10,889 [INFO] [BARUN][BiLSTM_Attention] Training done in 9.4s, best val: 0.001295
+2026-05-16 06:05:11,530 [INFO] 
+[BARUN][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:05:11,531 [INFO]   MAE: 19.8759
+2026-05-16 06:05:11,532 [INFO]   MSE: 786.9349
+2026-05-16 06:05:11,533 [INFO]   RMSE: 28.0524
+2026-05-16 06:05:11,533 [INFO]   R2: 0.8749
+2026-05-16 06:05:11,535 [INFO]   MAPE: 5.1146
+2026-05-16 06:05:11,535 [INFO]   MAE_pct: 4.9769
+2026-05-16 06:05:11,536 [INFO]   RMSE_pct: 7.0243
+2026-05-16 06:05:11,537 [INFO]   Direction_Accuracy: 49.8270
+2026-05-16 06:05:12,808 [INFO] 
+--- Stock: BFC ---
+2026-05-16 06:05:12,857 [INFO] 
+============================================================
+2026-05-16 06:05:12,858 [INFO] Processing: BFC
+2026-05-16 06:05:12,859 [INFO] ============================================================
+2026-05-16 06:05:12,879 [INFO]   Train: 1218, Val: 214, Test: 215
+2026-05-16 06:05:12,879 [INFO] 
+Training StackedLSTM_Attention on BFC
+2026-05-16 06:05:13,130 [INFO] [BFC][StackedLSTM_Attention] Epoch 1/150 Train: 0.040798 Val: 0.120123 LR: 1.00e-03
+2026-05-16 06:05:16,450 [INFO] [BFC][StackedLSTM_Attention] Epoch 20/150 Train: 0.005023 Val: 0.059756 LR: 1.00e-03
+2026-05-16 06:05:18,203 [INFO] [BFC][StackedLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:05:18,203 [INFO] [BFC][StackedLSTM_Attention] Training done in 5.3s, best val: 0.044644
+2026-05-16 06:05:18,820 [INFO] 
+[BFC][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:05:18,821 [INFO]   MAE: 14.7845
+2026-05-16 06:05:18,822 [INFO]   MSE: 323.2273
+2026-05-16 06:05:18,823 [INFO]   RMSE: 17.9785
+2026-05-16 06:05:18,823 [INFO]   R2: 0.4862
+2026-05-16 06:05:18,825 [INFO]   MAPE: 3.0969
+2026-05-16 06:05:18,825 [INFO]   MAE_pct: 3.0842
+2026-05-16 06:05:18,826 [INFO]   RMSE_pct: 3.7505
+2026-05-16 06:05:18,826 [INFO]   Direction_Accuracy: 44.8598
+2026-05-16 06:05:20,164 [INFO] 
+Training CNN_LSTM on BFC
+2026-05-16 06:05:20,347 [INFO] [BFC][CNN_LSTM] Epoch 1/150 Train: 0.059077 Val: 0.278262 LR: 1.00e-03
+2026-05-16 06:05:22,631 [INFO] [BFC][CNN_LSTM] Epoch 20/150 Train: 0.003812 Val: 0.046953 LR: 1.00e-03
+2026-05-16 06:05:23,694 [INFO] [BFC][CNN_LSTM] Early stopping at epoch 29
+2026-05-16 06:05:23,695 [INFO] [BFC][CNN_LSTM] Training done in 3.5s, best val: 0.045756
+2026-05-16 06:05:24,265 [INFO] 
+[BFC][CNN_LSTM] TEST Metrics:
+2026-05-16 06:05:24,265 [INFO]   MAE: 11.6862
+2026-05-16 06:05:24,266 [INFO]   MSE: 217.3800
+2026-05-16 06:05:24,267 [INFO]   RMSE: 14.7438
+2026-05-16 06:05:24,268 [INFO]   R2: 0.6545
+2026-05-16 06:05:24,269 [INFO]   MAPE: 2.4391
+2026-05-16 06:05:24,269 [INFO]   MAE_pct: 2.4378
+2026-05-16 06:05:24,270 [INFO]   RMSE_pct: 3.0757
+2026-05-16 06:05:24,271 [INFO]   Direction_Accuracy: 44.8598
+2026-05-16 06:05:25,553 [INFO] 
+Training BiLSTM_Attention on BFC
+2026-05-16 06:05:25,985 [INFO] [BFC][BiLSTM_Attention] Epoch 1/150 Train: 0.042386 Val: 0.139380 LR: 1.00e-03
+2026-05-16 06:05:32,631 [INFO] [BFC][BiLSTM_Attention] Epoch 20/150 Train: 0.004790 Val: 0.072472 LR: 1.00e-03
+2026-05-16 06:05:39,613 [INFO] [BFC][BiLSTM_Attention] Epoch 40/150 Train: 0.003715 Val: 0.057654 LR: 5.00e-04
+2026-05-16 06:05:40,318 [INFO] [BFC][BiLSTM_Attention] Early stopping at epoch 42
+2026-05-16 06:05:40,319 [INFO] [BFC][BiLSTM_Attention] Training done in 14.8s, best val: 0.050303
+2026-05-16 06:05:40,911 [INFO] 
+[BFC][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:05:40,911 [INFO]   MAE: 11.2360
+2026-05-16 06:05:40,912 [INFO]   MSE: 205.4599
+2026-05-16 06:05:40,913 [INFO]   RMSE: 14.3339
+2026-05-16 06:05:40,913 [INFO]   R2: 0.6734
+2026-05-16 06:05:40,914 [INFO]   MAPE: 2.3487
+2026-05-16 06:05:40,915 [INFO]   MAE_pct: 2.3439
+2026-05-16 06:05:40,915 [INFO]   RMSE_pct: 2.9902
+2026-05-16 06:05:40,917 [INFO]   Direction_Accuracy: 42.5234
+2026-05-16 06:05:42,523 [INFO] 
+--- Stock: BOKL ---
+2026-05-16 06:05:42,572 [INFO] 
+============================================================
+2026-05-16 06:05:42,573 [INFO] Processing: BOKL
+2026-05-16 06:05:42,573 [INFO] ============================================================
+2026-05-16 06:05:42,593 [INFO]   Train: 845, Val: 134, Test: 135
+2026-05-16 06:05:42,593 [INFO] 
+Training StackedLSTM_Attention on BOKL
+2026-05-16 06:05:42,818 [INFO] [BOKL][StackedLSTM_Attention] Epoch 1/150 Train: 0.058054 Val: 0.040977 LR: 1.00e-03
+2026-05-16 06:05:44,968 [INFO] [BOKL][StackedLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:05:44,969 [INFO] [BOKL][StackedLSTM_Attention] Training done in 2.4s, best val: 0.034575
+2026-05-16 06:05:45,594 [INFO] 
+[BOKL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:05:45,595 [INFO]   MAE: 15.1357
+2026-05-16 06:05:45,596 [INFO]   MSE: 313.0292
+2026-05-16 06:05:45,596 [INFO]   RMSE: 17.6926
+2026-05-16 06:05:45,597 [INFO]   R2: 0.6751
+2026-05-16 06:05:45,598 [INFO]   MAPE: 6.2975
+2026-05-16 06:05:45,598 [INFO]   MAE_pct: 5.9532
+2026-05-16 06:05:45,599 [INFO]   RMSE_pct: 6.9589
+2026-05-16 06:05:45,600 [INFO]   Direction_Accuracy: 51.4925
+2026-05-16 06:05:46,924 [INFO] 
+Training CNN_LSTM on BOKL
+2026-05-16 06:05:47,093 [INFO] [BOKL][CNN_LSTM] Epoch 1/150 Train: 0.083735 Val: 0.134943 LR: 1.00e-03
+2026-05-16 06:05:48,631 [INFO] [BOKL][CNN_LSTM] Early stopping at epoch 19
+2026-05-16 06:05:48,632 [INFO] [BOKL][CNN_LSTM] Training done in 1.7s, best val: 0.017569
+2026-05-16 06:05:49,267 [INFO] 
+[BOKL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:05:49,268 [INFO]   MAE: 10.3835
+2026-05-16 06:05:49,269 [INFO]   MSE: 164.4020
+2026-05-16 06:05:49,271 [INFO]   RMSE: 12.8219
+2026-05-16 06:05:49,271 [INFO]   R2: 0.8293
+2026-05-16 06:05:49,273 [INFO]   MAPE: 4.1948
+2026-05-16 06:05:49,273 [INFO]   MAE_pct: 4.0840
+2026-05-16 06:05:49,274 [INFO]   RMSE_pct: 5.0431
+2026-05-16 06:05:49,275 [INFO]   Direction_Accuracy: 55.9701
+2026-05-16 06:05:50,547 [INFO] 
+Training BiLSTM_Attention on BOKL
+2026-05-16 06:05:50,883 [INFO] [BOKL][BiLSTM_Attention] Epoch 1/150 Train: 0.068106 Val: 0.092077 LR: 1.00e-03
+2026-05-16 06:05:54,648 [INFO] [BOKL][BiLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:05:54,649 [INFO] [BOKL][BiLSTM_Attention] Training done in 4.1s, best val: 0.013930
+2026-05-16 06:05:55,292 [INFO] 
+[BOKL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:05:55,293 [INFO]   MAE: 13.8649
+2026-05-16 06:05:55,294 [INFO]   MSE: 302.1014
+2026-05-16 06:05:55,295 [INFO]   RMSE: 17.3811
+2026-05-16 06:05:55,296 [INFO]   R2: 0.6864
+2026-05-16 06:05:55,296 [INFO]   MAPE: 5.9537
+2026-05-16 06:05:55,297 [INFO]   MAE_pct: 5.4533
+2026-05-16 06:05:55,298 [INFO]   RMSE_pct: 6.8363
+2026-05-16 06:05:55,298 [INFO]   Direction_Accuracy: 55.9701
+2026-05-16 06:05:56,586 [INFO] 
+--- Stock: BPCL ---
+2026-05-16 06:05:56,638 [INFO] 
+============================================================
+2026-05-16 06:05:56,639 [INFO] Processing: BPCL
+2026-05-16 06:05:56,640 [INFO] ============================================================
+2026-05-16 06:05:56,664 [INFO]   Train: 2513, Val: 492, Test: 492
+2026-05-16 06:05:56,665 [INFO] 
+Training StackedLSTM_Attention on BPCL
+2026-05-16 06:05:57,104 [INFO] [BPCL][StackedLSTM_Attention] Epoch 1/150 Train: 0.064729 Val: 0.000712 LR: 1.00e-03
+2026-05-16 06:06:03,872 [INFO] [BPCL][StackedLSTM_Attention] Epoch 20/150 Train: 0.010853 Val: 0.003299 LR: 5.00e-04
+2026-05-16 06:06:04,953 [INFO] [BPCL][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:06:04,953 [INFO] [BPCL][StackedLSTM_Attention] Training done in 8.3s, best val: 0.000509
+2026-05-16 06:06:05,602 [INFO] 
+[BPCL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:06:05,603 [INFO]   MAE: 75.8497
+2026-05-16 06:06:05,603 [INFO]   MSE: 14293.7725
+2026-05-16 06:06:05,604 [INFO]   RMSE: 119.5566
+2026-05-16 06:06:05,605 [INFO]   R2: 0.6356
+2026-05-16 06:06:05,605 [INFO]   MAPE: 10.7135
+2026-05-16 06:06:05,607 [INFO]   MAE_pct: 13.7533
+2026-05-16 06:06:05,608 [INFO]   RMSE_pct: 21.6783
+2026-05-16 06:06:05,608 [INFO]   Direction_Accuracy: 49.8982
+2026-05-16 06:06:06,921 [INFO] 
+Training CNN_LSTM on BPCL
+2026-05-16 06:06:07,252 [INFO] [BPCL][CNN_LSTM] Epoch 1/150 Train: 0.102024 Val: 0.005441 LR: 1.00e-03
+2026-05-16 06:06:11,958 [INFO] [BPCL][CNN_LSTM] Epoch 20/150 Train: 0.016079 Val: 0.004406 LR: 5.00e-04
+2026-05-16 06:06:12,696 [INFO] [BPCL][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:06:12,697 [INFO] [BPCL][CNN_LSTM] Training done in 5.8s, best val: 0.001770
+2026-05-16 06:06:13,277 [INFO] 
+[BPCL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:06:13,278 [INFO]   MAE: 109.2805
+2026-05-16 06:06:13,279 [INFO]   MSE: 25817.2441
+2026-05-16 06:06:13,280 [INFO]   RMSE: 160.6775
+2026-05-16 06:06:13,280 [INFO]   R2: 0.3418
+2026-05-16 06:06:13,281 [INFO]   MAPE: 16.0237
+2026-05-16 06:06:13,282 [INFO]   MAE_pct: 19.8150
+2026-05-16 06:06:13,283 [INFO]   RMSE_pct: 29.1344
+2026-05-16 06:06:13,284 [INFO]   Direction_Accuracy: 54.1752
+2026-05-16 06:06:14,605 [INFO] 
+Training BiLSTM_Attention on BPCL
+2026-05-16 06:06:15,402 [INFO] [BPCL][BiLSTM_Attention] Epoch 1/150 Train: 0.066759 Val: 0.020857 LR: 1.00e-03
+2026-05-16 06:06:29,127 [INFO] [BPCL][BiLSTM_Attention] Epoch 20/150 Train: 0.011521 Val: 0.002760 LR: 5.00e-04
+2026-05-16 06:06:39,246 [INFO] [BPCL][BiLSTM_Attention] Early stopping at epoch 34
+2026-05-16 06:06:39,246 [INFO] [BPCL][BiLSTM_Attention] Training done in 24.6s, best val: 0.000370
+2026-05-16 06:06:40,176 [INFO] 
+[BPCL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:06:40,176 [INFO]   MAE: 43.3574
+2026-05-16 06:06:40,177 [INFO]   MSE: 7627.9697
+2026-05-16 06:06:40,178 [INFO]   RMSE: 87.3382
+2026-05-16 06:06:40,178 [INFO]   R2: 0.8055
+2026-05-16 06:06:40,179 [INFO]   MAPE: 6.1567
+2026-05-16 06:06:40,180 [INFO]   MAE_pct: 7.8617
+2026-05-16 06:06:40,180 [INFO]   RMSE_pct: 15.8364
+2026-05-16 06:06:40,181 [INFO]   Direction_Accuracy: 51.7312
+2026-05-16 06:06:41,468 [INFO] 
+Phase 1 complete: 30 total results
+2026-05-16 06:06:41,476 [INFO] 
+============================================================
+2026-05-16 06:06:41,477 [INFO] PHASE 1 RESULTS: Default Hyperparameter Comparison
+2026-05-16 06:06:41,478 [INFO] ============================================================
+2026-05-16 06:06:43,915 [INFO] 
+============================================================
+2026-05-16 06:06:43,916 [INFO] PHASE 2: Hyperparameter Tuning - Testing variations across 10 datasets
+2026-05-16 06:06:43,917 [INFO] ============================================================
+2026-05-16 06:06:43,920 [INFO] 
+========================================
+2026-05-16 06:06:43,920 [INFO] Tuning: StackedLSTM_Attention
+2026-05-16 06:06:43,921 [INFO] ========================================
+2026-05-16 06:06:43,922 [INFO] 
+  Variation 1/6: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:06:44,204 [INFO] [ADBL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.056259 Val: 0.036677 LR: 1.00e-03
+2026-05-16 06:06:48,804 [INFO] [ADBL_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.008569 Val: 0.000731 LR: 1.00e-03
+2026-05-16 06:06:52,355 [INFO] [ADBL_v0][StackedLSTM_Attention] Early stopping at epoch 35
+2026-05-16 06:06:52,356 [INFO] [ADBL_v0][StackedLSTM_Attention] Training done in 8.4s, best val: 0.000731
+2026-05-16 06:06:52,375 [INFO]     ADBL: MSE=116.8274 RMSE=10.8087 MAPE=2.36%
+2026-05-16 06:06:52,651 [INFO] [AHPC_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.051715 Val: 0.052435 LR: 1.00e-03
+2026-05-16 06:06:57,350 [INFO] [AHPC_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.007894 Val: 0.004662 LR: 5.00e-04
+2026-05-16 06:07:02,325 [INFO] [AHPC_v0][StackedLSTM_Attention] Epoch 40/150 Train: 0.006783 Val: 0.004194 LR: 2.50e-04
+2026-05-16 06:07:07,417 [INFO] [AHPC_v0][StackedLSTM_Attention] Epoch 60/150 Train: 0.006566 Val: 0.003085 LR: 1.25e-04
+2026-05-16 06:07:12,393 [INFO] [AHPC_v0][StackedLSTM_Attention] Epoch 80/150 Train: 0.006227 Val: 0.003178 LR: 6.25e-05
+2026-05-16 06:07:12,394 [INFO] [AHPC_v0][StackedLSTM_Attention] Early stopping at epoch 80
+2026-05-16 06:07:12,395 [INFO] [AHPC_v0][StackedLSTM_Attention] Training done in 20.0s, best val: 0.002755
+2026-05-16 06:07:12,416 [INFO]     AHPC: MSE=1107.0526 RMSE=33.2724 MAPE=9.50%
+2026-05-16 06:07:12,555 [INFO] [AKJCL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.065893 Val: 0.013309 LR: 1.00e-03
+2026-05-16 06:07:14,614 [INFO] [AKJCL_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.006962 Val: 0.012323 LR: 5.00e-04
+2026-05-16 06:07:16,452 [INFO] [AKJCL_v0][StackedLSTM_Attention] Early stopping at epoch 37
+2026-05-16 06:07:16,453 [INFO] [AKJCL_v0][StackedLSTM_Attention] Training done in 4.0s, best val: 0.003414
+2026-05-16 06:07:16,463 [INFO]     AKJCL: MSE=1496.3834 RMSE=38.6831 MAPE=7.09%
+2026-05-16 06:07:16,619 [INFO] [AKPL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.054649 Val: 0.007192 LR: 1.00e-03
+2026-05-16 06:07:19,163 [INFO] [AKPL_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.007012 Val: 0.003498 LR: 5.00e-04
+2026-05-16 06:07:19,164 [INFO] [AKPL_v0][StackedLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:07:19,165 [INFO] [AKPL_v0][StackedLSTM_Attention] Training done in 2.7s, best val: 0.001770
+2026-05-16 06:07:19,178 [INFO]     AKPL: MSE=184.6411 RMSE=13.5883 MAPE=3.63%
+2026-05-16 06:07:19,444 [INFO] [ALICL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.021320 Val: 0.005798 LR: 1.00e-03
+2026-05-16 06:07:23,953 [INFO] [ALICL_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.003381 Val: 0.000916 LR: 1.00e-03
+2026-05-16 06:07:28,626 [INFO] [ALICL_v0][StackedLSTM_Attention] Epoch 40/150 Train: 0.002919 Val: 0.000492 LR: 2.50e-04
+2026-05-16 06:07:33,297 [INFO] [ALICL_v0][StackedLSTM_Attention] Epoch 60/150 Train: 0.002420 Val: 0.000434 LR: 1.25e-04
+2026-05-16 06:07:36,846 [INFO] [ALICL_v0][StackedLSTM_Attention] Early stopping at epoch 75
+2026-05-16 06:07:36,847 [INFO] [ALICL_v0][StackedLSTM_Attention] Training done in 17.6s, best val: 0.000434
+2026-05-16 06:07:36,866 [INFO]     ALICL: MSE=844.7219 RMSE=29.0641 MAPE=4.25%
+2026-05-16 06:07:37,048 [INFO] [API_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.050095 Val: 0.018754 LR: 1.00e-03
+2026-05-16 06:07:40,081 [INFO] [API_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.005763 Val: 0.002213 LR: 5.00e-04
+2026-05-16 06:07:40,882 [INFO] [API_v0][StackedLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:07:40,883 [INFO] [API_v0][StackedLSTM_Attention] Training done in 4.0s, best val: 0.000887
+2026-05-16 06:07:40,897 [INFO]     API: MSE=40.4565 RMSE=6.3605 MAPE=1.49%
+2026-05-16 06:07:41,081 [INFO] [BARUN_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.042680 Val: 0.019362 LR: 1.00e-03
+2026-05-16 06:07:43,945 [INFO] [BARUN_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.005600 Val: 0.008984 LR: 5.00e-04
+2026-05-16 06:07:44,251 [INFO] [BARUN_v0][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:07:44,252 [INFO] [BARUN_v0][StackedLSTM_Attention] Training done in 3.3s, best val: 0.001534
+2026-05-16 06:07:44,266 [INFO]     BARUN: MSE=949.6914 RMSE=30.8171 MAPE=5.42%
+2026-05-16 06:07:44,413 [INFO] [BFC_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.029546 Val: 0.078046 LR: 1.00e-03
+2026-05-16 06:07:46,477 [INFO] [BFC_v0][StackedLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:07:46,478 [INFO] [BFC_v0][StackedLSTM_Attention] Training done in 2.2s, best val: 0.035874
+2026-05-16 06:07:46,491 [INFO]     BFC: MSE=534.4731 RMSE=23.1187 MAPE=4.03%
+2026-05-16 06:07:46,600 [INFO] [BOKL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.060549 Val: 0.043063 LR: 1.00e-03
+2026-05-16 06:07:47,893 [INFO] [BOKL_v0][StackedLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:07:47,893 [INFO] [BOKL_v0][StackedLSTM_Attention] Training done in 1.4s, best val: 0.012277
+2026-05-16 06:07:47,904 [INFO]     BOKL: MSE=677.1305 RMSE=26.0217 MAPE=9.62%
+2026-05-16 06:07:48,186 [INFO] [BPCL_v0][StackedLSTM_Attention] Epoch 1/150 Train: 0.063368 Val: 0.001980 LR: 1.00e-03
+2026-05-16 06:07:52,881 [INFO] [BPCL_v0][StackedLSTM_Attention] Epoch 20/150 Train: 0.012629 Val: 0.004387 LR: 1.00e-03
+2026-05-16 06:07:57,872 [INFO] [BPCL_v0][StackedLSTM_Attention] Epoch 40/150 Train: 0.009535 Val: 0.003983 LR: 5.00e-04
+2026-05-16 06:08:01,330 [INFO] [BPCL_v0][StackedLSTM_Attention] Early stopping at epoch 54
+2026-05-16 06:08:01,331 [INFO] [BPCL_v0][StackedLSTM_Attention] Training done in 13.4s, best val: 0.000543
+2026-05-16 06:08:01,350 [INFO]     BPCL: MSE=6326.2607 RMSE=79.5378 MAPE=6.40%
+2026-05-16 06:08:01,351 [INFO]   Variation 1 avg: MSE=1227.7639 RMSE=29.1272 MAPE=5.38% Composite=15.8971
+2026-05-16 06:08:01,352 [INFO] 
+  Variation 2/6: {'hidden_size': 128, 'num_layers': 2, 'dropout': 0.3, 'lr': 0.001}
+2026-05-16 06:08:01,666 [INFO] [ADBL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.042462 Val: 0.019999 LR: 1.00e-03
+2026-05-16 06:08:06,886 [INFO] [ADBL_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.007804 Val: 0.002985 LR: 5.00e-04
+2026-05-16 06:08:12,368 [INFO] [ADBL_v1][StackedLSTM_Attention] Epoch 40/150 Train: 0.007250 Val: 0.001609 LR: 2.50e-04
+2026-05-16 06:08:17,857 [INFO] [ADBL_v1][StackedLSTM_Attention] Epoch 60/150 Train: 0.006549 Val: 0.000820 LR: 2.50e-04
+2026-05-16 06:08:20,866 [INFO] [ADBL_v1][StackedLSTM_Attention] Early stopping at epoch 71
+2026-05-16 06:08:20,866 [INFO] [ADBL_v1][StackedLSTM_Attention] Training done in 19.5s, best val: 0.000690
+2026-05-16 06:08:20,895 [INFO]     ADBL: MSE=165.8471 RMSE=12.8782 MAPE=2.60%
+2026-05-16 06:08:21,211 [INFO] [AHPC_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.040394 Val: 0.023110 LR: 1.00e-03
+2026-05-16 06:08:26,537 [INFO] [AHPC_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.007783 Val: 0.008326 LR: 1.00e-03
+2026-05-16 06:08:32,113 [INFO] [AHPC_v1][StackedLSTM_Attention] Epoch 40/150 Train: 0.006431 Val: 0.005787 LR: 5.00e-04
+2026-05-16 06:08:37,695 [INFO] [AHPC_v1][StackedLSTM_Attention] Epoch 60/150 Train: 0.006088 Val: 0.004831 LR: 2.50e-04
+2026-05-16 06:08:37,695 [INFO] [AHPC_v1][StackedLSTM_Attention] Early stopping at epoch 60
+2026-05-16 06:08:37,696 [INFO] [AHPC_v1][StackedLSTM_Attention] Training done in 16.8s, best val: 0.004331
+2026-05-16 06:08:37,726 [INFO]     AHPC: MSE=2878.9741 RMSE=53.6561 MAPE=15.77%
+2026-05-16 06:08:37,872 [INFO] [AKJCL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.048749 Val: 0.004671 LR: 1.00e-03
+2026-05-16 06:08:39,674 [INFO] [AKJCL_v1][StackedLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:08:39,674 [INFO] [AKJCL_v1][StackedLSTM_Attention] Training done in 1.9s, best val: 0.004671
+2026-05-16 06:08:39,689 [INFO]     AKJCL: MSE=6579.3687 RMSE=81.1133 MAPE=16.43%
+2026-05-16 06:08:39,863 [INFO] [AKPL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.056279 Val: 0.007680 LR: 1.00e-03
+2026-05-16 06:08:42,527 [INFO] [AKPL_v1][StackedLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:08:42,528 [INFO] [AKPL_v1][StackedLSTM_Attention] Training done in 2.8s, best val: 0.001245
+2026-05-16 06:08:42,546 [INFO]     AKPL: MSE=115.6370 RMSE=10.7535 MAPE=3.13%
+2026-05-16 06:08:42,834 [INFO] [ALICL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.025196 Val: 0.001068 LR: 1.00e-03
+2026-05-16 06:08:47,831 [INFO] [ALICL_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.003416 Val: 0.002563 LR: 1.00e-03
+2026-05-16 06:08:50,712 [INFO] [ALICL_v1][StackedLSTM_Attention] Early stopping at epoch 31
+2026-05-16 06:08:50,713 [INFO] [ALICL_v1][StackedLSTM_Attention] Training done in 8.1s, best val: 0.000682
+2026-05-16 06:08:50,740 [INFO]     ALICL: MSE=1340.4658 RMSE=36.6124 MAPE=5.05%
+2026-05-16 06:08:50,944 [INFO] [API_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.039992 Val: 0.002339 LR: 1.00e-03
+2026-05-16 06:08:54,291 [INFO] [API_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.005974 Val: 0.001260 LR: 5.00e-04
+2026-05-16 06:08:54,473 [INFO] [API_v1][StackedLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:08:54,474 [INFO] [API_v1][StackedLSTM_Attention] Training done in 3.7s, best val: 0.000981
+2026-05-16 06:08:54,494 [INFO]     API: MSE=122.6566 RMSE=11.0750 MAPE=3.21%
+2026-05-16 06:08:54,691 [INFO] [BARUN_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.034239 Val: 0.007605 LR: 1.00e-03
+2026-05-16 06:08:57,925 [INFO] [BARUN_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.006191 Val: 0.006880 LR: 5.00e-04
+2026-05-16 06:08:59,108 [INFO] [BARUN_v1][StackedLSTM_Attention] Early stopping at epoch 27
+2026-05-16 06:08:59,109 [INFO] [BARUN_v1][StackedLSTM_Attention] Training done in 4.6s, best val: 0.001244
+2026-05-16 06:08:59,129 [INFO]     BARUN: MSE=1356.5845 RMSE=36.8318 MAPE=6.98%
+2026-05-16 06:08:59,288 [INFO] [BFC_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.041373 Val: 0.145667 LR: 1.00e-03
+2026-05-16 06:09:01,561 [INFO] [BFC_v1][StackedLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:09:01,562 [INFO] [BFC_v1][StackedLSTM_Attention] Training done in 2.4s, best val: 0.038033
+2026-05-16 06:09:01,578 [INFO]     BFC: MSE=991.0639 RMSE=31.4812 MAPE=5.83%
+2026-05-16 06:09:01,693 [INFO] [BOKL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.050428 Val: 0.113507 LR: 1.00e-03
+2026-05-16 06:09:03,425 [INFO] [BOKL_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.005122 Val: 0.065729 LR: 5.00e-04
+2026-05-16 06:09:04,628 [INFO] [BOKL_v1][StackedLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:09:04,629 [INFO] [BOKL_v1][StackedLSTM_Attention] Training done in 3.0s, best val: 0.048304
+2026-05-16 06:09:04,642 [INFO]     BOKL: MSE=90.7743 RMSE=9.5276 MAPE=2.90%
+2026-05-16 06:09:04,954 [INFO] [BPCL_v1][StackedLSTM_Attention] Epoch 1/150 Train: 0.048072 Val: 0.009764 LR: 1.00e-03
+2026-05-16 06:09:10,237 [INFO] [BPCL_v1][StackedLSTM_Attention] Epoch 20/150 Train: 0.013089 Val: 0.007646 LR: 1.00e-03
+2026-05-16 06:09:12,720 [INFO] [BPCL_v1][StackedLSTM_Attention] Early stopping at epoch 29
+2026-05-16 06:09:12,721 [INFO] [BPCL_v1][StackedLSTM_Attention] Training done in 8.0s, best val: 0.000577
+2026-05-16 06:09:12,750 [INFO]     BPCL: MSE=11109.5020 RMSE=105.4016 MAPE=9.53%
+2026-05-16 06:09:12,750 [INFO]   Variation 2 avg: MSE=2475.0874 RMSE=38.9331 MAPE=7.14% Composite=18.6439
+2026-05-16 06:09:12,751 [INFO] 
+  Variation 3/6: {'hidden_size': 128, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0005}
+2026-05-16 06:09:13,131 [INFO] [ADBL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.057646 Val: 0.024512 LR: 5.00e-04
+2026-05-16 06:09:19,768 [INFO] [ADBL_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.009594 Val: 0.001345 LR: 5.00e-04
+2026-05-16 06:09:24,298 [INFO] [ADBL_v2][StackedLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:09:24,299 [INFO] [ADBL_v2][StackedLSTM_Attention] Training done in 11.5s, best val: 0.001041
+2026-05-16 06:09:24,334 [INFO]     ADBL: MSE=566.2108 RMSE=23.7952 MAPE=5.29%
+2026-05-16 06:09:24,722 [INFO] [AHPC_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.058852 Val: 0.027129 LR: 5.00e-04
+2026-05-16 06:09:31,581 [INFO] [AHPC_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.008614 Val: 0.004232 LR: 2.50e-04
+2026-05-16 06:09:38,770 [INFO] [AHPC_v2][StackedLSTM_Attention] Epoch 40/150 Train: 0.007049 Val: 0.009083 LR: 1.25e-04
+2026-05-16 06:09:45,958 [INFO] [AHPC_v2][StackedLSTM_Attention] Epoch 60/150 Train: 0.006494 Val: 0.004356 LR: 6.25e-05
+2026-05-16 06:09:46,675 [INFO] [AHPC_v2][StackedLSTM_Attention] Early stopping at epoch 62
+2026-05-16 06:09:46,676 [INFO] [AHPC_v2][StackedLSTM_Attention] Training done in 22.3s, best val: 0.002868
+2026-05-16 06:09:46,710 [INFO]     AHPC: MSE=2273.1038 RMSE=47.6771 MAPE=12.04%
+2026-05-16 06:09:46,889 [INFO] [AKJCL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.068019 Val: 0.019504 LR: 5.00e-04
+2026-05-16 06:09:49,835 [INFO] [AKJCL_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.006492 Val: 0.015653 LR: 5.00e-04
+2026-05-16 06:09:52,776 [INFO] [AKJCL_v2][StackedLSTM_Attention] Early stopping at epoch 39
+2026-05-16 06:09:52,777 [INFO] [AKJCL_v2][StackedLSTM_Attention] Training done in 6.0s, best val: 0.004147
+2026-05-16 06:09:52,795 [INFO]     AKJCL: MSE=3786.2107 RMSE=61.5322 MAPE=11.22%
+2026-05-16 06:09:53,014 [INFO] [AKPL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.060578 Val: 0.005905 LR: 5.00e-04
+2026-05-16 06:09:56,681 [INFO] [AKPL_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.008040 Val: 0.002551 LR: 2.50e-04
+2026-05-16 06:09:56,875 [INFO] [AKPL_v2][StackedLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:09:56,876 [INFO] [AKPL_v2][StackedLSTM_Attention] Training done in 4.1s, best val: 0.001191
+2026-05-16 06:09:56,898 [INFO]     AKPL: MSE=85.4491 RMSE=9.2439 MAPE=2.81%
+2026-05-16 06:09:57,269 [INFO] [ALICL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.025408 Val: 0.005067 LR: 5.00e-04
+2026-05-16 06:10:03,735 [INFO] [ALICL_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.003713 Val: 0.002093 LR: 2.50e-04
+2026-05-16 06:10:07,804 [INFO] [ALICL_v2][StackedLSTM_Attention] Early stopping at epoch 32
+2026-05-16 06:10:07,805 [INFO] [ALICL_v2][StackedLSTM_Attention] Training done in 10.9s, best val: 0.000813
+2026-05-16 06:10:07,838 [INFO]     ALICL: MSE=1225.8320 RMSE=35.0119 MAPE=5.22%
+2026-05-16 06:10:08,093 [INFO] [API_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.053525 Val: 0.008803 LR: 5.00e-04
+2026-05-16 06:10:12,443 [INFO] [API_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.005987 Val: 0.001033 LR: 2.50e-04
+2026-05-16 06:10:12,901 [INFO] [API_v2][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:10:12,902 [INFO] [API_v2][StackedLSTM_Attention] Training done in 5.0s, best val: 0.000676
+2026-05-16 06:10:12,926 [INFO]     API: MSE=204.2363 RMSE=14.2911 MAPE=4.21%
+2026-05-16 06:10:13,171 [INFO] [BARUN_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.043780 Val: 0.027674 LR: 5.00e-04
+2026-05-16 06:10:17,355 [INFO] [BARUN_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.005505 Val: 0.009953 LR: 2.50e-04
+2026-05-16 06:10:19,763 [INFO] [BARUN_v2][StackedLSTM_Attention] Early stopping at epoch 31
+2026-05-16 06:10:19,764 [INFO] [BARUN_v2][StackedLSTM_Attention] Training done in 6.8s, best val: 0.006268
+2026-05-16 06:10:19,787 [INFO]     BARUN: MSE=4492.1367 RMSE=67.0234 MAPE=13.45%
+2026-05-16 06:10:19,986 [INFO] [BFC_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.049221 Val: 0.126555 LR: 5.00e-04
+2026-05-16 06:10:23,264 [INFO] [BFC_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.004645 Val: 0.055992 LR: 2.50e-04
+2026-05-16 06:10:23,438 [INFO] [BFC_v2][StackedLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:10:23,438 [INFO] [BFC_v2][StackedLSTM_Attention] Training done in 3.6s, best val: 0.039622
+2026-05-16 06:10:23,459 [INFO]     BFC: MSE=259.2783 RMSE=16.1021 MAPE=2.64%
+2026-05-16 06:10:23,604 [INFO] [BOKL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.066585 Val: 0.016283 LR: 5.00e-04
+2026-05-16 06:10:25,386 [INFO] [BOKL_v2][StackedLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:10:25,387 [INFO] [BOKL_v2][StackedLSTM_Attention] Training done in 1.9s, best val: 0.016283
+2026-05-16 06:10:25,403 [INFO]     BOKL: MSE=427.2589 RMSE=20.6702 MAPE=7.11%
+2026-05-16 06:10:25,787 [INFO] [BPCL_v2][StackedLSTM_Attention] Epoch 1/150 Train: 0.078981 Val: 0.008026 LR: 5.00e-04
+2026-05-16 06:10:32,561 [INFO] [BPCL_v2][StackedLSTM_Attention] Epoch 20/150 Train: 0.012466 Val: 0.002745 LR: 2.50e-04
+2026-05-16 06:10:33,268 [INFO] [BPCL_v2][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:10:33,268 [INFO] [BPCL_v2][StackedLSTM_Attention] Training done in 7.8s, best val: 0.002023
+2026-05-16 06:10:33,303 [INFO]     BPCL: MSE=6601.7319 RMSE=81.2510 MAPE=8.85%
+2026-05-16 06:10:33,304 [INFO]   Variation 3 avg: MSE=1992.1449 RMSE=37.6598 MAPE=7.28% Composite=18.5364
+2026-05-16 06:10:33,305 [INFO] 
+  Variation 4/6: {'hidden_size': 256, 'num_layers': 2, 'dropout': 0.4, 'lr': 0.0005}
+2026-05-16 06:10:34,034 [INFO] [ADBL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.051558 Val: 0.038794 LR: 5.00e-04
+2026-05-16 06:10:47,227 [INFO] [ADBL_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.009478 Val: 0.010088 LR: 5.00e-04
+2026-05-16 06:10:56,971 [INFO] [ADBL_v3][StackedLSTM_Attention] Early stopping at epoch 34
+2026-05-16 06:10:56,972 [INFO] [ADBL_v3][StackedLSTM_Attention] Training done in 23.6s, best val: 0.001088
+2026-05-16 06:10:57,024 [INFO]     ADBL: MSE=694.6777 RMSE=26.3567 MAPE=5.67%
+2026-05-16 06:10:57,771 [INFO] [AHPC_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.044905 Val: 0.019323 LR: 5.00e-04
+2026-05-16 06:11:11,388 [INFO] [AHPC_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.008254 Val: 0.008323 LR: 5.00e-04
+2026-05-16 06:11:25,796 [INFO] [AHPC_v3][StackedLSTM_Attention] Epoch 40/150 Train: 0.005939 Val: 0.006610 LR: 1.25e-04
+2026-05-16 06:11:40,178 [INFO] [AHPC_v3][StackedLSTM_Attention] Epoch 60/150 Train: 0.005681 Val: 0.006348 LR: 6.25e-05
+2026-05-16 06:11:43,053 [INFO] [AHPC_v3][StackedLSTM_Attention] Early stopping at epoch 64
+2026-05-16 06:11:43,054 [INFO] [AHPC_v3][StackedLSTM_Attention] Training done in 46.0s, best val: 0.004756
+2026-05-16 06:11:43,109 [INFO]     AHPC: MSE=4062.6062 RMSE=63.7386 MAPE=15.68%
+2026-05-16 06:11:43,450 [INFO] [AKJCL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.045668 Val: 0.029708 LR: 5.00e-04
+2026-05-16 06:11:49,347 [INFO] [AKJCL_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.006482 Val: 0.013597 LR: 2.50e-04
+2026-05-16 06:11:49,348 [INFO] [AKJCL_v3][StackedLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:11:49,349 [INFO] [AKJCL_v3][StackedLSTM_Attention] Training done in 6.2s, best val: 0.005156
+2026-05-16 06:11:49,375 [INFO]     AKJCL: MSE=3458.4788 RMSE=58.8088 MAPE=10.89%
+2026-05-16 06:11:49,792 [INFO] [AKPL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.054366 Val: 0.001905 LR: 5.00e-04
+2026-05-16 06:11:55,552 [INFO] [AKPL_v3][StackedLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:11:55,553 [INFO] [AKPL_v3][StackedLSTM_Attention] Training done in 6.1s, best val: 0.001905
+2026-05-16 06:11:55,585 [INFO]     AKPL: MSE=206.5433 RMSE=14.3716 MAPE=4.33%
+2026-05-16 06:11:56,300 [INFO] [ALICL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.031197 Val: 0.019084 LR: 5.00e-04
+2026-05-16 06:12:09,223 [INFO] [ALICL_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.003107 Val: 0.001582 LR: 2.50e-04
+2026-05-16 06:12:10,588 [INFO] [ALICL_v3][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:12:10,589 [INFO] [ALICL_v3][StackedLSTM_Attention] Training done in 15.0s, best val: 0.001497
+2026-05-16 06:12:10,642 [INFO]     ALICL: MSE=5597.5845 RMSE=74.8170 MAPE=11.76%
+2026-05-16 06:12:11,131 [INFO] [API_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.050470 Val: 0.008416 LR: 5.00e-04
+2026-05-16 06:12:19,828 [INFO] [API_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.006007 Val: 0.002526 LR: 2.50e-04
+2026-05-16 06:12:21,206 [INFO] [API_v3][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:12:21,207 [INFO] [API_v3][StackedLSTM_Attention] Training done in 10.5s, best val: 0.000593
+2026-05-16 06:12:21,244 [INFO]     API: MSE=651.5583 RMSE=25.5256 MAPE=8.14%
+2026-05-16 06:12:21,711 [INFO] [BARUN_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.040820 Val: 0.019646 LR: 5.00e-04
+2026-05-16 06:12:30,069 [INFO] [BARUN_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.006003 Val: 0.004936 LR: 2.50e-04
+2026-05-16 06:12:31,388 [INFO] [BARUN_v3][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:12:31,389 [INFO] [BARUN_v3][StackedLSTM_Attention] Training done in 10.1s, best val: 0.001403
+2026-05-16 06:12:31,425 [INFO]     BARUN: MSE=1963.6494 RMSE=44.3131 MAPE=8.06%
+2026-05-16 06:12:31,803 [INFO] [BFC_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.039586 Val: 0.083109 LR: 5.00e-04
+2026-05-16 06:12:38,384 [INFO] [BFC_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.005244 Val: 0.074678 LR: 5.00e-04
+2026-05-16 06:12:41,153 [INFO] [BFC_v3][StackedLSTM_Attention] Early stopping at epoch 28
+2026-05-16 06:12:41,153 [INFO] [BFC_v3][StackedLSTM_Attention] Training done in 9.7s, best val: 0.042621
+2026-05-16 06:12:41,182 [INFO]     BFC: MSE=664.8929 RMSE=25.7855 MAPE=4.74%
+2026-05-16 06:12:41,449 [INFO] [BOKL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.060066 Val: 0.096098 LR: 5.00e-04
+2026-05-16 06:12:45,950 [INFO] [BOKL_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.006366 Val: 0.070027 LR: 2.50e-04
+2026-05-16 06:12:46,424 [INFO] [BOKL_v3][StackedLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:12:46,425 [INFO] [BOKL_v3][StackedLSTM_Attention] Training done in 5.2s, best val: 0.044408
+2026-05-16 06:12:46,448 [INFO]     BOKL: MSE=219.5105 RMSE=14.8159 MAPE=5.07%
+2026-05-16 06:12:47,197 [INFO] [BPCL_v3][StackedLSTM_Attention] Epoch 1/150 Train: 0.051747 Val: 0.005390 LR: 5.00e-04
+2026-05-16 06:13:00,750 [INFO] [BPCL_v3][StackedLSTM_Attention] Epoch 20/150 Train: 0.012639 Val: 0.007054 LR: 2.50e-04
+2026-05-16 06:13:04,329 [INFO] [BPCL_v3][StackedLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:13:04,329 [INFO] [BPCL_v3][StackedLSTM_Attention] Training done in 17.8s, best val: 0.001100
+2026-05-16 06:13:04,383 [INFO]     BPCL: MSE=12005.8174 RMSE=109.5711 MAPE=9.78%
+2026-05-16 06:13:04,384 [INFO]   Variation 4 avg: MSE=2952.5319 RMSE=45.8104 MAPE=8.41% Composite=20.2500
+2026-05-16 06:13:04,384 [INFO] 
+  Variation 5/6: {'hidden_size': 256, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0001}
+2026-05-16 06:13:05,350 [INFO] [ADBL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.068626 Val: 0.015040 LR: 1.00e-04
+2026-05-16 06:13:22,879 [INFO] [ADBL_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.007116 Val: 0.003838 LR: 1.00e-04
+2026-05-16 06:13:32,114 [INFO] [ADBL_v4][StackedLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:13:32,115 [INFO] [ADBL_v4][StackedLSTM_Attention] Training done in 27.7s, best val: 0.001541
+2026-05-16 06:13:32,184 [INFO]     ADBL: MSE=327.8269 RMSE=18.1060 MAPE=4.73%
+2026-05-16 06:13:33,176 [INFO] [AHPC_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.055145 Val: 0.034618 LR: 1.00e-04
+2026-05-16 06:13:51,253 [INFO] [AHPC_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.007879 Val: 0.007042 LR: 1.00e-04
+2026-05-16 06:14:10,292 [INFO] [AHPC_v4][StackedLSTM_Attention] Epoch 40/150 Train: 0.005666 Val: 0.003849 LR: 5.00e-05
+2026-05-16 06:14:29,348 [INFO] [AHPC_v4][StackedLSTM_Attention] Epoch 60/150 Train: 0.005292 Val: 0.004192 LR: 1.25e-05
+2026-05-16 06:14:48,411 [INFO] [AHPC_v4][StackedLSTM_Attention] Epoch 80/150 Train: 0.005097 Val: 0.003785 LR: 3.13e-06
+2026-05-16 06:14:54,131 [INFO] [AHPC_v4][StackedLSTM_Attention] Early stopping at epoch 86
+2026-05-16 06:14:54,132 [INFO] [AHPC_v4][StackedLSTM_Attention] Training done in 81.9s, best val: 0.003016
+2026-05-16 06:14:54,201 [INFO]     AHPC: MSE=1978.5801 RMSE=44.4812 MAPE=11.28%
+2026-05-16 06:14:54,643 [INFO] [AKJCL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.070598 Val: 0.005972 LR: 1.00e-04
+2026-05-16 06:15:02,471 [INFO] [AKJCL_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.006756 Val: 0.008373 LR: 1.00e-04
+2026-05-16 06:15:06,167 [INFO] [AKJCL_v4][StackedLSTM_Attention] Early stopping at epoch 29
+2026-05-16 06:15:06,168 [INFO] [AKJCL_v4][StackedLSTM_Attention] Training done in 11.9s, best val: 0.005367
+2026-05-16 06:15:06,201 [INFO]     AKJCL: MSE=4596.9673 RMSE=67.8009 MAPE=12.18%
+2026-05-16 06:15:06,746 [INFO] [AKPL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.059133 Val: 0.005511 LR: 1.00e-04
+2026-05-16 06:15:16,454 [INFO] [AKPL_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.006568 Val: 0.003048 LR: 5.00e-05
+2026-05-16 06:15:16,455 [INFO] [AKPL_v4][StackedLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:15:16,456 [INFO] [AKPL_v4][StackedLSTM_Attention] Training done in 10.2s, best val: 0.001271
+2026-05-16 06:15:16,497 [INFO]     AKPL: MSE=168.3286 RMSE=12.9742 MAPE=3.80%
+2026-05-16 06:15:17,442 [INFO] [ALICL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.029941 Val: 0.004148 LR: 1.00e-04
+2026-05-16 06:15:34,626 [INFO] [ALICL_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.003159 Val: 0.002102 LR: 5.00e-05
+2026-05-16 06:15:45,472 [INFO] [ALICL_v4][StackedLSTM_Attention] Early stopping at epoch 32
+2026-05-16 06:15:45,472 [INFO] [ALICL_v4][StackedLSTM_Attention] Training done in 28.9s, best val: 0.001560
+2026-05-16 06:15:45,542 [INFO]     ALICL: MSE=2893.9951 RMSE=53.7959 MAPE=7.71%
+2026-05-16 06:15:46,184 [INFO] [API_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.064482 Val: 0.012131 LR: 1.00e-04
+2026-05-16 06:15:57,786 [INFO] [API_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.005928 Val: 0.002627 LR: 5.00e-05
+2026-05-16 06:16:10,014 [INFO] [API_v4][StackedLSTM_Attention] Epoch 40/150 Train: 0.005419 Val: 0.001995 LR: 5.00e-05
+2026-05-16 06:16:20,379 [INFO] [API_v4][StackedLSTM_Attention] Early stopping at epoch 57
+2026-05-16 06:16:20,379 [INFO] [API_v4][StackedLSTM_Attention] Training done in 34.8s, best val: 0.000594
+2026-05-16 06:16:20,426 [INFO]     API: MSE=95.6199 RMSE=9.7785 MAPE=2.58%
+2026-05-16 06:16:21,047 [INFO] [BARUN_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.049393 Val: 0.002450 LR: 1.00e-04
+2026-05-16 06:16:29,853 [INFO] [BARUN_v4][StackedLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:16:29,853 [INFO] [BARUN_v4][StackedLSTM_Attention] Training done in 9.4s, best val: 0.002450
+2026-05-16 06:16:29,900 [INFO]     BARUN: MSE=1599.7294 RMSE=39.9966 MAPE=6.94%
+2026-05-16 06:16:30,395 [INFO] [BFC_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.078245 Val: 0.173004 LR: 1.00e-04
+2026-05-16 06:16:39,194 [INFO] [BFC_v4][StackedLSTM_Attention] Epoch 20/150 Train: 0.005146 Val: 0.056471 LR: 5.00e-05
+2026-05-16 06:16:39,657 [INFO] [BFC_v4][StackedLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:16:39,658 [INFO] [BFC_v4][StackedLSTM_Attention] Training done in 9.7s, best val: 0.033967
+2026-05-16 06:16:39,694 [INFO]     BFC: MSE=419.1850 RMSE=20.4740 MAPE=3.58%
+2026-05-16 06:16:40,048 [INFO] [BOKL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.054929 Val: 0.017679 LR: 1.00e-04
+2026-05-16 06:16:45,102 [INFO] [BOKL_v4][StackedLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:16:45,104 [INFO] [BOKL_v4][StackedLSTM_Attention] Training done in 5.4s, best val: 0.011303
+2026-05-16 06:16:45,136 [INFO]     BOKL: MSE=293.6084 RMSE=17.1350 MAPE=6.20%
+2026-05-16 06:16:46,132 [INFO] [BPCL_v4][StackedLSTM_Attention] Epoch 1/150 Train: 0.073105 Val: 0.011374 LR: 1.00e-04
+2026-05-16 06:17:01,430 [INFO] [BPCL_v4][StackedLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:17:01,431 [INFO] [BPCL_v4][StackedLSTM_Attention] Training done in 16.2s, best val: 0.000503
+2026-05-16 06:17:01,503 [INFO]     BPCL: MSE=16680.5684 RMSE=129.1533 MAPE=11.35%
+2026-05-16 06:17:01,503 [INFO]   Variation 5 avg: MSE=2905.4409 RMSE=41.3696 MAPE=7.03% Composite=18.7557
+2026-05-16 06:17:01,504 [INFO] 
+  Variation 6/6: {'hidden_size': 128, 'num_layers': 4, 'dropout': 0.35, 'lr': 0.0005}
+2026-05-16 06:17:01,963 [INFO] [ADBL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.084782 Val: 0.005667 LR: 5.00e-04
+2026-05-16 06:17:10,137 [INFO] [ADBL_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.012036 Val: 0.002951 LR: 5.00e-04
+2026-05-16 06:17:18,728 [INFO] [ADBL_v5][StackedLSTM_Attention] Epoch 40/150 Train: 0.008577 Val: 0.002705 LR: 1.25e-04
+2026-05-16 06:17:26,002 [INFO] [ADBL_v5][StackedLSTM_Attention] Early stopping at epoch 57
+2026-05-16 06:17:26,003 [INFO] [ADBL_v5][StackedLSTM_Attention] Training done in 24.5s, best val: 0.000694
+2026-05-16 06:17:26,042 [INFO]     ADBL: MSE=78.1779 RMSE=8.8418 MAPE=1.85%
+2026-05-16 06:17:26,515 [INFO] [AHPC_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.075608 Val: 0.029897 LR: 5.00e-04
+2026-05-16 06:17:34,880 [INFO] [AHPC_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.009866 Val: 0.007070 LR: 5.00e-04
+2026-05-16 06:17:43,633 [INFO] [AHPC_v5][StackedLSTM_Attention] Epoch 40/150 Train: 0.008478 Val: 0.004772 LR: 2.50e-04
+2026-05-16 06:17:52,398 [INFO] [AHPC_v5][StackedLSTM_Attention] Epoch 60/150 Train: 0.007331 Val: 0.004790 LR: 1.25e-04
+2026-05-16 06:17:53,715 [INFO] [AHPC_v5][StackedLSTM_Attention] Early stopping at epoch 63
+2026-05-16 06:17:53,715 [INFO] [AHPC_v5][StackedLSTM_Attention] Training done in 27.6s, best val: 0.003878
+2026-05-16 06:17:53,755 [INFO]     AHPC: MSE=4812.6606 RMSE=69.3733 MAPE=17.85%
+2026-05-16 06:17:53,971 [INFO] [AKJCL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.089850 Val: 0.009657 LR: 5.00e-04
+2026-05-16 06:17:57,564 [INFO] [AKJCL_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.008068 Val: 0.018349 LR: 2.50e-04
+2026-05-16 06:17:58,686 [INFO] [AKJCL_v5][StackedLSTM_Attention] Early stopping at epoch 26
+2026-05-16 06:17:58,687 [INFO] [AKJCL_v5][StackedLSTM_Attention] Training done in 4.9s, best val: 0.004532
+2026-05-16 06:17:58,708 [INFO]     AKJCL: MSE=3730.9890 RMSE=61.0818 MAPE=11.36%
+2026-05-16 06:17:58,969 [INFO] [AKPL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.082550 Val: 0.010195 LR: 5.00e-04
+2026-05-16 06:18:03,415 [INFO] [AKPL_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.010592 Val: 0.002722 LR: 5.00e-04
+2026-05-16 06:18:05,763 [INFO] [AKPL_v5][StackedLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:18:05,764 [INFO] [AKPL_v5][StackedLSTM_Attention] Training done in 7.0s, best val: 0.001634
+2026-05-16 06:18:05,788 [INFO]     AKPL: MSE=242.1163 RMSE=15.5601 MAPE=4.60%
+2026-05-16 06:18:06,230 [INFO] [ALICL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.038044 Val: 0.003393 LR: 5.00e-04
+2026-05-16 06:18:14,118 [INFO] [ALICL_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.004159 Val: 0.000717 LR: 5.00e-04
+2026-05-16 06:18:22,414 [INFO] [ALICL_v5][StackedLSTM_Attention] Epoch 40/150 Train: 0.003357 Val: 0.000601 LR: 1.25e-04
+2026-05-16 06:18:24,920 [INFO] [ALICL_v5][StackedLSTM_Attention] Early stopping at epoch 46
+2026-05-16 06:18:24,920 [INFO] [ALICL_v5][StackedLSTM_Attention] Training done in 19.1s, best val: 0.000543
+2026-05-16 06:18:24,961 [INFO]     ALICL: MSE=827.2357 RMSE=28.7617 MAPE=3.79%
+2026-05-16 06:18:25,271 [INFO] [API_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.072171 Val: 0.023666 LR: 5.00e-04
+2026-05-16 06:18:30,595 [INFO] [API_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.009246 Val: 0.002351 LR: 5.00e-04
+2026-05-16 06:18:35,930 [INFO] [API_v5][StackedLSTM_Attention] Early stopping at epoch 39
+2026-05-16 06:18:35,930 [INFO] [API_v5][StackedLSTM_Attention] Training done in 10.9s, best val: 0.001037
+2026-05-16 06:18:35,960 [INFO]     API: MSE=119.8537 RMSE=10.9478 MAPE=2.38%
+2026-05-16 06:18:36,260 [INFO] [BARUN_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.065382 Val: 0.016680 LR: 5.00e-04
+2026-05-16 06:18:40,565 [INFO] [BARUN_v5][StackedLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:18:40,566 [INFO] [BARUN_v5][StackedLSTM_Attention] Training done in 4.6s, best val: 0.006465
+2026-05-16 06:18:40,593 [INFO]     BARUN: MSE=2742.7207 RMSE=52.3710 MAPE=9.92%
+2026-05-16 06:18:40,836 [INFO] [BFC_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.084157 Val: 0.297697 LR: 5.00e-04
+2026-05-16 06:18:44,873 [INFO] [BFC_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.007040 Val: 0.068467 LR: 2.50e-04
+2026-05-16 06:18:47,218 [INFO] [BFC_v5][StackedLSTM_Attention] Early stopping at epoch 31
+2026-05-16 06:18:47,218 [INFO] [BFC_v5][StackedLSTM_Attention] Training done in 6.6s, best val: 0.047439
+2026-05-16 06:18:47,241 [INFO]     BFC: MSE=936.4675 RMSE=30.6018 MAPE=5.60%
+2026-05-16 06:18:47,410 [INFO] [BOKL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.080916 Val: 0.037637 LR: 5.00e-04
+2026-05-16 06:18:50,171 [INFO] [BOKL_v5][StackedLSTM_Attention] Epoch 20/150 Train: 0.007558 Val: 0.063228 LR: 2.50e-04
+2026-05-16 06:18:50,172 [INFO] [BOKL_v5][StackedLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:18:50,173 [INFO] [BOKL_v5][StackedLSTM_Attention] Training done in 2.9s, best val: 0.017840
+2026-05-16 06:18:50,191 [INFO]     BOKL: MSE=83.6037 RMSE=9.1435 MAPE=2.93%
+2026-05-16 06:18:50,662 [INFO] [BPCL_v5][StackedLSTM_Attention] Epoch 1/150 Train: 0.102044 Val: 0.011526 LR: 5.00e-04
+2026-05-16 06:18:57,678 [INFO] [BPCL_v5][StackedLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:18:57,679 [INFO] [BPCL_v5][StackedLSTM_Attention] Training done in 7.5s, best val: 0.001760
+2026-05-16 06:18:57,719 [INFO]     BPCL: MSE=19678.6348 RMSE=140.2806 MAPE=13.72%
+2026-05-16 06:18:57,720 [INFO]   Variation 6 avg: MSE=3325.2460 RMSE=42.6963 MAPE=7.40% Composite=19.2862
+2026-05-16 06:18:57,720 [INFO] 
+  BEST for StackedLSTM_Attention: Variation 1
+2026-05-16 06:18:57,721 [INFO]   Params: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:18:57,722 [INFO]   Composite Score: 15.8971
+2026-05-16 06:18:57,723 [INFO] 
+========================================
+2026-05-16 06:18:57,723 [INFO] Tuning: CNN_LSTM
+2026-05-16 06:18:57,724 [INFO] ========================================
+2026-05-16 06:18:57,725 [INFO] 
+  Variation 1/6: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:18:57,972 [INFO] [ADBL_v0][CNN_LSTM] Epoch 1/150 Train: 0.092007 Val: 0.009143 LR: 1.00e-03
+2026-05-16 06:19:02,071 [INFO] [ADBL_v0][CNN_LSTM] Epoch 20/150 Train: 0.009346 Val: 0.003513 LR: 5.00e-04
+2026-05-16 06:19:02,934 [INFO] [ADBL_v0][CNN_LSTM] Early stopping at epoch 24
+2026-05-16 06:19:02,935 [INFO] [ADBL_v0][CNN_LSTM] Training done in 5.2s, best val: 0.001010
+2026-05-16 06:19:02,954 [INFO]     ADBL: MSE=1443.2021 RMSE=37.9895 MAPE=6.78%
+2026-05-16 06:19:03,208 [INFO] [AHPC_v0][CNN_LSTM] Epoch 1/150 Train: 0.095106 Val: 0.019233 LR: 1.00e-03
+2026-05-16 06:19:07,445 [INFO] [AHPC_v0][CNN_LSTM] Epoch 20/150 Train: 0.010302 Val: 0.007656 LR: 1.00e-03
+2026-05-16 06:19:11,824 [INFO] [AHPC_v0][CNN_LSTM] Epoch 40/150 Train: 0.007124 Val: 0.006865 LR: 2.50e-04
+2026-05-16 06:19:12,039 [INFO] [AHPC_v0][CNN_LSTM] Early stopping at epoch 41
+2026-05-16 06:19:12,040 [INFO] [AHPC_v0][CNN_LSTM] Training done in 9.1s, best val: 0.002981
+2026-05-16 06:19:12,060 [INFO]     AHPC: MSE=1293.9004 RMSE=35.9708 MAPE=9.91%
+2026-05-16 06:19:12,183 [INFO] [AKJCL_v0][CNN_LSTM] Epoch 1/150 Train: 0.101352 Val: 0.077483 LR: 1.00e-03
+2026-05-16 06:19:13,991 [INFO] [AKJCL_v0][CNN_LSTM] Epoch 20/150 Train: 0.006365 Val: 0.007541 LR: 5.00e-04
+2026-05-16 06:19:15,941 [INFO] [AKJCL_v0][CNN_LSTM] Epoch 40/150 Train: 0.004777 Val: 0.016566 LR: 2.50e-04
+2026-05-16 06:19:16,519 [INFO] [AKJCL_v0][CNN_LSTM] Early stopping at epoch 46
+2026-05-16 06:19:16,520 [INFO] [AKJCL_v0][CNN_LSTM] Training done in 4.4s, best val: 0.005249
+2026-05-16 06:19:16,532 [INFO]     AKJCL: MSE=9739.0762 RMSE=98.6868 MAPE=18.94%
+2026-05-16 06:19:16,694 [INFO] [AKPL_v0][CNN_LSTM] Epoch 1/150 Train: 0.088333 Val: 0.016774 LR: 1.00e-03
+2026-05-16 06:19:18,760 [INFO] [AKPL_v0][CNN_LSTM] Early stopping at epoch 18
+2026-05-16 06:19:18,760 [INFO] [AKPL_v0][CNN_LSTM] Training done in 2.2s, best val: 0.001448
+2026-05-16 06:19:18,773 [INFO]     AKPL: MSE=223.9791 RMSE=14.9659 MAPE=4.54%
+2026-05-16 06:19:19,018 [INFO] [ALICL_v0][CNN_LSTM] Epoch 1/150 Train: 0.036562 Val: 0.002308 LR: 1.00e-03
+2026-05-16 06:19:23,064 [INFO] [ALICL_v0][CNN_LSTM] Epoch 20/150 Train: 0.003562 Val: 0.001554 LR: 5.00e-04
+2026-05-16 06:19:24,559 [INFO] [ALICL_v0][CNN_LSTM] Early stopping at epoch 27
+2026-05-16 06:19:24,560 [INFO] [ALICL_v0][CNN_LSTM] Training done in 5.8s, best val: 0.000962
+2026-05-16 06:19:24,579 [INFO]     ALICL: MSE=3075.4236 RMSE=55.4565 MAPE=8.43%
+2026-05-16 06:19:24,746 [INFO] [API_v0][CNN_LSTM] Epoch 1/150 Train: 0.087841 Val: 0.004184 LR: 1.00e-03
+2026-05-16 06:19:27,470 [INFO] [API_v0][CNN_LSTM] Epoch 20/150 Train: 0.005890 Val: 0.007934 LR: 1.00e-03
+2026-05-16 06:19:28,735 [INFO] [API_v0][CNN_LSTM] Early stopping at epoch 29
+2026-05-16 06:19:28,736 [INFO] [API_v0][CNN_LSTM] Training done in 4.1s, best val: 0.001446
+2026-05-16 06:19:28,750 [INFO]     API: MSE=440.3884 RMSE=20.9854 MAPE=6.39%
+2026-05-16 06:19:28,913 [INFO] [BARUN_v0][CNN_LSTM] Epoch 1/150 Train: 0.068709 Val: 0.037151 LR: 1.00e-03
+2026-05-16 06:19:31,484 [INFO] [BARUN_v0][CNN_LSTM] Epoch 20/150 Train: 0.005456 Val: 0.017643 LR: 5.00e-04
+2026-05-16 06:19:31,621 [INFO] [BARUN_v0][CNN_LSTM] Early stopping at epoch 21
+2026-05-16 06:19:31,622 [INFO] [BARUN_v0][CNN_LSTM] Training done in 2.8s, best val: 0.003510
+2026-05-16 06:19:31,636 [INFO]     BARUN: MSE=2568.0586 RMSE=50.6760 MAPE=11.06%
+2026-05-16 06:19:31,767 [INFO] [BFC_v0][CNN_LSTM] Epoch 1/150 Train: 0.066748 Val: 0.190882 LR: 1.00e-03
+2026-05-16 06:19:33,821 [INFO] [BFC_v0][CNN_LSTM] Epoch 20/150 Train: 0.003830 Val: 0.041986 LR: 5.00e-04
+2026-05-16 06:19:34,031 [INFO] [BFC_v0][CNN_LSTM] Early stopping at epoch 22
+2026-05-16 06:19:34,032 [INFO] [BFC_v0][CNN_LSTM] Training done in 2.4s, best val: 0.037463
+2026-05-16 06:19:34,044 [INFO]     BFC: MSE=371.0472 RMSE=19.2626 MAPE=3.03%
+2026-05-16 06:19:34,145 [INFO] [BOKL_v0][CNN_LSTM] Epoch 1/150 Train: 0.091858 Val: 0.098913 LR: 1.00e-03
+2026-05-16 06:19:35,570 [INFO] [BOKL_v0][CNN_LSTM] Epoch 20/150 Train: 0.006027 Val: 0.099913 LR: 5.00e-04
+2026-05-16 06:19:35,935 [INFO] [BOKL_v0][CNN_LSTM] Early stopping at epoch 25
+2026-05-16 06:19:35,935 [INFO] [BOKL_v0][CNN_LSTM] Training done in 1.9s, best val: 0.027276
+2026-05-16 06:19:35,946 [INFO]     BOKL: MSE=55.0389 RMSE=7.4188 MAPE=2.35%
+2026-05-16 06:19:36,209 [INFO] [BPCL_v0][CNN_LSTM] Epoch 1/150 Train: 0.117642 Val: 0.007723 LR: 1.00e-03
+2026-05-16 06:19:40,457 [INFO] [BPCL_v0][CNN_LSTM] Epoch 20/150 Train: 0.016726 Val: 0.001580 LR: 5.00e-04
+2026-05-16 06:19:41,779 [INFO] [BPCL_v0][CNN_LSTM] Early stopping at epoch 26
+2026-05-16 06:19:41,779 [INFO] [BPCL_v0][CNN_LSTM] Training done in 5.8s, best val: 0.000988
+2026-05-16 06:19:41,799 [INFO]     BPCL: MSE=15654.5801 RMSE=125.1183 MAPE=11.51%
+2026-05-16 06:19:41,799 [INFO]   Variation 1 avg: MSE=3486.4695 RMSE=46.6531 MAPE=8.29% Composite=20.3148
+2026-05-16 06:19:41,800 [INFO] 
+  Variation 2/6: {'hidden_size': 128, 'num_layers': 2, 'dropout': 0.3, 'lr': 0.001}
+2026-05-16 06:19:42,061 [INFO] [ADBL_v1][CNN_LSTM] Epoch 1/150 Train: 0.070659 Val: 0.009789 LR: 1.00e-03
+2026-05-16 06:19:46,237 [INFO] [ADBL_v1][CNN_LSTM] Epoch 20/150 Train: 0.010241 Val: 0.005245 LR: 1.00e-03
+2026-05-16 06:19:48,405 [INFO] [ADBL_v1][CNN_LSTM] Early stopping at epoch 30
+2026-05-16 06:19:48,406 [INFO] [ADBL_v1][CNN_LSTM] Training done in 6.6s, best val: 0.000925
+2026-05-16 06:19:48,428 [INFO]     ADBL: MSE=403.1182 RMSE=20.0778 MAPE=4.10%
+2026-05-16 06:19:48,679 [INFO] [AHPC_v1][CNN_LSTM] Epoch 1/150 Train: 0.068205 Val: 0.013438 LR: 1.00e-03
+2026-05-16 06:19:52,909 [INFO] [AHPC_v1][CNN_LSTM] Epoch 20/150 Train: 0.010310 Val: 0.006862 LR: 1.00e-03
+2026-05-16 06:19:57,375 [INFO] [AHPC_v1][CNN_LSTM] Epoch 40/150 Train: 0.006450 Val: 0.003447 LR: 2.50e-04
+2026-05-16 06:19:57,824 [INFO] [AHPC_v1][CNN_LSTM] Early stopping at epoch 42
+2026-05-16 06:19:57,825 [INFO] [AHPC_v1][CNN_LSTM] Training done in 9.4s, best val: 0.002743
+2026-05-16 06:19:57,848 [INFO]     AHPC: MSE=2071.0239 RMSE=45.5085 MAPE=12.32%
+2026-05-16 06:19:57,975 [INFO] [AKJCL_v1][CNN_LSTM] Epoch 1/150 Train: 0.076139 Val: 0.055344 LR: 1.00e-03
+2026-05-16 06:19:59,804 [INFO] [AKJCL_v1][CNN_LSTM] Epoch 20/150 Train: 0.005923 Val: 0.006687 LR: 5.00e-04
+2026-05-16 06:20:00,859 [INFO] [AKJCL_v1][CNN_LSTM] Early stopping at epoch 31
+2026-05-16 06:20:00,859 [INFO] [AKJCL_v1][CNN_LSTM] Training done in 3.0s, best val: 0.005077
+2026-05-16 06:20:00,872 [INFO]     AKJCL: MSE=9684.7129 RMSE=98.4109 MAPE=18.26%
+2026-05-16 06:20:01,025 [INFO] [AKPL_v1][CNN_LSTM] Epoch 1/150 Train: 0.070625 Val: 0.005800 LR: 1.00e-03
+2026-05-16 06:20:03,159 [INFO] [AKPL_v1][CNN_LSTM] Early stopping at epoch 19
+2026-05-16 06:20:03,160 [INFO] [AKPL_v1][CNN_LSTM] Training done in 2.3s, best val: 0.001254
+2026-05-16 06:20:03,174 [INFO]     AKPL: MSE=82.7742 RMSE=9.0980 MAPE=2.74%
+2026-05-16 06:20:03,414 [INFO] [ALICL_v1][CNN_LSTM] Epoch 1/150 Train: 0.028088 Val: 0.003500 LR: 1.00e-03
+2026-05-16 06:20:07,515 [INFO] [ALICL_v1][CNN_LSTM] Epoch 20/150 Train: 0.004149 Val: 0.001413 LR: 5.00e-04
+2026-05-16 06:20:09,019 [INFO] [ALICL_v1][CNN_LSTM] Early stopping at epoch 27
+2026-05-16 06:20:09,019 [INFO] [ALICL_v1][CNN_LSTM] Training done in 5.8s, best val: 0.000813
+2026-05-16 06:20:09,042 [INFO]     ALICL: MSE=1521.6713 RMSE=39.0086 MAPE=5.65%
+2026-05-16 06:20:09,219 [INFO] [API_v1][CNN_LSTM] Epoch 1/150 Train: 0.062903 Val: 0.017202 LR: 1.00e-03
+2026-05-16 06:20:12,007 [INFO] [API_v1][CNN_LSTM] Epoch 20/150 Train: 0.006379 Val: 0.002095 LR: 5.00e-04
+2026-05-16 06:20:12,008 [INFO] [API_v1][CNN_LSTM] Early stopping at epoch 20
+2026-05-16 06:20:12,009 [INFO] [API_v1][CNN_LSTM] Training done in 2.9s, best val: 0.000978
+2026-05-16 06:20:12,026 [INFO]     API: MSE=369.8612 RMSE=19.2318 MAPE=4.64%
+2026-05-16 06:20:12,195 [INFO] [BARUN_v1][CNN_LSTM] Epoch 1/150 Train: 0.057056 Val: 0.034593 LR: 1.00e-03
+2026-05-16 06:20:14,886 [INFO] [BARUN_v1][CNN_LSTM] Epoch 20/150 Train: 0.006007 Val: 0.003639 LR: 1.00e-03
+2026-05-16 06:20:16,850 [INFO] [BARUN_v1][CNN_LSTM] Early stopping at epoch 34
+2026-05-16 06:20:16,850 [INFO] [BARUN_v1][CNN_LSTM] Training done in 4.8s, best val: 0.003380
+2026-05-16 06:20:16,868 [INFO]     BARUN: MSE=5395.0186 RMSE=73.4508 MAPE=14.36%
+2026-05-16 06:20:17,016 [INFO] [BFC_v1][CNN_LSTM] Epoch 1/150 Train: 0.061084 Val: 0.224585 LR: 1.00e-03
+2026-05-16 06:20:19,087 [INFO] [BFC_v1][CNN_LSTM] Epoch 20/150 Train: 0.003600 Val: 0.056949 LR: 5.00e-04
+2026-05-16 06:20:19,089 [INFO] [BFC_v1][CNN_LSTM] Early stopping at epoch 20
+2026-05-16 06:20:19,089 [INFO] [BFC_v1][CNN_LSTM] Training done in 2.2s, best val: 0.043529
+2026-05-16 06:20:19,103 [INFO]     BFC: MSE=612.2839 RMSE=24.7444 MAPE=4.53%
+2026-05-16 06:20:19,204 [INFO] [BOKL_v1][CNN_LSTM] Epoch 1/150 Train: 0.061697 Val: 0.035530 LR: 1.00e-03
+2026-05-16 06:20:20,455 [INFO] [BOKL_v1][CNN_LSTM] Early stopping at epoch 18
+2026-05-16 06:20:20,455 [INFO] [BOKL_v1][CNN_LSTM] Training done in 1.3s, best val: 0.017188
+2026-05-16 06:20:20,467 [INFO]     BOKL: MSE=382.3025 RMSE=19.5526 MAPE=6.91%
+2026-05-16 06:20:20,728 [INFO] [BPCL_v1][CNN_LSTM] Epoch 1/150 Train: 0.087568 Val: 0.002732 LR: 1.00e-03
+2026-05-16 06:20:25,046 [INFO] [BPCL_v1][CNN_LSTM] Epoch 20/150 Train: 0.016193 Val: 0.004727 LR: 5.00e-04
+2026-05-16 06:20:29,517 [INFO] [BPCL_v1][CNN_LSTM] Epoch 40/150 Train: 0.012592 Val: 0.003057 LR: 2.50e-04
+2026-05-16 06:20:32,005 [INFO] [BPCL_v1][CNN_LSTM] Early stopping at epoch 51
+2026-05-16 06:20:32,005 [INFO] [BPCL_v1][CNN_LSTM] Training done in 11.5s, best val: 0.000988
+2026-05-16 06:20:32,030 [INFO]     BPCL: MSE=9015.3867 RMSE=94.9494 MAPE=9.61%
+2026-05-16 06:20:32,031 [INFO]   Variation 2 avg: MSE=2953.8153 RMSE=44.4033 MAPE=8.31% Composite=20.1212
+2026-05-16 06:20:32,031 [INFO] 
+  Variation 3/6: {'hidden_size': 128, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0005}
+2026-05-16 06:20:32,311 [INFO] [ADBL_v2][CNN_LSTM] Epoch 1/150 Train: 0.119241 Val: 0.011721 LR: 5.00e-04
+2026-05-16 06:20:36,973 [INFO] [ADBL_v2][CNN_LSTM] Epoch 20/150 Train: 0.008254 Val: 0.002217 LR: 2.50e-04
+2026-05-16 06:20:40,598 [INFO] [ADBL_v2][CNN_LSTM] Early stopping at epoch 35
+2026-05-16 06:20:40,598 [INFO] [ADBL_v2][CNN_LSTM] Training done in 8.5s, best val: 0.002217
+2026-05-16 06:20:40,625 [INFO]     ADBL: MSE=1545.0326 RMSE=39.3069 MAPE=9.93%
+2026-05-16 06:20:40,905 [INFO] [AHPC_v2][CNN_LSTM] Epoch 1/150 Train: 0.102799 Val: 0.024382 LR: 5.00e-04
+2026-05-16 06:20:45,591 [INFO] [AHPC_v2][CNN_LSTM] Epoch 20/150 Train: 0.011631 Val: 0.005135 LR: 5.00e-04
+2026-05-16 06:20:50,533 [INFO] [AHPC_v2][CNN_LSTM] Epoch 40/150 Train: 0.007641 Val: 0.003704 LR: 2.50e-04
+2026-05-16 06:20:51,534 [INFO] [AHPC_v2][CNN_LSTM] Early stopping at epoch 44
+2026-05-16 06:20:51,534 [INFO] [AHPC_v2][CNN_LSTM] Training done in 10.9s, best val: 0.003699
+2026-05-16 06:20:51,561 [INFO]     AHPC: MSE=676.8477 RMSE=26.0163 MAPE=7.75%
+2026-05-16 06:20:51,701 [INFO] [AKJCL_v2][CNN_LSTM] Epoch 1/150 Train: 0.128067 Val: 0.122927 LR: 5.00e-04
+2026-05-16 06:20:53,773 [INFO] [AKJCL_v2][CNN_LSTM] Epoch 20/150 Train: 0.008798 Val: 0.007771 LR: 5.00e-04
+2026-05-16 06:20:55,868 [INFO] [AKJCL_v2][CNN_LSTM] Early stopping at epoch 39
+2026-05-16 06:20:55,869 [INFO] [AKJCL_v2][CNN_LSTM] Training done in 4.3s, best val: 0.004017
+2026-05-16 06:20:55,883 [INFO]     AKJCL: MSE=8509.5498 RMSE=92.2472 MAPE=16.28%
+2026-05-16 06:20:56,051 [INFO] [AKPL_v2][CNN_LSTM] Epoch 1/150 Train: 0.114633 Val: 0.019468 LR: 5.00e-04
+2026-05-16 06:20:58,335 [INFO] [AKPL_v2][CNN_LSTM] Early stopping at epoch 18
+2026-05-16 06:20:58,335 [INFO] [AKPL_v2][CNN_LSTM] Training done in 2.4s, best val: 0.001990
+2026-05-16 06:20:58,353 [INFO]     AKPL: MSE=140.8195 RMSE=11.8667 MAPE=3.47%
+2026-05-16 06:20:58,641 [INFO] [ALICL_v2][CNN_LSTM] Epoch 1/150 Train: 0.050759 Val: 0.014038 LR: 5.00e-04
+2026-05-16 06:21:03,123 [INFO] [ALICL_v2][CNN_LSTM] Epoch 20/150 Train: 0.003454 Val: 0.001677 LR: 2.50e-04
+2026-05-16 06:21:03,363 [INFO] [ALICL_v2][CNN_LSTM] Early stopping at epoch 21
+2026-05-16 06:21:03,364 [INFO] [ALICL_v2][CNN_LSTM] Training done in 5.0s, best val: 0.001469
+2026-05-16 06:21:03,391 [INFO]     ALICL: MSE=2587.7131 RMSE=50.8696 MAPE=6.95%
+2026-05-16 06:21:03,589 [INFO] [API_v2][CNN_LSTM] Epoch 1/150 Train: 0.109629 Val: 0.002310 LR: 5.00e-04
+2026-05-16 06:21:06,630 [INFO] [API_v2][CNN_LSTM] Epoch 20/150 Train: 0.007706 Val: 0.002141 LR: 2.50e-04
+2026-05-16 06:21:07,102 [INFO] [API_v2][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:21:07,103 [INFO] [API_v2][CNN_LSTM] Training done in 3.7s, best val: 0.001661
+2026-05-16 06:21:07,122 [INFO]     API: MSE=413.7436 RMSE=20.3407 MAPE=5.40%
+2026-05-16 06:21:07,307 [INFO] [BARUN_v2][CNN_LSTM] Epoch 1/150 Train: 0.098316 Val: 0.030229 LR: 5.00e-04
+2026-05-16 06:21:10,226 [INFO] [BARUN_v2][CNN_LSTM] Epoch 20/150 Train: 0.005899 Val: 0.011353 LR: 2.50e-04
+2026-05-16 06:21:11,754 [INFO] [BARUN_v2][CNN_LSTM] Early stopping at epoch 30
+2026-05-16 06:21:11,755 [INFO] [BARUN_v2][CNN_LSTM] Training done in 4.6s, best val: 0.005470
+2026-05-16 06:21:11,774 [INFO]     BARUN: MSE=5448.1982 RMSE=73.8119 MAPE=15.14%
+2026-05-16 06:21:11,923 [INFO] [BFC_v2][CNN_LSTM] Epoch 1/150 Train: 0.092133 Val: 0.222932 LR: 5.00e-04
+2026-05-16 06:21:14,245 [INFO] [BFC_v2][CNN_LSTM] Epoch 20/150 Train: 0.004437 Val: 0.049506 LR: 2.50e-04
+2026-05-16 06:21:14,967 [INFO] [BFC_v2][CNN_LSTM] Early stopping at epoch 26
+2026-05-16 06:21:14,968 [INFO] [BFC_v2][CNN_LSTM] Training done in 3.2s, best val: 0.030492
+2026-05-16 06:21:14,985 [INFO]     BFC: MSE=266.8971 RMSE=16.3370 MAPE=2.67%
+2026-05-16 06:21:15,111 [INFO] [BOKL_v2][CNN_LSTM] Epoch 1/150 Train: 0.118046 Val: 0.027313 LR: 5.00e-04
+2026-05-16 06:21:16,385 [INFO] [BOKL_v2][CNN_LSTM] Early stopping at epoch 16
+2026-05-16 06:21:16,386 [INFO] [BOKL_v2][CNN_LSTM] Training done in 1.4s, best val: 0.027313
+2026-05-16 06:21:16,399 [INFO]     BOKL: MSE=1647.2487 RMSE=40.5863 MAPE=15.17%
+2026-05-16 06:21:16,689 [INFO] [BPCL_v2][CNN_LSTM] Epoch 1/150 Train: 0.132451 Val: 0.035804 LR: 5.00e-04
+2026-05-16 06:21:21,434 [INFO] [BPCL_v2][CNN_LSTM] Epoch 20/150 Train: 0.013639 Val: 0.003237 LR: 2.50e-04
+2026-05-16 06:21:22,182 [INFO] [BPCL_v2][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:21:22,183 [INFO] [BPCL_v2][CNN_LSTM] Training done in 5.8s, best val: 0.001123
+2026-05-16 06:21:22,210 [INFO]     BPCL: MSE=14805.3311 RMSE=121.6772 MAPE=11.72%
+2026-05-16 06:21:22,210 [INFO]   Variation 3 avg: MSE=3604.1381 RMSE=49.3060 MAPE=9.45% Composite=21.5571
+2026-05-16 06:21:22,211 [INFO] 
+  Variation 4/6: {'hidden_size': 256, 'num_layers': 2, 'dropout': 0.4, 'lr': 0.0005}
+2026-05-16 06:21:22,559 [INFO] [ADBL_v3][CNN_LSTM] Epoch 1/150 Train: 0.071830 Val: 0.005232 LR: 5.00e-04
+2026-05-16 06:21:28,452 [INFO] [ADBL_v3][CNN_LSTM] Epoch 20/150 Train: 0.009526 Val: 0.003507 LR: 5.00e-04
+2026-05-16 06:21:32,134 [INFO] [ADBL_v3][CNN_LSTM] Early stopping at epoch 32
+2026-05-16 06:21:32,135 [INFO] [ADBL_v3][CNN_LSTM] Training done in 9.9s, best val: 0.001351
+2026-05-16 06:21:32,166 [INFO]     ADBL: MSE=641.5216 RMSE=25.3283 MAPE=5.41%
+2026-05-16 06:21:32,519 [INFO] [AHPC_v3][CNN_LSTM] Epoch 1/150 Train: 0.073118 Val: 0.017861 LR: 5.00e-04
+2026-05-16 06:21:38,545 [INFO] [AHPC_v3][CNN_LSTM] Epoch 20/150 Train: 0.011082 Val: 0.005536 LR: 5.00e-04
+2026-05-16 06:21:44,889 [INFO] [AHPC_v3][CNN_LSTM] Epoch 40/150 Train: 0.007710 Val: 0.006235 LR: 2.50e-04
+2026-05-16 06:21:45,558 [INFO] [AHPC_v3][CNN_LSTM] Early stopping at epoch 42
+2026-05-16 06:21:45,559 [INFO] [AHPC_v3][CNN_LSTM] Training done in 13.4s, best val: 0.003465
+2026-05-16 06:21:45,591 [INFO]     AHPC: MSE=1025.7046 RMSE=32.0266 MAPE=8.61%
+2026-05-16 06:21:45,763 [INFO] [AKJCL_v3][CNN_LSTM] Epoch 1/150 Train: 0.080648 Val: 0.027525 LR: 5.00e-04
+2026-05-16 06:21:48,397 [INFO] [AKJCL_v3][CNN_LSTM] Epoch 20/150 Train: 0.005715 Val: 0.008265 LR: 2.50e-04
+2026-05-16 06:21:48,669 [INFO] [AKJCL_v3][CNN_LSTM] Early stopping at epoch 22
+2026-05-16 06:21:48,670 [INFO] [AKJCL_v3][CNN_LSTM] Training done in 3.0s, best val: 0.004311
+2026-05-16 06:21:48,688 [INFO]     AKJCL: MSE=8615.2246 RMSE=92.8182 MAPE=16.46%
+2026-05-16 06:21:48,892 [INFO] [AKPL_v3][CNN_LSTM] Epoch 1/150 Train: 0.084629 Val: 0.018294 LR: 5.00e-04
+2026-05-16 06:21:51,935 [INFO] [AKPL_v3][CNN_LSTM] Early stopping at epoch 19
+2026-05-16 06:21:51,935 [INFO] [AKPL_v3][CNN_LSTM] Training done in 3.2s, best val: 0.000979
+2026-05-16 06:21:51,955 [INFO]     AKPL: MSE=128.1914 RMSE=11.3222 MAPE=3.29%
+2026-05-16 06:21:52,292 [INFO] [ALICL_v3][CNN_LSTM] Epoch 1/150 Train: 0.029698 Val: 0.005533 LR: 5.00e-04
+2026-05-16 06:21:58,006 [INFO] [ALICL_v3][CNN_LSTM] Epoch 20/150 Train: 0.003785 Val: 0.000931 LR: 2.50e-04
+2026-05-16 06:21:59,496 [INFO] [ALICL_v3][CNN_LSTM] Early stopping at epoch 25
+2026-05-16 06:21:59,497 [INFO] [ALICL_v3][CNN_LSTM] Training done in 7.5s, best val: 0.000800
+2026-05-16 06:21:59,528 [INFO]     ALICL: MSE=3064.0701 RMSE=55.3540 MAPE=7.98%
+2026-05-16 06:21:59,768 [INFO] [API_v3][CNN_LSTM] Epoch 1/150 Train: 0.062038 Val: 0.017044 LR: 5.00e-04
+2026-05-16 06:22:03,581 [INFO] [API_v3][CNN_LSTM] Epoch 20/150 Train: 0.005671 Val: 0.001448 LR: 2.50e-04
+2026-05-16 06:22:04,586 [INFO] [API_v3][CNN_LSTM] Early stopping at epoch 25
+2026-05-16 06:22:04,587 [INFO] [API_v3][CNN_LSTM] Training done in 5.0s, best val: 0.000921
+2026-05-16 06:22:04,611 [INFO]     API: MSE=368.6058 RMSE=19.1991 MAPE=4.74%
+2026-05-16 06:22:04,840 [INFO] [BARUN_v3][CNN_LSTM] Epoch 1/150 Train: 0.063495 Val: 0.005579 LR: 5.00e-04
+2026-05-16 06:22:07,775 [INFO] [BARUN_v3][CNN_LSTM] Early stopping at epoch 16
+2026-05-16 06:22:07,776 [INFO] [BARUN_v3][CNN_LSTM] Training done in 3.1s, best val: 0.005579
+2026-05-16 06:22:07,798 [INFO]     BARUN: MSE=2656.1812 RMSE=51.5382 MAPE=10.21%
+2026-05-16 06:22:07,984 [INFO] [BFC_v3][CNN_LSTM] Epoch 1/150 Train: 0.052000 Val: 0.178219 LR: 5.00e-04
+2026-05-16 06:22:10,906 [INFO] [BFC_v3][CNN_LSTM] Epoch 20/150 Train: 0.003883 Val: 0.037816 LR: 2.50e-04
+2026-05-16 06:22:12,131 [INFO] [BFC_v3][CNN_LSTM] Early stopping at epoch 28
+2026-05-16 06:22:12,131 [INFO] [BFC_v3][CNN_LSTM] Training done in 4.3s, best val: 0.025328
+2026-05-16 06:22:12,150 [INFO]     BFC: MSE=242.3617 RMSE=15.5680 MAPE=2.55%
+2026-05-16 06:22:12,286 [INFO] [BOKL_v3][CNN_LSTM] Epoch 1/150 Train: 0.078229 Val: 0.049754 LR: 5.00e-04
+2026-05-16 06:22:13,974 [INFO] [BOKL_v3][CNN_LSTM] Early stopping at epoch 17
+2026-05-16 06:22:13,975 [INFO] [BOKL_v3][CNN_LSTM] Training done in 1.8s, best val: 0.006383
+2026-05-16 06:22:13,990 [INFO]     BOKL: MSE=214.5778 RMSE=14.6485 MAPE=4.94%
+2026-05-16 06:22:14,341 [INFO] [BPCL_v3][CNN_LSTM] Epoch 1/150 Train: 0.092346 Val: 0.000875 LR: 5.00e-04
+2026-05-16 06:22:20,329 [INFO] [BPCL_v3][CNN_LSTM] Epoch 20/150 Train: 0.013292 Val: 0.003459 LR: 2.50e-04
+2026-05-16 06:22:23,145 [INFO] [BPCL_v3][CNN_LSTM] Early stopping at epoch 29
+2026-05-16 06:22:23,146 [INFO] [BPCL_v3][CNN_LSTM] Training done in 9.1s, best val: 0.000819
+2026-05-16 06:22:23,177 [INFO]     BPCL: MSE=18493.2422 RMSE=135.9899 MAPE=11.82%
+2026-05-16 06:22:23,178 [INFO]   Variation 4 avg: MSE=3544.9681 RMSE=45.3793 MAPE=7.60% Composite=19.6097
+2026-05-16 06:22:23,179 [INFO] 
+  Variation 5/6: {'hidden_size': 256, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0001}
+2026-05-16 06:22:23,639 [INFO] [ADBL_v4][CNN_LSTM] Epoch 1/150 Train: 0.192292 Val: 0.024419 LR: 1.00e-04
+2026-05-16 06:22:31,727 [INFO] [ADBL_v4][CNN_LSTM] Epoch 20/150 Train: 0.010469 Val: 0.005292 LR: 1.00e-04
+2026-05-16 06:22:39,802 [INFO] [ADBL_v4][CNN_LSTM] Early stopping at epoch 39
+2026-05-16 06:22:39,802 [INFO] [ADBL_v4][CNN_LSTM] Training done in 16.6s, best val: 0.002348
+2026-05-16 06:22:39,842 [INFO]     ADBL: MSE=1341.0084 RMSE=36.6198 MAPE=8.02%
+2026-05-16 06:22:40,321 [INFO] [AHPC_v4][CNN_LSTM] Epoch 1/150 Train: 0.187457 Val: 0.072021 LR: 1.00e-04
+2026-05-16 06:22:48,649 [INFO] [AHPC_v4][CNN_LSTM] Epoch 20/150 Train: 0.012300 Val: 0.019143 LR: 1.00e-04
+2026-05-16 06:22:57,415 [INFO] [AHPC_v4][CNN_LSTM] Epoch 40/150 Train: 0.007292 Val: 0.006757 LR: 1.00e-04
+2026-05-16 06:23:06,175 [INFO] [AHPC_v4][CNN_LSTM] Epoch 60/150 Train: 0.007461 Val: 0.006999 LR: 5.00e-05
+2026-05-16 06:23:08,789 [INFO] [AHPC_v4][CNN_LSTM] Early stopping at epoch 66
+2026-05-16 06:23:08,790 [INFO] [AHPC_v4][CNN_LSTM] Training done in 28.9s, best val: 0.005318
+2026-05-16 06:23:08,830 [INFO]     AHPC: MSE=2972.1667 RMSE=54.5176 MAPE=14.74%
+2026-05-16 06:23:09,051 [INFO] [AKJCL_v4][CNN_LSTM] Epoch 1/150 Train: 0.180630 Val: 0.041216 LR: 1.00e-04
+2026-05-16 06:23:12,656 [INFO] [AKJCL_v4][CNN_LSTM] Epoch 20/150 Train: 0.006470 Val: 0.028449 LR: 2.50e-05
+2026-05-16 06:23:16,454 [INFO] [AKJCL_v4][CNN_LSTM] Epoch 40/150 Train: 0.006428 Val: 0.024750 LR: 1.25e-05
+2026-05-16 06:23:18,546 [INFO] [AKJCL_v4][CNN_LSTM] Early stopping at epoch 51
+2026-05-16 06:23:18,546 [INFO] [AKJCL_v4][CNN_LSTM] Training done in 9.7s, best val: 0.017603
+2026-05-16 06:23:18,568 [INFO]     AKJCL: MSE=2733.4294 RMSE=52.2822 MAPE=11.12%
+2026-05-16 06:23:18,852 [INFO] [AKPL_v4][CNN_LSTM] Epoch 1/150 Train: 0.191140 Val: 0.141850 LR: 1.00e-04
+2026-05-16 06:23:23,266 [INFO] [AKPL_v4][CNN_LSTM] Epoch 20/150 Train: 0.008435 Val: 0.002977 LR: 1.00e-04
+2026-05-16 06:23:27,004 [INFO] [AKPL_v4][CNN_LSTM] Early stopping at epoch 36
+2026-05-16 06:23:27,005 [INFO] [AKPL_v4][CNN_LSTM] Training done in 8.4s, best val: 0.002225
+2026-05-16 06:23:27,031 [INFO]     AKPL: MSE=305.7617 RMSE=17.4860 MAPE=4.71%
+2026-05-16 06:23:27,486 [INFO] [ALICL_v4][CNN_LSTM] Epoch 1/150 Train: 0.083070 Val: 0.014516 LR: 1.00e-04
+2026-05-16 06:23:35,392 [INFO] [ALICL_v4][CNN_LSTM] Epoch 20/150 Train: 0.003550 Val: 0.001927 LR: 1.00e-04
+2026-05-16 06:23:43,661 [INFO] [ALICL_v4][CNN_LSTM] Epoch 40/150 Train: 0.003007 Val: 0.001981 LR: 5.00e-05
+2026-05-16 06:23:44,915 [INFO] [ALICL_v4][CNN_LSTM] Early stopping at epoch 43
+2026-05-16 06:23:44,916 [INFO] [ALICL_v4][CNN_LSTM] Training done in 17.8s, best val: 0.001268
+2026-05-16 06:23:44,954 [INFO]     ALICL: MSE=1833.4604 RMSE=42.8189 MAPE=4.97%
+2026-05-16 06:23:45,289 [INFO] [API_v4][CNN_LSTM] Epoch 1/150 Train: 0.168181 Val: 0.062602 LR: 1.00e-04
+2026-05-16 06:23:50,562 [INFO] [API_v4][CNN_LSTM] Epoch 20/150 Train: 0.006598 Val: 0.002819 LR: 5.00e-05
+2026-05-16 06:23:55,006 [INFO] [API_v4][CNN_LSTM] Early stopping at epoch 36
+2026-05-16 06:23:55,007 [INFO] [API_v4][CNN_LSTM] Training done in 10.0s, best val: 0.001254
+2026-05-16 06:23:55,036 [INFO]     API: MSE=507.1640 RMSE=22.5203 MAPE=5.31%
+2026-05-16 06:23:55,363 [INFO] [BARUN_v4][CNN_LSTM] Epoch 1/150 Train: 0.158841 Val: 0.010202 LR: 1.00e-04
+2026-05-16 06:24:00,461 [INFO] [BARUN_v4][CNN_LSTM] Epoch 20/150 Train: 0.006170 Val: 0.003313 LR: 1.00e-04
+2026-05-16 06:24:04,179 [INFO] [BARUN_v4][CNN_LSTM] Early stopping at epoch 34
+2026-05-16 06:24:04,180 [INFO] [BARUN_v4][CNN_LSTM] Training done in 9.1s, best val: 0.001708
+2026-05-16 06:24:04,208 [INFO]     BARUN: MSE=3628.6711 RMSE=60.2385 MAPE=10.23%
+2026-05-16 06:24:04,461 [INFO] [BFC_v4][CNN_LSTM] Epoch 1/150 Train: 0.149650 Val: 0.598705 LR: 1.00e-04
+2026-05-16 06:24:08,508 [INFO] [BFC_v4][CNN_LSTM] Epoch 20/150 Train: 0.004804 Val: 0.041032 LR: 1.00e-04
+2026-05-16 06:24:12,114 [INFO] [BFC_v4][CNN_LSTM] Early stopping at epoch 37
+2026-05-16 06:24:12,115 [INFO] [BFC_v4][CNN_LSTM] Training done in 7.9s, best val: 0.029418
+2026-05-16 06:24:12,139 [INFO]     BFC: MSE=952.8318 RMSE=30.8680 MAPE=5.31%
+2026-05-16 06:24:12,322 [INFO] [BOKL_v4][CNN_LSTM] Epoch 1/150 Train: 0.148367 Val: 0.067826 LR: 1.00e-04
+2026-05-16 06:24:15,079 [INFO] [BOKL_v4][CNN_LSTM] Epoch 20/150 Train: 0.006045 Val: 0.027273 LR: 5.00e-05
+2026-05-16 06:24:15,381 [INFO] [BOKL_v4][CNN_LSTM] Early stopping at epoch 22
+2026-05-16 06:24:15,382 [INFO] [BOKL_v4][CNN_LSTM] Training done in 3.2s, best val: 0.007467
+2026-05-16 06:24:15,401 [INFO]     BOKL: MSE=182.2644 RMSE=13.5005 MAPE=4.30%
+2026-05-16 06:24:15,873 [INFO] [BPCL_v4][CNN_LSTM] Epoch 1/150 Train: 0.204380 Val: 0.040791 LR: 1.00e-04
+2026-05-16 06:24:24,132 [INFO] [BPCL_v4][CNN_LSTM] Epoch 20/150 Train: 0.012598 Val: 0.000912 LR: 1.00e-04
+2026-05-16 06:24:32,852 [INFO] [BPCL_v4][CNN_LSTM] Epoch 40/150 Train: 0.011178 Val: 0.002701 LR: 5.00e-05
+2026-05-16 06:24:36,777 [INFO] [BPCL_v4][CNN_LSTM] Early stopping at epoch 49
+2026-05-16 06:24:36,778 [INFO] [BPCL_v4][CNN_LSTM] Training done in 21.3s, best val: 0.000782
+2026-05-16 06:24:36,818 [INFO]     BPCL: MSE=15008.3525 RMSE=122.5086 MAPE=10.85%
+2026-05-16 06:24:36,819 [INFO]   Variation 5 avg: MSE=2946.5111 RMSE=45.3360 MAPE=7.95% Composite=19.7790
+2026-05-16 06:24:36,819 [INFO] 
+  Variation 6/6: {'hidden_size': 128, 'num_layers': 4, 'dropout': 0.35, 'lr': 0.0005}
+2026-05-16 06:24:37,120 [INFO] [ADBL_v5][CNN_LSTM] Epoch 1/150 Train: 0.137523 Val: 0.027376 LR: 5.00e-04
+2026-05-16 06:24:42,113 [INFO] [ADBL_v5][CNN_LSTM] Epoch 20/150 Train: 0.013335 Val: 0.002689 LR: 2.50e-04
+2026-05-16 06:24:42,907 [INFO] [ADBL_v5][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:24:42,908 [INFO] [ADBL_v5][CNN_LSTM] Training done in 6.1s, best val: 0.001246
+2026-05-16 06:24:42,939 [INFO]     ADBL: MSE=1428.0375 RMSE=37.7894 MAPE=6.42%
+2026-05-16 06:24:43,253 [INFO] [AHPC_v5][CNN_LSTM] Epoch 1/150 Train: 0.127436 Val: 0.040261 LR: 5.00e-04
+2026-05-16 06:24:48,512 [INFO] [AHPC_v5][CNN_LSTM] Epoch 20/150 Train: 0.011913 Val: 0.005975 LR: 5.00e-04
+2026-05-16 06:24:53,976 [INFO] [AHPC_v5][CNN_LSTM] Epoch 40/150 Train: 0.008323 Val: 0.003412 LR: 1.25e-04
+2026-05-16 06:24:57,839 [INFO] [AHPC_v5][CNN_LSTM] Early stopping at epoch 54
+2026-05-16 06:24:57,840 [INFO] [AHPC_v5][CNN_LSTM] Training done in 14.9s, best val: 0.002808
+2026-05-16 06:24:57,872 [INFO]     AHPC: MSE=1220.8658 RMSE=34.9409 MAPE=9.87%
+2026-05-16 06:24:58,022 [INFO] [AKJCL_v5][CNN_LSTM] Epoch 1/150 Train: 0.147299 Val: 0.135237 LR: 5.00e-04
+2026-05-16 06:25:00,261 [INFO] [AKJCL_v5][CNN_LSTM] Epoch 20/150 Train: 0.008550 Val: 0.028846 LR: 2.50e-04
+2026-05-16 06:25:00,724 [INFO] [AKJCL_v5][CNN_LSTM] Early stopping at epoch 24
+2026-05-16 06:25:00,725 [INFO] [AKJCL_v5][CNN_LSTM] Training done in 2.8s, best val: 0.010376
+2026-05-16 06:25:00,742 [INFO]     AKJCL: MSE=3083.1677 RMSE=55.5263 MAPE=11.84%
+2026-05-16 06:25:00,916 [INFO] [AKPL_v5][CNN_LSTM] Epoch 1/150 Train: 0.132973 Val: 0.054459 LR: 5.00e-04
+2026-05-16 06:25:03,725 [INFO] [AKPL_v5][CNN_LSTM] Epoch 20/150 Train: 0.009537 Val: 0.006227 LR: 2.50e-04
+2026-05-16 06:25:04,748 [INFO] [AKPL_v5][CNN_LSTM] Early stopping at epoch 27
+2026-05-16 06:25:04,749 [INFO] [AKPL_v5][CNN_LSTM] Training done in 4.0s, best val: 0.003403
+2026-05-16 06:25:04,769 [INFO]     AKPL: MSE=306.5858 RMSE=17.5096 MAPE=4.81%
+2026-05-16 06:25:05,072 [INFO] [ALICL_v5][CNN_LSTM] Epoch 1/150 Train: 0.064644 Val: 0.002479 LR: 5.00e-04
+2026-05-16 06:25:10,016 [INFO] [ALICL_v5][CNN_LSTM] Epoch 20/150 Train: 0.004878 Val: 0.001487 LR: 2.50e-04
+2026-05-16 06:25:14,901 [INFO] [ALICL_v5][CNN_LSTM] Early stopping at epoch 39
+2026-05-16 06:25:14,902 [INFO] [ALICL_v5][CNN_LSTM] Training done in 10.1s, best val: 0.000882
+2026-05-16 06:25:14,933 [INFO]     ALICL: MSE=4727.4097 RMSE=68.7562 MAPE=10.16%
+2026-05-16 06:25:15,171 [INFO] [API_v5][CNN_LSTM] Epoch 1/150 Train: 0.118433 Val: 0.030264 LR: 5.00e-04
+2026-05-16 06:25:18,482 [INFO] [API_v5][CNN_LSTM] Epoch 20/150 Train: 0.007076 Val: 0.002185 LR: 2.50e-04
+2026-05-16 06:25:18,657 [INFO] [API_v5][CNN_LSTM] Early stopping at epoch 21
+2026-05-16 06:25:18,658 [INFO] [API_v5][CNN_LSTM] Training done in 3.7s, best val: 0.001607
+2026-05-16 06:25:18,680 [INFO]     API: MSE=232.1620 RMSE=15.2369 MAPE=4.23%
+2026-05-16 06:25:18,879 [INFO] [BARUN_v5][CNN_LSTM] Epoch 1/150 Train: 0.110748 Val: 0.033235 LR: 5.00e-04
+2026-05-16 06:25:22,054 [INFO] [BARUN_v5][CNN_LSTM] Epoch 20/150 Train: 0.006930 Val: 0.009555 LR: 2.50e-04
+2026-05-16 06:25:22,388 [INFO] [BARUN_v5][CNN_LSTM] Early stopping at epoch 22
+2026-05-16 06:25:22,389 [INFO] [BARUN_v5][CNN_LSTM] Training done in 3.7s, best val: 0.004235
+2026-05-16 06:25:22,411 [INFO]     BARUN: MSE=2851.5669 RMSE=53.4001 MAPE=10.94%
+2026-05-16 06:25:22,573 [INFO] [BFC_v5][CNN_LSTM] Epoch 1/150 Train: 0.114564 Val: 0.378500 LR: 5.00e-04
+2026-05-16 06:25:25,089 [INFO] [BFC_v5][CNN_LSTM] Epoch 20/150 Train: 0.006848 Val: 0.134735 LR: 5.00e-04
+2026-05-16 06:25:26,551 [INFO] [BFC_v5][CNN_LSTM] Early stopping at epoch 31
+2026-05-16 06:25:26,552 [INFO] [BFC_v5][CNN_LSTM] Training done in 4.1s, best val: 0.039190
+2026-05-16 06:25:26,571 [INFO]     BFC: MSE=357.8504 RMSE=18.9169 MAPE=3.08%
+2026-05-16 06:25:26,691 [INFO] [BOKL_v5][CNN_LSTM] Epoch 1/150 Train: 0.131191 Val: 0.037111 LR: 5.00e-04
+2026-05-16 06:25:28,398 [INFO] [BOKL_v5][CNN_LSTM] Epoch 20/150 Train: 0.006613 Val: 0.039811 LR: 2.50e-04
+2026-05-16 06:25:29,302 [INFO] [BOKL_v5][CNN_LSTM] Early stopping at epoch 30
+2026-05-16 06:25:29,302 [INFO] [BOKL_v5][CNN_LSTM] Training done in 2.7s, best val: 0.028304
+2026-05-16 06:25:29,318 [INFO]     BOKL: MSE=84.2313 RMSE=9.1778 MAPE=2.77%
+2026-05-16 06:25:29,632 [INFO] [BPCL_v5][CNN_LSTM] Epoch 1/150 Train: 0.144229 Val: 0.032545 LR: 5.00e-04
+2026-05-16 06:25:34,529 [INFO] [BPCL_v5][CNN_LSTM] Early stopping at epoch 19
+2026-05-16 06:25:34,530 [INFO] [BPCL_v5][CNN_LSTM] Training done in 5.2s, best val: 0.001610
+2026-05-16 06:25:34,561 [INFO]     BPCL: MSE=15877.4561 RMSE=126.0058 MAPE=12.58%
+2026-05-16 06:25:34,562 [INFO]   Variation 6 avg: MSE=3016.9333 RMSE=43.7260 MAPE=7.67% Composite=19.4850
+2026-05-16 06:25:34,563 [INFO] 
+  BEST for CNN_LSTM: Variation 6
+2026-05-16 06:25:34,563 [INFO]   Params: {'hidden_size': 128, 'num_layers': 4, 'dropout': 0.35, 'lr': 0.0005}
+2026-05-16 06:25:34,564 [INFO]   Composite Score: 19.4850
+2026-05-16 06:25:34,565 [INFO] 
+========================================
+2026-05-16 06:25:34,565 [INFO] Tuning: BiLSTM_Attention
+2026-05-16 06:25:34,566 [INFO] ========================================
+2026-05-16 06:25:34,568 [INFO] 
+  Variation 1/6: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:25:34,899 [INFO] [ADBL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.050215 Val: 0.041544 LR: 1.00e-03
+2026-05-16 06:25:40,484 [INFO] [ADBL_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.007624 Val: 0.001330 LR: 1.00e-03
+2026-05-16 06:25:46,291 [INFO] [ADBL_v0][BiLSTM_Attention] Epoch 40/150 Train: 0.006424 Val: 0.001046 LR: 5.00e-04
+2026-05-16 06:25:46,884 [INFO] [ADBL_v0][BiLSTM_Attention] Early stopping at epoch 42
+2026-05-16 06:25:46,884 [INFO] [ADBL_v0][BiLSTM_Attention] Training done in 12.3s, best val: 0.000708
+2026-05-16 06:25:46,906 [INFO]     ADBL: MSE=116.5036 RMSE=10.7937 MAPE=2.84%
+2026-05-16 06:25:47,240 [INFO] [AHPC_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.051254 Val: 0.017470 LR: 1.00e-03
+2026-05-16 06:25:52,948 [INFO] [AHPC_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.007073 Val: 0.004509 LR: 5.00e-04
+2026-05-16 06:25:58,946 [INFO] [AHPC_v0][BiLSTM_Attention] Epoch 40/150 Train: 0.006586 Val: 0.003858 LR: 2.50e-04
+2026-05-16 06:26:04,836 [INFO] [AHPC_v0][BiLSTM_Attention] Epoch 60/150 Train: 0.005726 Val: 0.005072 LR: 1.25e-04
+2026-05-16 06:26:05,180 [INFO] [AHPC_v0][BiLSTM_Attention] Early stopping at epoch 61
+2026-05-16 06:26:05,180 [INFO] [AHPC_v0][BiLSTM_Attention] Training done in 18.2s, best val: 0.003380
+2026-05-16 06:26:05,203 [INFO]     AHPC: MSE=546.2347 RMSE=23.3717 MAPE=6.97%
+2026-05-16 06:26:05,361 [INFO] [AKJCL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.047903 Val: 0.027457 LR: 1.00e-03
+2026-05-16 06:26:07,677 [INFO] [AKJCL_v0][BiLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:26:07,677 [INFO] [AKJCL_v0][BiLSTM_Attention] Training done in 2.4s, best val: 0.003129
+2026-05-16 06:26:07,690 [INFO]     AKJCL: MSE=4599.2183 RMSE=67.8175 MAPE=12.96%
+2026-05-16 06:26:07,886 [INFO] [AKPL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.046849 Val: 0.002164 LR: 1.00e-03
+2026-05-16 06:26:10,758 [INFO] [AKPL_v0][BiLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:26:10,759 [INFO] [AKPL_v0][BiLSTM_Attention] Training done in 3.0s, best val: 0.001011
+2026-05-16 06:26:10,774 [INFO]     AKPL: MSE=165.6895 RMSE=12.8720 MAPE=4.14%
+2026-05-16 06:26:11,109 [INFO] [ALICL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.027203 Val: 0.001604 LR: 1.00e-03
+2026-05-16 06:26:16,561 [INFO] [ALICL_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.003224 Val: 0.000861 LR: 1.00e-03
+2026-05-16 06:26:22,245 [INFO] [ALICL_v0][BiLSTM_Attention] Epoch 40/150 Train: 0.002665 Val: 0.000519 LR: 5.00e-04
+2026-05-16 06:26:25,670 [INFO] [ALICL_v0][BiLSTM_Attention] Early stopping at epoch 52
+2026-05-16 06:26:25,671 [INFO] [ALICL_v0][BiLSTM_Attention] Training done in 14.9s, best val: 0.000417
+2026-05-16 06:26:25,693 [INFO]     ALICL: MSE=792.9501 RMSE=28.1594 MAPE=3.93%
+2026-05-16 06:26:25,914 [INFO] [API_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.053735 Val: 0.010565 LR: 1.00e-03
+2026-05-16 06:26:29,546 [INFO] [API_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.005527 Val: 0.000953 LR: 1.00e-03
+2026-05-16 06:26:31,262 [INFO] [API_v0][BiLSTM_Attention] Early stopping at epoch 29
+2026-05-16 06:26:31,263 [INFO] [API_v0][BiLSTM_Attention] Training done in 5.5s, best val: 0.000652
+2026-05-16 06:26:31,278 [INFO]     API: MSE=51.8181 RMSE=7.1985 MAPE=1.59%
+2026-05-16 06:26:31,496 [INFO] [BARUN_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.039096 Val: 0.019515 LR: 1.00e-03
+2026-05-16 06:26:34,948 [INFO] [BARUN_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.005719 Val: 0.001020 LR: 1.00e-03
+2026-05-16 06:26:37,372 [INFO] [BARUN_v0][BiLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:26:37,373 [INFO] [BARUN_v0][BiLSTM_Attention] Training done in 6.1s, best val: 0.000794
+2026-05-16 06:26:37,388 [INFO]     BARUN: MSE=2169.1887 RMSE=46.5746 MAPE=7.01%
+2026-05-16 06:26:37,565 [INFO] [BFC_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.038972 Val: 0.119687 LR: 1.00e-03
+2026-05-16 06:26:40,300 [INFO] [BFC_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.004232 Val: 0.052672 LR: 5.00e-04
+2026-05-16 06:26:41,308 [INFO] [BFC_v0][BiLSTM_Attention] Early stopping at epoch 27
+2026-05-16 06:26:41,309 [INFO] [BFC_v0][BiLSTM_Attention] Training done in 3.9s, best val: 0.046364
+2026-05-16 06:26:41,324 [INFO]     BFC: MSE=207.7837 RMSE=14.4147 MAPE=2.44%
+2026-05-16 06:26:41,449 [INFO] [BOKL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.041164 Val: 0.058944 LR: 1.00e-03
+2026-05-16 06:26:43,146 [INFO] [BOKL_v0][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:26:43,147 [INFO] [BOKL_v0][BiLSTM_Attention] Training done in 1.8s, best val: 0.015665
+2026-05-16 06:26:43,160 [INFO]     BOKL: MSE=183.0598 RMSE=13.5300 MAPE=4.44%
+2026-05-16 06:26:43,496 [INFO] [BPCL_v0][BiLSTM_Attention] Epoch 1/150 Train: 0.088686 Val: 0.001048 LR: 1.00e-03
+2026-05-16 06:26:49,224 [INFO] [BPCL_v0][BiLSTM_Attention] Epoch 20/150 Train: 0.011578 Val: 0.006332 LR: 5.00e-04
+2026-05-16 06:26:50,727 [INFO] [BPCL_v0][BiLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:26:50,728 [INFO] [BPCL_v0][BiLSTM_Attention] Training done in 7.5s, best val: 0.000672
+2026-05-16 06:26:50,751 [INFO]     BPCL: MSE=16311.9980 RMSE=127.7184 MAPE=10.79%
+2026-05-16 06:26:50,752 [INFO]   Variation 1 avg: MSE=2514.4444 RMSE=35.2450 MAPE=5.71% Composite=17.1326
+2026-05-16 06:26:50,753 [INFO] 
+  Variation 2/6: {'hidden_size': 128, 'num_layers': 2, 'dropout': 0.3, 'lr': 0.001}
+2026-05-16 06:26:51,271 [INFO] [ADBL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.041649 Val: 0.026247 LR: 1.00e-03
+2026-05-16 06:27:00,551 [INFO] [ADBL_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.008356 Val: 0.004845 LR: 1.00e-03
+2026-05-16 06:27:05,427 [INFO] [ADBL_v1][BiLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:27:05,428 [INFO] [ADBL_v1][BiLSTM_Attention] Training done in 14.6s, best val: 0.001085
+2026-05-16 06:27:05,471 [INFO]     ADBL: MSE=1115.3477 RMSE=33.3968 MAPE=6.01%
+2026-05-16 06:27:06,004 [INFO] [AHPC_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.047551 Val: 0.025504 LR: 1.00e-03
+2026-05-16 06:27:15,528 [INFO] [AHPC_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.007912 Val: 0.007159 LR: 5.00e-04
+2026-05-16 06:27:25,552 [INFO] [AHPC_v1][BiLSTM_Attention] Epoch 40/150 Train: 0.006027 Val: 0.007552 LR: 2.50e-04
+2026-05-16 06:27:32,087 [INFO] [AHPC_v1][BiLSTM_Attention] Early stopping at epoch 53
+2026-05-16 06:27:32,088 [INFO] [AHPC_v1][BiLSTM_Attention] Training done in 26.6s, best val: 0.003925
+2026-05-16 06:27:32,131 [INFO]     AHPC: MSE=1999.6401 RMSE=44.7173 MAPE=11.03%
+2026-05-16 06:27:32,377 [INFO] [AKJCL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.056817 Val: 0.013383 LR: 1.00e-03
+2026-05-16 06:27:36,519 [INFO] [AKJCL_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.006236 Val: 0.009766 LR: 5.00e-04
+2026-05-16 06:27:40,866 [INFO] [AKJCL_v1][BiLSTM_Attention] Epoch 40/150 Train: 0.005073 Val: 0.006758 LR: 1.25e-04
+2026-05-16 06:27:42,393 [INFO] [AKJCL_v1][BiLSTM_Attention] Early stopping at epoch 47
+2026-05-16 06:27:42,394 [INFO] [AKJCL_v1][BiLSTM_Attention] Training done in 10.2s, best val: 0.003321
+2026-05-16 06:27:42,417 [INFO]     AKJCL: MSE=3025.7625 RMSE=55.0069 MAPE=10.03%
+2026-05-16 06:27:42,718 [INFO] [AKPL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.039865 Val: 0.001486 LR: 1.00e-03
+2026-05-16 06:27:47,843 [INFO] [AKPL_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.005840 Val: 0.003246 LR: 5.00e-04
+2026-05-16 06:27:48,658 [INFO] [AKPL_v1][BiLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:27:48,659 [INFO] [AKPL_v1][BiLSTM_Attention] Training done in 6.2s, best val: 0.001025
+2026-05-16 06:27:48,685 [INFO]     AKPL: MSE=61.3159 RMSE=7.8304 MAPE=2.29%
+2026-05-16 06:27:49,198 [INFO] [ALICL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.024967 Val: 0.001474 LR: 1.00e-03
+2026-05-16 06:27:58,302 [INFO] [ALICL_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.002921 Val: 0.002487 LR: 5.00e-04
+2026-05-16 06:28:07,887 [INFO] [ALICL_v1][BiLSTM_Attention] Epoch 40/150 Train: 0.002523 Val: 0.000582 LR: 2.50e-04
+2026-05-16 06:28:10,765 [INFO] [ALICL_v1][BiLSTM_Attention] Early stopping at epoch 46
+2026-05-16 06:28:10,766 [INFO] [ALICL_v1][BiLSTM_Attention] Training done in 22.0s, best val: 0.000515
+2026-05-16 06:28:10,811 [INFO]     ALICL: MSE=1469.8053 RMSE=38.3380 MAPE=5.79%
+2026-05-16 06:28:11,161 [INFO] [API_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.041203 Val: 0.010970 LR: 1.00e-03
+2026-05-16 06:28:17,288 [INFO] [API_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.005602 Val: 0.003260 LR: 5.00e-04
+2026-05-16 06:28:17,607 [INFO] [API_v1][BiLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:28:17,608 [INFO] [API_v1][BiLSTM_Attention] Training done in 6.8s, best val: 0.000502
+2026-05-16 06:28:17,639 [INFO]     API: MSE=180.4200 RMSE=13.4321 MAPE=4.00%
+2026-05-16 06:28:17,979 [INFO] [BARUN_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.044449 Val: 0.015606 LR: 1.00e-03
+2026-05-16 06:28:23,834 [INFO] [BARUN_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.005614 Val: 0.008683 LR: 5.00e-04
+2026-05-16 06:28:24,447 [INFO] [BARUN_v1][BiLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:28:24,448 [INFO] [BARUN_v1][BiLSTM_Attention] Training done in 6.8s, best val: 0.001089
+2026-05-16 06:28:24,478 [INFO]     BARUN: MSE=1281.5685 RMSE=35.7990 MAPE=6.35%
+2026-05-16 06:28:24,751 [INFO] [BFC_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.033857 Val: 0.077888 LR: 1.00e-03
+2026-05-16 06:28:29,383 [INFO] [BFC_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.004627 Val: 0.054150 LR: 5.00e-04
+2026-05-16 06:28:30,841 [INFO] [BFC_v1][BiLSTM_Attention] Early stopping at epoch 26
+2026-05-16 06:28:30,842 [INFO] [BFC_v1][BiLSTM_Attention] Training done in 6.3s, best val: 0.038926
+2026-05-16 06:28:30,867 [INFO]     BFC: MSE=361.9672 RMSE=19.0254 MAPE=3.31%
+2026-05-16 06:28:31,060 [INFO] [BOKL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.038571 Val: 0.052849 LR: 1.00e-03
+2026-05-16 06:28:33,886 [INFO] [BOKL_v1][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:28:33,886 [INFO] [BOKL_v1][BiLSTM_Attention] Training done in 3.0s, best val: 0.025179
+2026-05-16 06:28:33,905 [INFO]     BOKL: MSE=342.2958 RMSE=18.5012 MAPE=6.61%
+2026-05-16 06:28:34,440 [INFO] [BPCL_v1][BiLSTM_Attention] Epoch 1/150 Train: 0.046935 Val: 0.017423 LR: 1.00e-03
+2026-05-16 06:28:43,987 [INFO] [BPCL_v1][BiLSTM_Attention] Epoch 20/150 Train: 0.010927 Val: 0.001830 LR: 5.00e-04
+2026-05-16 06:28:50,008 [INFO] [BPCL_v1][BiLSTM_Attention] Early stopping at epoch 32
+2026-05-16 06:28:50,009 [INFO] [BPCL_v1][BiLSTM_Attention] Training done in 16.1s, best val: 0.000422
+2026-05-16 06:28:50,053 [INFO]     BPCL: MSE=14169.2207 RMSE=119.0345 MAPE=9.72%
+2026-05-16 06:28:50,054 [INFO]   Variation 2 avg: MSE=2400.7344 RMSE=38.5082 MAPE=6.51% Composite=17.9742
+2026-05-16 06:28:50,055 [INFO] 
+  Variation 3/6: {'hidden_size': 128, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0005}
+2026-05-16 06:28:50,788 [INFO] [ADBL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.049532 Val: 0.013368 LR: 5.00e-04
+2026-05-16 06:29:04,022 [INFO] [ADBL_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.009863 Val: 0.001060 LR: 5.00e-04
+2026-05-16 06:29:10,987 [INFO] [ADBL_v2][BiLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:29:10,988 [INFO] [ADBL_v2][BiLSTM_Attention] Training done in 20.9s, best val: 0.000831
+2026-05-16 06:29:11,044 [INFO]     ADBL: MSE=179.6145 RMSE=13.4020 MAPE=2.98%
+2026-05-16 06:29:11,797 [INFO] [AHPC_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.047698 Val: 0.036475 LR: 5.00e-04
+2026-05-16 06:29:25,409 [INFO] [AHPC_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.007911 Val: 0.004666 LR: 5.00e-04
+2026-05-16 06:29:39,741 [INFO] [AHPC_v2][BiLSTM_Attention] Epoch 40/150 Train: 0.006538 Val: 0.003785 LR: 2.50e-04
+2026-05-16 06:29:54,108 [INFO] [AHPC_v2][BiLSTM_Attention] Epoch 60/150 Train: 0.006268 Val: 0.007340 LR: 1.25e-04
+2026-05-16 06:29:59,155 [INFO] [AHPC_v2][BiLSTM_Attention] Early stopping at epoch 67
+2026-05-16 06:29:59,156 [INFO] [AHPC_v2][BiLSTM_Attention] Training done in 48.1s, best val: 0.003341
+2026-05-16 06:29:59,215 [INFO]     AHPC: MSE=4689.8037 RMSE=68.4821 MAPE=16.41%
+2026-05-16 06:29:59,556 [INFO] [AKJCL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.050177 Val: 0.016011 LR: 5.00e-04
+2026-05-16 06:30:05,450 [INFO] [AKJCL_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.006876 Val: 0.009557 LR: 2.50e-04
+2026-05-16 06:30:06,372 [INFO] [AKJCL_v2][BiLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:30:06,373 [INFO] [AKJCL_v2][BiLSTM_Attention] Training done in 7.1s, best val: 0.004139
+2026-05-16 06:30:06,402 [INFO]     AKJCL: MSE=3399.0986 RMSE=58.3018 MAPE=10.64%
+2026-05-16 06:30:06,823 [INFO] [AKPL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.049509 Val: 0.003674 LR: 5.00e-04
+2026-05-16 06:30:14,153 [INFO] [AKPL_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.008357 Val: 0.001869 LR: 2.50e-04
+2026-05-16 06:30:14,927 [INFO] [AKPL_v2][BiLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:30:14,928 [INFO] [AKPL_v2][BiLSTM_Attention] Training done in 8.5s, best val: 0.001298
+2026-05-16 06:30:14,963 [INFO]     AKPL: MSE=141.6434 RMSE=11.9014 MAPE=3.41%
+2026-05-16 06:30:15,676 [INFO] [ALICL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.028470 Val: 0.008964 LR: 5.00e-04
+2026-05-16 06:30:28,619 [INFO] [ALICL_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.002960 Val: 0.001551 LR: 2.50e-04
+2026-05-16 06:30:39,524 [INFO] [ALICL_v2][BiLSTM_Attention] Early stopping at epoch 36
+2026-05-16 06:30:39,525 [INFO] [ALICL_v2][BiLSTM_Attention] Training done in 24.5s, best val: 0.000526
+2026-05-16 06:30:39,582 [INFO]     ALICL: MSE=870.5269 RMSE=29.5047 MAPE=4.03%
+2026-05-16 06:30:40,069 [INFO] [API_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.044981 Val: 0.005162 LR: 5.00e-04
+2026-05-16 06:30:48,297 [INFO] [API_v2][BiLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:30:48,298 [INFO] [API_v2][BiLSTM_Attention] Training done in 8.7s, best val: 0.000571
+2026-05-16 06:30:48,337 [INFO]     API: MSE=140.3467 RMSE=11.8468 MAPE=3.48%
+2026-05-16 06:30:48,816 [INFO] [BARUN_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.056847 Val: 0.014878 LR: 5.00e-04
+2026-05-16 06:30:57,201 [INFO] [BARUN_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.006378 Val: 0.003509 LR: 5.00e-04
+2026-05-16 06:31:02,035 [INFO] [BARUN_v2][BiLSTM_Attention] Early stopping at epoch 31
+2026-05-16 06:31:02,036 [INFO] [BARUN_v2][BiLSTM_Attention] Training done in 13.7s, best val: 0.001035
+2026-05-16 06:31:02,075 [INFO]     BARUN: MSE=1225.7853 RMSE=35.0112 MAPE=5.68%
+2026-05-16 06:31:02,456 [INFO] [BFC_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.047095 Val: 0.168927 LR: 5.00e-04
+2026-05-16 06:31:09,061 [INFO] [BFC_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.005232 Val: 0.058082 LR: 5.00e-04
+2026-05-16 06:31:13,578 [INFO] [BFC_v2][BiLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:31:13,578 [INFO] [BFC_v2][BiLSTM_Attention] Training done in 11.5s, best val: 0.033481
+2026-05-16 06:31:13,613 [INFO]     BFC: MSE=239.1925 RMSE=15.4659 MAPE=2.51%
+2026-05-16 06:31:13,877 [INFO] [BOKL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.056940 Val: 0.014527 LR: 5.00e-04
+2026-05-16 06:31:18,398 [INFO] [BOKL_v2][BiLSTM_Attention] Epoch 20/150 Train: 0.004716 Val: 0.029723 LR: 2.50e-04
+2026-05-16 06:31:19,580 [INFO] [BOKL_v2][BiLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:31:19,581 [INFO] [BOKL_v2][BiLSTM_Attention] Training done in 5.9s, best val: 0.011963
+2026-05-16 06:31:19,606 [INFO]     BOKL: MSE=398.5806 RMSE=19.9645 MAPE=7.65%
+2026-05-16 06:31:20,360 [INFO] [BPCL_v2][BiLSTM_Attention] Epoch 1/150 Train: 0.065286 Val: 0.000894 LR: 5.00e-04
+2026-05-16 06:31:31,102 [INFO] [BPCL_v2][BiLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:31:31,102 [INFO] [BPCL_v2][BiLSTM_Attention] Training done in 11.5s, best val: 0.000894
+2026-05-16 06:31:31,160 [INFO]     BPCL: MSE=20726.2773 RMSE=143.9662 MAPE=13.18%
+2026-05-16 06:31:31,160 [INFO]   Variation 3 avg: MSE=3201.0870 RMSE=40.7847 MAPE=7.00% Composite=18.8018
+2026-05-16 06:31:31,161 [INFO] 
+  Variation 4/6: {'hidden_size': 256, 'num_layers': 2, 'dropout': 0.4, 'lr': 0.0005}
+2026-05-16 06:31:32,550 [INFO] [ADBL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.048979 Val: 0.026171 LR: 5.00e-04
+2026-05-16 06:31:58,096 [INFO] [ADBL_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.007621 Val: 0.004842 LR: 2.50e-04
+2026-05-16 06:31:59,438 [INFO] [ADBL_v3][BiLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:31:59,439 [INFO] [ADBL_v3][BiLSTM_Attention] Training done in 28.2s, best val: 0.001338
+2026-05-16 06:31:59,533 [INFO]     ADBL: MSE=1092.1173 RMSE=33.0472 MAPE=7.15%
+2026-05-16 06:32:00,962 [INFO] [AHPC_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.045290 Val: 0.024475 LR: 5.00e-04
+2026-05-16 06:32:27,205 [INFO] [AHPC_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.007316 Val: 0.005692 LR: 2.50e-04
+2026-05-16 06:32:54,861 [INFO] [AHPC_v3][BiLSTM_Attention] Epoch 40/150 Train: 0.006105 Val: 0.005489 LR: 1.25e-04
+2026-05-16 06:33:08,690 [INFO] [AHPC_v3][BiLSTM_Attention] Early stopping at epoch 50
+2026-05-16 06:33:08,691 [INFO] [AHPC_v3][BiLSTM_Attention] Training done in 69.1s, best val: 0.004818
+2026-05-16 06:33:08,790 [INFO]     AHPC: MSE=5270.5181 RMSE=72.5983 MAPE=18.77%
+2026-05-16 06:33:09,431 [INFO] [AKJCL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.047192 Val: 0.006274 LR: 5.00e-04
+2026-05-16 06:33:20,820 [INFO] [AKJCL_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.007514 Val: 0.013329 LR: 5.00e-04
+2026-05-16 06:33:25,609 [INFO] [AKJCL_v3][BiLSTM_Attention] Early stopping at epoch 28
+2026-05-16 06:33:25,610 [INFO] [AKJCL_v3][BiLSTM_Attention] Training done in 16.8s, best val: 0.005176
+2026-05-16 06:33:25,653 [INFO]     AKJCL: MSE=3033.2327 RMSE=55.0748 MAPE=10.71%
+2026-05-16 06:33:26,436 [INFO] [AKPL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.048228 Val: 0.001446 LR: 5.00e-04
+2026-05-16 06:33:37,559 [INFO] [AKPL_v3][BiLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:33:37,560 [INFO] [AKPL_v3][BiLSTM_Attention] Training done in 11.9s, best val: 0.001446
+2026-05-16 06:33:37,614 [INFO]     AKPL: MSE=266.9725 RMSE=16.3393 MAPE=4.73%
+2026-05-16 06:33:38,974 [INFO] [ALICL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.030492 Val: 0.003155 LR: 5.00e-04
+2026-05-16 06:34:03,945 [INFO] [ALICL_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.003295 Val: 0.000738 LR: 5.00e-04
+2026-05-16 06:34:23,657 [INFO] [ALICL_v3][BiLSTM_Attention] Early stopping at epoch 35
+2026-05-16 06:34:23,658 [INFO] [ALICL_v3][BiLSTM_Attention] Training done in 46.0s, best val: 0.000738
+2026-05-16 06:34:23,751 [INFO]     ALICL: MSE=2507.3108 RMSE=50.0731 MAPE=7.61%
+2026-05-16 06:34:24,684 [INFO] [API_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.051647 Val: 0.015466 LR: 5.00e-04
+2026-05-16 06:34:41,540 [INFO] [API_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.005964 Val: 0.001832 LR: 5.00e-04
+2026-05-16 06:34:50,388 [INFO] [API_v3][BiLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:34:50,388 [INFO] [API_v3][BiLSTM_Attention] Training done in 26.6s, best val: 0.000891
+2026-05-16 06:34:50,451 [INFO]     API: MSE=399.9191 RMSE=19.9980 MAPE=6.29%
+2026-05-16 06:34:51,348 [INFO] [BARUN_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.039406 Val: 0.004645 LR: 5.00e-04
+2026-05-16 06:35:07,519 [INFO] [BARUN_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.005769 Val: 0.011233 LR: 1.25e-04
+2026-05-16 06:35:13,483 [INFO] [BARUN_v3][BiLSTM_Attention] Early stopping at epoch 27
+2026-05-16 06:35:13,484 [INFO] [BARUN_v3][BiLSTM_Attention] Training done in 23.0s, best val: 0.002394
+2026-05-16 06:35:13,545 [INFO]     BARUN: MSE=3126.1333 RMSE=55.9118 MAPE=10.02%
+2026-05-16 06:35:14,260 [INFO] [BFC_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.041101 Val: 0.198083 LR: 5.00e-04
+2026-05-16 06:35:27,027 [INFO] [BFC_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.004640 Val: 0.068313 LR: 2.50e-04
+2026-05-16 06:35:29,040 [INFO] [BFC_v3][BiLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:35:29,041 [INFO] [BFC_v3][BiLSTM_Attention] Training done in 15.5s, best val: 0.046386
+2026-05-16 06:35:29,089 [INFO]     BFC: MSE=828.7668 RMSE=28.7883 MAPE=5.42%
+2026-05-16 06:35:29,593 [INFO] [BOKL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.052379 Val: 0.050089 LR: 5.00e-04
+2026-05-16 06:35:37,374 [INFO] [BOKL_v3][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:35:37,374 [INFO] [BOKL_v3][BiLSTM_Attention] Training done in 8.2s, best val: 0.022270
+2026-05-16 06:35:37,411 [INFO]     BOKL: MSE=244.9299 RMSE=15.6502 MAPE=5.67%
+2026-05-16 06:35:38,844 [INFO] [BPCL_v3][BiLSTM_Attention] Epoch 1/150 Train: 0.061466 Val: 0.057918 LR: 5.00e-04
+2026-05-16 06:36:05,183 [INFO] [BPCL_v3][BiLSTM_Attention] Epoch 20/150 Train: 0.011961 Val: 0.002992 LR: 5.00e-04
+2026-05-16 06:36:21,817 [INFO] [BPCL_v3][BiLSTM_Attention] Early stopping at epoch 32
+2026-05-16 06:36:21,818 [INFO] [BPCL_v3][BiLSTM_Attention] Training done in 44.4s, best val: 0.000508
+2026-05-16 06:36:21,917 [INFO]     BPCL: MSE=9181.2578 RMSE=95.8189 MAPE=7.48%
+2026-05-16 06:36:21,918 [INFO]   Variation 4 avg: MSE=2595.1158 RMSE=44.3300 MAPE=8.38% Composite=20.0604
+2026-05-16 06:36:21,919 [INFO] 
+  Variation 5/6: {'hidden_size': 256, 'num_layers': 3, 'dropout': 0.3, 'lr': 0.0001}
+2026-05-16 06:36:23,994 [INFO] [ADBL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.053397 Val: 0.003025 LR: 1.00e-04
+2026-05-16 06:37:02,329 [INFO] [ADBL_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.006666 Val: 0.007953 LR: 5.00e-05
+2026-05-16 06:37:24,460 [INFO] [ADBL_v4][BiLSTM_Attention] Early stopping at epoch 31
+2026-05-16 06:37:24,460 [INFO] [ADBL_v4][BiLSTM_Attention] Training done in 62.5s, best val: 0.002100
+2026-05-16 06:37:24,601 [INFO]     ADBL: MSE=1005.0289 RMSE=31.7022 MAPE=7.78%
+2026-05-16 06:37:26,732 [INFO] [AHPC_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.051990 Val: 0.063901 LR: 1.00e-04
+2026-05-16 06:38:06,046 [INFO] [AHPC_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.006106 Val: 0.003456 LR: 5.00e-05
+2026-05-16 06:38:32,869 [INFO] [AHPC_v4][BiLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:38:32,870 [INFO] [AHPC_v4][BiLSTM_Attention] Training done in 68.2s, best val: 0.002842
+2026-05-16 06:38:33,014 [INFO]     AHPC: MSE=1701.5968 RMSE=41.2504 MAPE=9.23%
+2026-05-16 06:38:33,964 [INFO] [AKJCL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.054967 Val: 0.016307 LR: 1.00e-04
+2026-05-16 06:38:50,911 [INFO] [AKJCL_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.005510 Val: 0.009837 LR: 5.00e-05
+2026-05-16 06:38:52,689 [INFO] [AKJCL_v4][BiLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:38:52,689 [INFO] [AKJCL_v4][BiLSTM_Attention] Training done in 19.6s, best val: 0.005845
+2026-05-16 06:38:52,751 [INFO]     AKJCL: MSE=2671.8450 RMSE=51.6899 MAPE=9.83%
+2026-05-16 06:38:53,913 [INFO] [AKPL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.060990 Val: 0.005814 LR: 1.00e-04
+2026-05-16 06:39:14,916 [INFO] [AKPL_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.006513 Val: 0.001258 LR: 5.00e-05
+2026-05-16 06:39:16,027 [INFO] [AKPL_v4][BiLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:39:16,028 [INFO] [AKPL_v4][BiLSTM_Attention] Training done in 23.2s, best val: 0.000701
+2026-05-16 06:39:16,102 [INFO]     AKPL: MSE=100.4331 RMSE=10.0216 MAPE=3.05%
+2026-05-16 06:39:18,123 [INFO] [ALICL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.028052 Val: 0.003015 LR: 1.00e-04
+2026-05-16 06:39:55,344 [INFO] [ALICL_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.003062 Val: 0.000921 LR: 5.00e-05
+2026-05-16 06:40:07,083 [INFO] [ALICL_v4][BiLSTM_Attention] Early stopping at epoch 26
+2026-05-16 06:40:07,084 [INFO] [ALICL_v4][BiLSTM_Attention] Training done in 50.9s, best val: 0.000727
+2026-05-16 06:40:07,223 [INFO]     ALICL: MSE=1578.3470 RMSE=39.7284 MAPE=5.96%
+2026-05-16 06:40:08,598 [INFO] [API_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.048411 Val: 0.011746 LR: 1.00e-04
+2026-05-16 06:40:33,663 [INFO] [API_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.005391 Val: 0.002045 LR: 1.00e-04
+2026-05-16 06:40:50,808 [INFO] [API_v4][BiLSTM_Attention] Early stopping at epoch 33
+2026-05-16 06:40:50,809 [INFO] [API_v4][BiLSTM_Attention] Training done in 43.5s, best val: 0.000464
+2026-05-16 06:40:50,899 [INFO]     API: MSE=276.2546 RMSE=16.6209 MAPE=5.00%
+2026-05-16 06:40:52,229 [INFO] [BARUN_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.042488 Val: 0.012364 LR: 1.00e-04
+2026-05-16 06:41:16,327 [INFO] [BARUN_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.004884 Val: 0.017957 LR: 1.00e-04
+2026-05-16 06:41:27,747 [INFO] [BARUN_v4][BiLSTM_Attention] Early stopping at epoch 29
+2026-05-16 06:41:27,747 [INFO] [BARUN_v4][BiLSTM_Attention] Training done in 36.8s, best val: 0.004122
+2026-05-16 06:41:27,838 [INFO]     BARUN: MSE=3707.4697 RMSE=60.8890 MAPE=11.99%
+2026-05-16 06:41:28,896 [INFO] [BFC_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.047820 Val: 0.152898 LR: 1.00e-04
+2026-05-16 06:41:47,892 [INFO] [BFC_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.004516 Val: 0.070770 LR: 5.00e-05
+2026-05-16 06:41:48,891 [INFO] [BFC_v4][BiLSTM_Attention] Early stopping at epoch 21
+2026-05-16 06:41:48,892 [INFO] [BFC_v4][BiLSTM_Attention] Training done in 21.0s, best val: 0.038864
+2026-05-16 06:41:48,962 [INFO]     BFC: MSE=585.8712 RMSE=24.2048 MAPE=4.48%
+2026-05-16 06:41:49,705 [INFO] [BOKL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.050985 Val: 0.030053 LR: 1.00e-04
+2026-05-16 06:42:02,656 [INFO] [BOKL_v4][BiLSTM_Attention] Epoch 20/150 Train: 0.005326 Val: 0.031630 LR: 5.00e-05
+2026-05-16 06:42:02,657 [INFO] [BOKL_v4][BiLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:42:02,658 [INFO] [BOKL_v4][BiLSTM_Attention] Training done in 13.6s, best val: 0.014280
+2026-05-16 06:42:02,709 [INFO]     BOKL: MSE=91.0562 RMSE=9.5423 MAPE=3.19%
+2026-05-16 06:42:04,838 [INFO] [BPCL_v4][BiLSTM_Attention] Epoch 1/150 Train: 0.061828 Val: 0.005312 LR: 1.00e-04
+2026-05-16 06:42:39,916 [INFO] [BPCL_v4][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:42:39,917 [INFO] [BPCL_v4][BiLSTM_Attention] Training done in 37.1s, best val: 0.000499
+2026-05-16 06:42:40,061 [INFO]     BPCL: MSE=11985.9834 RMSE=109.4805 MAPE=9.29%
+2026-05-16 06:42:40,062 [INFO]   Variation 5 avg: MSE=2370.3886 RMSE=39.5130 MAPE=6.98% Composite=18.4531
+2026-05-16 06:42:40,063 [INFO] 
+  Variation 6/6: {'hidden_size': 128, 'num_layers': 4, 'dropout': 0.35, 'lr': 0.0005}
+2026-05-16 06:42:41,012 [INFO] [ADBL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.073691 Val: 0.027164 LR: 5.00e-04
+2026-05-16 06:42:58,208 [INFO] [ADBL_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.009532 Val: 0.001358 LR: 2.50e-04
+2026-05-16 06:43:00,926 [INFO] [ADBL_v5][BiLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:43:00,926 [INFO] [ADBL_v5][BiLSTM_Attention] Training done in 20.8s, best val: 0.001185
+2026-05-16 06:43:00,998 [INFO]     ADBL: MSE=558.4590 RMSE=23.6317 MAPE=5.53%
+2026-05-16 06:43:01,967 [INFO] [AHPC_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.059527 Val: 0.013723 LR: 5.00e-04
+2026-05-16 06:43:19,659 [INFO] [AHPC_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.010218 Val: 0.007039 LR: 5.00e-04
+2026-05-16 06:43:38,310 [INFO] [AHPC_v5][BiLSTM_Attention] Epoch 40/150 Train: 0.007432 Val: 0.004729 LR: 1.25e-04
+2026-05-16 06:43:41,093 [INFO] [AHPC_v5][BiLSTM_Attention] Early stopping at epoch 43
+2026-05-16 06:43:41,094 [INFO] [AHPC_v5][BiLSTM_Attention] Training done in 40.1s, best val: 0.003449
+2026-05-16 06:43:41,166 [INFO]     AHPC: MSE=3993.8350 RMSE=63.1968 MAPE=14.15%
+2026-05-16 06:43:41,609 [INFO] [AKJCL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.065619 Val: 0.013817 LR: 5.00e-04
+2026-05-16 06:43:49,260 [INFO] [AKJCL_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.008610 Val: 0.007704 LR: 2.50e-04
+2026-05-16 06:43:53,306 [INFO] [AKJCL_v5][BiLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:43:53,306 [INFO] [AKJCL_v5][BiLSTM_Attention] Training done in 12.1s, best val: 0.004593
+2026-05-16 06:43:53,341 [INFO]     AKJCL: MSE=4548.0713 RMSE=67.4394 MAPE=12.68%
+2026-05-16 06:43:53,880 [INFO] [AKPL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.080887 Val: 0.003344 LR: 5.00e-04
+2026-05-16 06:44:03,364 [INFO] [AKPL_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.008969 Val: 0.004278 LR: 2.50e-04
+2026-05-16 06:44:07,350 [INFO] [AKPL_v5][BiLSTM_Attention] Early stopping at epoch 28
+2026-05-16 06:44:07,351 [INFO] [AKPL_v5][BiLSTM_Attention] Training done in 14.0s, best val: 0.001405
+2026-05-16 06:44:07,393 [INFO]     AKPL: MSE=273.2947 RMSE=16.5316 MAPE=4.93%
+2026-05-16 06:44:08,321 [INFO] [ALICL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.041527 Val: 0.003927 LR: 5.00e-04
+2026-05-16 06:44:25,149 [INFO] [ALICL_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.004466 Val: 0.000733 LR: 5.00e-04
+2026-05-16 06:44:38,414 [INFO] [ALICL_v5][BiLSTM_Attention] Early stopping at epoch 35
+2026-05-16 06:44:38,414 [INFO] [ALICL_v5][BiLSTM_Attention] Training done in 31.0s, best val: 0.000733
+2026-05-16 06:44:38,484 [INFO]     ALICL: MSE=1907.6124 RMSE=43.6762 MAPE=6.48%
+2026-05-16 06:44:39,111 [INFO] [API_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.078841 Val: 0.009005 LR: 5.00e-04
+2026-05-16 06:44:50,417 [INFO] [API_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.009118 Val: 0.003313 LR: 5.00e-04
+2026-05-16 06:45:02,298 [INFO] [API_v5][BiLSTM_Attention] Epoch 40/150 Train: 0.006330 Val: 0.001114 LR: 1.25e-04
+2026-05-16 06:45:05,279 [INFO] [API_v5][BiLSTM_Attention] Early stopping at epoch 45
+2026-05-16 06:45:05,279 [INFO] [API_v5][BiLSTM_Attention] Training done in 26.8s, best val: 0.000552
+2026-05-16 06:45:05,328 [INFO]     API: MSE=55.9803 RMSE=7.4820 MAPE=1.64%
+2026-05-16 06:45:05,934 [INFO] [BARUN_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.056970 Val: 0.012878 LR: 5.00e-04
+2026-05-16 06:45:15,047 [INFO] [BARUN_v5][BiLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:45:15,048 [INFO] [BARUN_v5][BiLSTM_Attention] Training done in 9.7s, best val: 0.003429
+2026-05-16 06:45:15,098 [INFO]     BARUN: MSE=1830.0966 RMSE=42.7796 MAPE=7.85%
+2026-05-16 06:45:15,602 [INFO] [BFC_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.061040 Val: 0.160812 LR: 5.00e-04
+2026-05-16 06:45:24,177 [INFO] [BFC_v5][BiLSTM_Attention] Epoch 20/150 Train: 0.007081 Val: 0.076231 LR: 2.50e-04
+2026-05-16 06:45:31,831 [INFO] [BFC_v5][BiLSTM_Attention] Early stopping at epoch 37
+2026-05-16 06:45:31,832 [INFO] [BFC_v5][BiLSTM_Attention] Training done in 16.7s, best val: 0.050217
+2026-05-16 06:45:31,871 [INFO]     BFC: MSE=645.5004 RMSE=25.4067 MAPE=4.74%
+2026-05-16 06:45:32,216 [INFO] [BOKL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.096739 Val: 0.010198 LR: 5.00e-04
+2026-05-16 06:45:36,834 [INFO] [BOKL_v5][BiLSTM_Attention] Early stopping at epoch 16
+2026-05-16 06:45:36,835 [INFO] [BOKL_v5][BiLSTM_Attention] Training done in 4.9s, best val: 0.010198
+2026-05-16 06:45:36,865 [INFO]     BOKL: MSE=310.8367 RMSE=17.6306 MAPE=5.75%
+2026-05-16 06:45:37,840 [INFO] [BPCL_v5][BiLSTM_Attention] Epoch 1/150 Train: 0.085719 Val: 0.002380 LR: 5.00e-04
+2026-05-16 06:45:53,646 [INFO] [BPCL_v5][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:45:53,646 [INFO] [BPCL_v5][BiLSTM_Attention] Training done in 16.7s, best val: 0.000979
+2026-05-16 06:45:53,722 [INFO]     BPCL: MSE=9876.9541 RMSE=99.3829 MAPE=8.76%
+2026-05-16 06:45:53,723 [INFO]   Variation 6 avg: MSE=2400.0640 RMSE=40.7158 MAPE=7.25% Composite=18.7646
+2026-05-16 06:45:53,723 [INFO] 
+  BEST for BiLSTM_Attention: Variation 1
+2026-05-16 06:45:53,724 [INFO]   Params: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:45:53,725 [INFO]   Composite Score: 17.1326
+2026-05-16 06:45:53,726 [INFO] 
+============================================================
+2026-05-16 06:45:53,727 [INFO] PHASE 2 SUMMARY - Best Hyperparameters Per Model:
+2026-05-16 06:45:53,727 [INFO]   StackedLSTM_Attention: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:45:53,729 [INFO]   CNN_LSTM: {'hidden_size': 128, 'num_layers': 4, 'dropout': 0.35, 'lr': 0.0005}
+2026-05-16 06:45:53,729 [INFO]   BiLSTM_Attention: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:45:54,600 [INFO] 
+============================================================
+2026-05-16 06:45:54,601 [INFO] PHASE 3: Training best-tuned models on 10 datasets for final comparison
+2026-05-16 06:45:54,602 [INFO] ============================================================
+2026-05-16 06:45:54,603 [INFO] 
+--- Stock: ADBL ---
+2026-05-16 06:45:54,885 [INFO] [ADBL][StackedLSTM_Attention] Epoch 1/150 Train: 0.063828 Val: 0.025509 LR: 1.00e-03
+2026-05-16 06:45:59,525 [INFO] [ADBL][StackedLSTM_Attention] Epoch 20/150 Train: 0.007907 Val: 0.004441 LR: 5.00e-04
+2026-05-16 06:46:01,938 [INFO] [ADBL][StackedLSTM_Attention] Early stopping at epoch 30
+2026-05-16 06:46:01,939 [INFO] [ADBL][StackedLSTM_Attention] Training done in 7.3s, best val: 0.001580
+2026-05-16 06:46:01,960 [INFO] 
+[ADBL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:46:01,961 [INFO]   MAE: 24.2019
+2026-05-16 06:46:01,961 [INFO]   MSE: 1095.2666
+2026-05-16 06:46:01,962 [INFO]   RMSE: 33.0948
+2026-05-16 06:46:01,963 [INFO]   R2: 0.1929
+2026-05-16 06:46:01,963 [INFO]   MAPE: 7.3365
+2026-05-16 06:46:01,964 [INFO]   MAE_pct: 7.8112
+2026-05-16 06:46:01,965 [INFO]   RMSE_pct: 10.6814
+2026-05-16 06:46:01,965 [INFO]   Direction_Accuracy: 52.3109
+2026-05-16 06:46:03,719 [INFO] [ADBL][CNN_LSTM] Epoch 1/150 Train: 0.134033 Val: 0.017725 LR: 5.00e-04
+2026-05-16 06:46:08,779 [INFO] [ADBL][CNN_LSTM] Epoch 20/150 Train: 0.010286 Val: 0.005536 LR: 2.50e-04
+2026-05-16 06:46:11,432 [INFO] [ADBL][CNN_LSTM] Early stopping at epoch 30
+2026-05-16 06:46:11,433 [INFO] [ADBL][CNN_LSTM] Training done in 8.1s, best val: 0.002312
+2026-05-16 06:46:11,464 [INFO] 
+[ADBL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:46:11,465 [INFO]   MAE: 29.2717
+2026-05-16 06:46:11,465 [INFO]   MSE: 1697.0850
+2026-05-16 06:46:11,466 [INFO]   RMSE: 41.1957
+2026-05-16 06:46:11,467 [INFO]   R2: -0.2506
+2026-05-16 06:46:11,468 [INFO]   MAPE: 8.9993
+2026-05-16 06:46:11,469 [INFO]   MAE_pct: 9.4475
+2026-05-16 06:46:11,469 [INFO]   RMSE_pct: 13.2960
+2026-05-16 06:46:11,470 [INFO]   Direction_Accuracy: 49.3697
+2026-05-16 06:46:13,073 [INFO] [ADBL][BiLSTM_Attention] Epoch 1/150 Train: 0.048315 Val: 0.025666 LR: 1.00e-03
+2026-05-16 06:46:18,652 [INFO] [ADBL][BiLSTM_Attention] Epoch 20/150 Train: 0.006863 Val: 0.000806 LR: 5.00e-04
+2026-05-16 06:46:20,100 [INFO] [ADBL][BiLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:46:20,101 [INFO] [ADBL][BiLSTM_Attention] Training done in 7.3s, best val: 0.000768
+2026-05-16 06:46:20,123 [INFO] 
+[ADBL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:46:20,124 [INFO]   MAE: 12.6161
+2026-05-16 06:46:20,124 [INFO]   MSE: 583.0632
+2026-05-16 06:46:20,125 [INFO]   RMSE: 24.1467
+2026-05-16 06:46:20,126 [INFO]   R2: 0.5703
+2026-05-16 06:46:20,127 [INFO]   MAPE: 3.7538
+2026-05-16 06:46:20,127 [INFO]   MAE_pct: 4.0719
+2026-05-16 06:46:20,128 [INFO]   RMSE_pct: 7.7934
+2026-05-16 06:46:20,129 [INFO]   Direction_Accuracy: 48.1092
+2026-05-16 06:46:21,436 [INFO] 
+--- Stock: AHPC ---
+2026-05-16 06:46:21,716 [INFO] [AHPC][StackedLSTM_Attention] Epoch 1/150 Train: 0.051047 Val: 0.045676 LR: 1.00e-03
+2026-05-16 06:46:26,409 [INFO] [AHPC][StackedLSTM_Attention] Epoch 20/150 Train: 0.007503 Val: 0.003899 LR: 5.00e-04
+2026-05-16 06:46:31,240 [INFO] [AHPC][StackedLSTM_Attention] Epoch 40/150 Train: 0.006588 Val: 0.003658 LR: 1.25e-04
+2026-05-16 06:46:36,198 [INFO] [AHPC][StackedLSTM_Attention] Epoch 60/150 Train: 0.006529 Val: 0.002879 LR: 6.25e-05
+2026-05-16 06:46:36,703 [INFO] [AHPC][StackedLSTM_Attention] Early stopping at epoch 62
+2026-05-16 06:46:36,704 [INFO] [AHPC][StackedLSTM_Attention] Training done in 15.2s, best val: 0.002386
+2026-05-16 06:46:36,723 [INFO] 
+[AHPC][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:46:36,724 [INFO]   MAE: 20.4149
+2026-05-16 06:46:36,725 [INFO]   MSE: 853.5423
+2026-05-16 06:46:36,726 [INFO]   RMSE: 29.2154
+2026-05-16 06:46:36,727 [INFO]   R2: 0.6040
+2026-05-16 06:46:36,727 [INFO]   MAPE: 7.9555
+2026-05-16 06:46:36,728 [INFO]   MAE_pct: 7.8749
+2026-05-16 06:46:36,729 [INFO]   RMSE_pct: 11.2696
+2026-05-16 06:46:36,729 [INFO]   Direction_Accuracy: 50.3055
+2026-05-16 06:46:38,679 [INFO] [AHPC][CNN_LSTM] Epoch 1/150 Train: 0.122584 Val: 0.040380 LR: 5.00e-04
+2026-05-16 06:46:43,871 [INFO] [AHPC][CNN_LSTM] Epoch 20/150 Train: 0.013095 Val: 0.005121 LR: 5.00e-04
+2026-05-16 06:46:49,428 [INFO] [AHPC][CNN_LSTM] Epoch 40/150 Train: 0.008749 Val: 0.003765 LR: 2.50e-04
+2026-05-16 06:46:51,915 [INFO] [AHPC][CNN_LSTM] Early stopping at epoch 49
+2026-05-16 06:46:51,916 [INFO] [AHPC][CNN_LSTM] Training done in 13.6s, best val: 0.003566
+2026-05-16 06:46:51,948 [INFO] 
+[AHPC][CNN_LSTM] TEST Metrics:
+2026-05-16 06:46:51,949 [INFO]   MAE: 35.8615
+2026-05-16 06:46:51,949 [INFO]   MSE: 2972.0461
+2026-05-16 06:46:51,950 [INFO]   RMSE: 54.5165
+2026-05-16 06:46:51,951 [INFO]   R2: -0.3789
+2026-05-16 06:46:51,951 [INFO]   MAPE: 13.9682
+2026-05-16 06:46:51,952 [INFO]   MAE_pct: 13.8332
+2026-05-16 06:46:51,953 [INFO]   RMSE_pct: 21.0292
+2026-05-16 06:46:51,953 [INFO]   Direction_Accuracy: 50.9165
+2026-05-16 06:46:53,653 [INFO] [AHPC][BiLSTM_Attention] Epoch 1/150 Train: 0.055699 Val: 0.021495 LR: 1.00e-03
+2026-05-16 06:46:59,450 [INFO] [AHPC][BiLSTM_Attention] Epoch 20/150 Train: 0.007719 Val: 0.008073 LR: 5.00e-04
+2026-05-16 06:47:00,063 [INFO] [AHPC][BiLSTM_Attention] Early stopping at epoch 22
+2026-05-16 06:47:00,064 [INFO] [AHPC][BiLSTM_Attention] Training done in 6.7s, best val: 0.004120
+2026-05-16 06:47:00,086 [INFO] 
+[AHPC][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:00,087 [INFO]   MAE: 33.0018
+2026-05-16 06:47:00,087 [INFO]   MSE: 2379.3191
+2026-05-16 06:47:00,088 [INFO]   RMSE: 48.7783
+2026-05-16 06:47:00,089 [INFO]   R2: -0.1039
+2026-05-16 06:47:00,090 [INFO]   MAPE: 13.1474
+2026-05-16 06:47:00,091 [INFO]   MAE_pct: 12.7302
+2026-05-16 06:47:00,091 [INFO]   RMSE_pct: 18.8158
+2026-05-16 06:47:00,092 [INFO]   Direction_Accuracy: 50.1018
+2026-05-16 06:47:01,454 [INFO] 
+--- Stock: AKJCL ---
+2026-05-16 06:47:01,592 [INFO] [AKJCL][StackedLSTM_Attention] Epoch 1/150 Train: 0.047853 Val: 0.011999 LR: 1.00e-03
+2026-05-16 06:47:03,666 [INFO] [AKJCL][StackedLSTM_Attention] Epoch 20/150 Train: 0.005437 Val: 0.009458 LR: 5.00e-04
+2026-05-16 06:47:03,995 [INFO] [AKJCL][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:47:03,996 [INFO] [AKJCL][StackedLSTM_Attention] Training done in 2.5s, best val: 0.003674
+2026-05-16 06:47:04,007 [INFO] 
+[AKJCL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:04,008 [INFO]   MAE: 40.1652
+2026-05-16 06:47:04,009 [INFO]   MSE: 3992.1458
+2026-05-16 06:47:04,009 [INFO]   RMSE: 63.1834
+2026-05-16 06:47:04,010 [INFO]   R2: 0.4544
+2026-05-16 06:47:04,010 [INFO]   MAPE: 11.4572
+2026-05-16 06:47:04,011 [INFO]   MAE_pct: 15.3317
+2026-05-16 06:47:04,012 [INFO]   RMSE_pct: 24.1182
+2026-05-16 06:47:04,013 [INFO]   Direction_Accuracy: 52.8796
+2026-05-16 06:47:05,522 [INFO] [AKJCL][CNN_LSTM] Epoch 1/150 Train: 0.139386 Val: 0.053052 LR: 5.00e-04
+2026-05-16 06:47:07,790 [INFO] [AKJCL][CNN_LSTM] Epoch 20/150 Train: 0.006853 Val: 0.013997 LR: 2.50e-04
+2026-05-16 06:47:08,149 [INFO] [AKJCL][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:47:08,150 [INFO] [AKJCL][CNN_LSTM] Training done in 2.8s, best val: 0.007150
+2026-05-16 06:47:08,167 [INFO] 
+[AKJCL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:47:08,168 [INFO]   MAE: 44.1998
+2026-05-16 06:47:08,168 [INFO]   MSE: 4499.8540
+2026-05-16 06:47:08,169 [INFO]   RMSE: 67.0810
+2026-05-16 06:47:08,170 [INFO]   R2: 0.3850
+2026-05-16 06:47:08,170 [INFO]   MAPE: 12.8954
+2026-05-16 06:47:08,171 [INFO]   MAE_pct: 16.8719
+2026-05-16 06:47:08,172 [INFO]   RMSE_pct: 25.6060
+2026-05-16 06:47:08,172 [INFO]   Direction_Accuracy: 58.1152
+2026-05-16 06:47:09,578 [INFO] [AKJCL][BiLSTM_Attention] Epoch 1/150 Train: 0.048003 Val: 0.010340 LR: 1.00e-03
+2026-05-16 06:47:12,025 [INFO] [AKJCL][BiLSTM_Attention] Epoch 20/150 Train: 0.006601 Val: 0.004606 LR: 1.00e-03
+2026-05-16 06:47:14,636 [INFO] [AKJCL][BiLSTM_Attention] Epoch 40/150 Train: 0.004565 Val: 0.005831 LR: 2.50e-04
+2026-05-16 06:47:14,898 [INFO] [AKJCL][BiLSTM_Attention] Early stopping at epoch 42
+2026-05-16 06:47:14,899 [INFO] [AKJCL][BiLSTM_Attention] Training done in 5.5s, best val: 0.002714
+2026-05-16 06:47:14,911 [INFO] 
+[AKJCL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:14,912 [INFO]   MAE: 17.6364
+2026-05-16 06:47:14,913 [INFO]   MSE: 806.7431
+2026-05-16 06:47:14,913 [INFO]   RMSE: 28.4032
+2026-05-16 06:47:14,915 [INFO]   R2: 0.8897
+2026-05-16 06:47:14,915 [INFO]   MAPE: 5.2206
+2026-05-16 06:47:14,916 [INFO]   MAE_pct: 6.7321
+2026-05-16 06:47:14,917 [INFO]   RMSE_pct: 10.8420
+2026-05-16 06:47:14,918 [INFO]   Direction_Accuracy: 50.7853
+2026-05-16 06:47:16,186 [INFO] 
+--- Stock: AKPL ---
+2026-05-16 06:47:16,356 [INFO] [AKPL][StackedLSTM_Attention] Epoch 1/150 Train: 0.052777 Val: 0.009171 LR: 1.00e-03
+2026-05-16 06:47:18,870 [INFO] [AKPL][StackedLSTM_Attention] Epoch 20/150 Train: 0.007155 Val: 0.001984 LR: 5.00e-04
+2026-05-16 06:47:21,487 [INFO] [AKPL][StackedLSTM_Attention] Epoch 40/150 Train: 0.005584 Val: 0.001434 LR: 2.50e-04
+2026-05-16 06:47:24,111 [INFO] [AKPL][StackedLSTM_Attention] Epoch 60/150 Train: 0.005235 Val: 0.001985 LR: 1.25e-04
+2026-05-16 06:47:26,760 [INFO] [AKPL][StackedLSTM_Attention] Epoch 80/150 Train: 0.005031 Val: 0.001001 LR: 3.13e-05
+2026-05-16 06:47:27,026 [INFO] [AKPL][StackedLSTM_Attention] Early stopping at epoch 82
+2026-05-16 06:47:27,027 [INFO] [AKPL][StackedLSTM_Attention] Training done in 10.8s, best val: 0.000911
+2026-05-16 06:47:27,039 [INFO] 
+[AKPL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:27,040 [INFO]   MAE: 6.1478
+2026-05-16 06:47:27,040 [INFO]   MSE: 67.8573
+2026-05-16 06:47:27,041 [INFO]   RMSE: 8.2376
+2026-05-16 06:47:27,041 [INFO]   R2: 0.7688
+2026-05-16 06:47:27,042 [INFO]   MAPE: 2.3244
+2026-05-16 06:47:27,043 [INFO]   MAE_pct: 2.3634
+2026-05-16 06:47:27,043 [INFO]   RMSE_pct: 3.1667
+2026-05-16 06:47:27,044 [INFO]   Direction_Accuracy: 47.1311
+2026-05-16 06:47:28,591 [INFO] [AKPL][CNN_LSTM] Epoch 1/150 Train: 0.130737 Val: 0.058105 LR: 5.00e-04
+2026-05-16 06:47:31,397 [INFO] [AKPL][CNN_LSTM] Epoch 20/150 Train: 0.009084 Val: 0.006283 LR: 2.50e-04
+2026-05-16 06:47:31,546 [INFO] [AKPL][CNN_LSTM] Early stopping at epoch 21
+2026-05-16 06:47:31,546 [INFO] [AKPL][CNN_LSTM] Training done in 3.2s, best val: 0.001969
+2026-05-16 06:47:31,566 [INFO] 
+[AKPL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:47:31,566 [INFO]   MAE: 11.2877
+2026-05-16 06:47:31,567 [INFO]   MSE: 227.8226
+2026-05-16 06:47:31,567 [INFO]   RMSE: 15.0938
+2026-05-16 06:47:31,568 [INFO]   R2: 0.2238
+2026-05-16 06:47:31,569 [INFO]   MAPE: 4.2108
+2026-05-16 06:47:31,570 [INFO]   MAE_pct: 4.3392
+2026-05-16 06:47:31,570 [INFO]   RMSE_pct: 5.8024
+2026-05-16 06:47:31,571 [INFO]   Direction_Accuracy: 47.1311
+2026-05-16 06:47:33,104 [INFO] [AKPL][BiLSTM_Attention] Epoch 1/150 Train: 0.055767 Val: 0.004614 LR: 1.00e-03
+2026-05-16 06:47:36,202 [INFO] [AKPL][BiLSTM_Attention] Epoch 20/150 Train: 0.006523 Val: 0.001520 LR: 5.00e-04
+2026-05-16 06:47:37,052 [INFO] [AKPL][BiLSTM_Attention] Early stopping at epoch 25
+2026-05-16 06:47:37,053 [INFO] [AKPL][BiLSTM_Attention] Training done in 4.1s, best val: 0.000701
+2026-05-16 06:47:37,069 [INFO] 
+[AKPL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:37,070 [INFO]   MAE: 7.2356
+2026-05-16 06:47:37,070 [INFO]   MSE: 91.2853
+2026-05-16 06:47:37,071 [INFO]   RMSE: 9.5543
+2026-05-16 06:47:37,072 [INFO]   R2: 0.6890
+2026-05-16 06:47:37,073 [INFO]   MAPE: 2.7327
+2026-05-16 06:47:37,073 [INFO]   MAE_pct: 2.7815
+2026-05-16 06:47:37,074 [INFO]   RMSE_pct: 3.6729
+2026-05-16 06:47:37,075 [INFO]   Direction_Accuracy: 48.3607
+2026-05-16 06:47:38,633 [INFO] 
+--- Stock: ALICL ---
+2026-05-16 06:47:38,910 [INFO] [ALICL][StackedLSTM_Attention] Epoch 1/150 Train: 0.024111 Val: 0.004705 LR: 1.00e-03
+2026-05-16 06:47:43,424 [INFO] [ALICL][StackedLSTM_Attention] Epoch 20/150 Train: 0.002906 Val: 0.000646 LR: 5.00e-04
+2026-05-16 06:47:48,188 [INFO] [ALICL][StackedLSTM_Attention] Epoch 40/150 Train: 0.002616 Val: 0.000687 LR: 2.50e-04
+2026-05-16 06:47:52,901 [INFO] [ALICL][StackedLSTM_Attention] Epoch 60/150 Train: 0.002619 Val: 0.000522 LR: 1.25e-04
+2026-05-16 06:47:54,352 [INFO] [ALICL][StackedLSTM_Attention] Early stopping at epoch 66
+2026-05-16 06:47:54,353 [INFO] [ALICL][StackedLSTM_Attention] Training done in 15.7s, best val: 0.000429
+2026-05-16 06:47:54,373 [INFO] 
+[ALICL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:47:54,374 [INFO]   MAE: 16.4064
+2026-05-16 06:47:54,374 [INFO]   MSE: 545.8570
+2026-05-16 06:47:54,375 [INFO]   RMSE: 23.3636
+2026-05-16 06:47:54,376 [INFO]   R2: 0.9647
+2026-05-16 06:47:54,376 [INFO]   MAPE: 2.9539
+2026-05-16 06:47:54,377 [INFO]   MAE_pct: 2.7421
+2026-05-16 06:47:54,379 [INFO]   RMSE_pct: 3.9049
+2026-05-16 06:47:54,380 [INFO]   Direction_Accuracy: 51.8124
+2026-05-16 06:47:56,117 [INFO] [ALICL][CNN_LSTM] Epoch 1/150 Train: 0.058339 Val: 0.014268 LR: 5.00e-04
+2026-05-16 06:48:01,067 [INFO] [ALICL][CNN_LSTM] Epoch 20/150 Train: 0.004102 Val: 0.001254 LR: 2.50e-04
+2026-05-16 06:48:01,860 [INFO] [ALICL][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:48:01,860 [INFO] [ALICL][CNN_LSTM] Training done in 6.1s, best val: 0.001241
+2026-05-16 06:48:01,891 [INFO] 
+[ALICL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:48:01,891 [INFO]   MAE: 38.3806
+2026-05-16 06:48:01,892 [INFO]   MSE: 2381.9207
+2026-05-16 06:48:01,893 [INFO]   RMSE: 48.8049
+2026-05-16 06:48:01,893 [INFO]   R2: 0.8462
+2026-05-16 06:48:01,895 [INFO]   MAPE: 7.3653
+2026-05-16 06:48:01,895 [INFO]   MAE_pct: 6.4149
+2026-05-16 06:48:01,896 [INFO]   RMSE_pct: 8.1571
+2026-05-16 06:48:01,896 [INFO]   Direction_Accuracy: 45.8422
+2026-05-16 06:48:03,558 [INFO] [ALICL][BiLSTM_Attention] Epoch 1/150 Train: 0.017137 Val: 0.001253 LR: 1.00e-03
+2026-05-16 06:48:09,017 [INFO] [ALICL][BiLSTM_Attention] Epoch 20/150 Train: 0.003039 Val: 0.000525 LR: 5.00e-04
+2026-05-16 06:48:13,274 [INFO] [ALICL][BiLSTM_Attention] Early stopping at epoch 35
+2026-05-16 06:48:13,274 [INFO] [ALICL][BiLSTM_Attention] Training done in 10.0s, best val: 0.000525
+2026-05-16 06:48:13,296 [INFO] 
+[ALICL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:13,296 [INFO]   MAE: 27.4932
+2026-05-16 06:48:13,297 [INFO]   MSE: 1373.3850
+2026-05-16 06:48:13,298 [INFO]   RMSE: 37.0592
+2026-05-16 06:48:13,298 [INFO]   R2: 0.9113
+2026-05-16 06:48:13,299 [INFO]   MAPE: 5.2520
+2026-05-16 06:48:13,300 [INFO]   MAE_pct: 4.5952
+2026-05-16 06:48:13,300 [INFO]   RMSE_pct: 6.1940
+2026-05-16 06:48:13,301 [INFO]   Direction_Accuracy: 52.6652
+2026-05-16 06:48:14,679 [INFO] 
+--- Stock: API ---
+2026-05-16 06:48:14,883 [INFO] [API][StackedLSTM_Attention] Epoch 1/150 Train: 0.038739 Val: 0.012068 LR: 1.00e-03
+2026-05-16 06:48:17,903 [INFO] [API][StackedLSTM_Attention] Epoch 20/150 Train: 0.005381 Val: 0.001174 LR: 5.00e-04
+2026-05-16 06:48:19,812 [INFO] [API][StackedLSTM_Attention] Early stopping at epoch 32
+2026-05-16 06:48:19,813 [INFO] [API][StackedLSTM_Attention] Training done in 5.1s, best val: 0.000606
+2026-05-16 06:48:19,827 [INFO] 
+[API][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:19,827 [INFO]   MAE: 5.3372
+2026-05-16 06:48:19,829 [INFO]   MSE: 52.0002
+2026-05-16 06:48:19,829 [INFO]   RMSE: 7.2111
+2026-05-16 06:48:19,830 [INFO]   R2: 0.8995
+2026-05-16 06:48:19,831 [INFO]   MAPE: 1.7709
+2026-05-16 06:48:19,832 [INFO]   MAE_pct: 1.7869
+2026-05-16 06:48:19,832 [INFO]   RMSE_pct: 2.4142
+2026-05-16 06:48:19,833 [INFO]   Direction_Accuracy: 46.6216
+2026-05-16 06:48:21,421 [INFO] [API][CNN_LSTM] Epoch 1/150 Train: 0.116719 Val: 0.007901 LR: 5.00e-04
+2026-05-16 06:48:24,766 [INFO] [API][CNN_LSTM] Epoch 20/150 Train: 0.006821 Val: 0.002379 LR: 2.50e-04
+2026-05-16 06:48:26,006 [INFO] [API][CNN_LSTM] Early stopping at epoch 27
+2026-05-16 06:48:26,007 [INFO] [API][CNN_LSTM] Training done in 4.9s, best val: 0.001061
+2026-05-16 06:48:26,029 [INFO] 
+[API][CNN_LSTM] TEST Metrics:
+2026-05-16 06:48:26,030 [INFO]   MAE: 24.5541
+2026-05-16 06:48:26,031 [INFO]   MSE: 673.9650
+2026-05-16 06:48:26,031 [INFO]   RMSE: 25.9608
+2026-05-16 06:48:26,032 [INFO]   R2: -0.3028
+2026-05-16 06:48:26,033 [INFO]   MAPE: 8.2169
+2026-05-16 06:48:26,034 [INFO]   MAE_pct: 8.2206
+2026-05-16 06:48:26,035 [INFO]   RMSE_pct: 8.6916
+2026-05-16 06:48:26,035 [INFO]   Direction_Accuracy: 46.2838
+2026-05-16 06:48:27,547 [INFO] [API][BiLSTM_Attention] Epoch 1/150 Train: 0.039610 Val: 0.003180 LR: 1.00e-03
+2026-05-16 06:48:30,648 [INFO] [API][BiLSTM_Attention] Early stopping at epoch 17
+2026-05-16 06:48:30,649 [INFO] [API][BiLSTM_Attention] Training done in 3.3s, best val: 0.000758
+2026-05-16 06:48:30,666 [INFO] 
+[API][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:30,666 [INFO]   MAE: 8.4819
+2026-05-16 06:48:30,667 [INFO]   MSE: 100.4921
+2026-05-16 06:48:30,668 [INFO]   RMSE: 10.0246
+2026-05-16 06:48:30,669 [INFO]   R2: 0.8057
+2026-05-16 06:48:30,669 [INFO]   MAPE: 2.8164
+2026-05-16 06:48:30,670 [INFO]   MAE_pct: 2.8397
+2026-05-16 06:48:30,671 [INFO]   RMSE_pct: 3.3562
+2026-05-16 06:48:30,672 [INFO]   Direction_Accuracy: 47.9730
+2026-05-16 06:48:32,021 [INFO] 
+--- Stock: BARUN ---
+2026-05-16 06:48:32,217 [INFO] [BARUN][StackedLSTM_Attention] Epoch 1/150 Train: 0.040294 Val: 0.019076 LR: 1.00e-03
+2026-05-16 06:48:35,190 [INFO] [BARUN][StackedLSTM_Attention] Epoch 20/150 Train: 0.005247 Val: 0.019400 LR: 5.00e-04
+2026-05-16 06:48:35,191 [INFO] [BARUN][StackedLSTM_Attention] Early stopping at epoch 20
+2026-05-16 06:48:35,191 [INFO] [BARUN][StackedLSTM_Attention] Training done in 3.1s, best val: 0.001177
+2026-05-16 06:48:35,205 [INFO] 
+[BARUN][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:35,206 [INFO]   MAE: 24.7313
+2026-05-16 06:48:35,207 [INFO]   MSE: 1305.0896
+2026-05-16 06:48:35,208 [INFO]   RMSE: 36.1260
+2026-05-16 06:48:35,209 [INFO]   R2: 0.7925
+2026-05-16 06:48:35,209 [INFO]   MAPE: 6.4883
+2026-05-16 06:48:35,210 [INFO]   MAE_pct: 6.1927
+2026-05-16 06:48:35,211 [INFO]   RMSE_pct: 9.0459
+2026-05-16 06:48:35,212 [INFO]   Direction_Accuracy: 49.8270
+2026-05-16 06:48:36,786 [INFO] [BARUN][CNN_LSTM] Epoch 1/150 Train: 0.102523 Val: 0.054061 LR: 5.00e-04
+2026-05-16 06:48:39,963 [INFO] [BARUN][CNN_LSTM] Epoch 20/150 Train: 0.006517 Val: 0.012191 LR: 5.00e-04
+2026-05-16 06:48:42,421 [INFO] [BARUN][CNN_LSTM] Early stopping at epoch 35
+2026-05-16 06:48:42,422 [INFO] [BARUN][CNN_LSTM] Training done in 5.9s, best val: 0.012191
+2026-05-16 06:48:42,444 [INFO] 
+[BARUN][CNN_LSTM] TEST Metrics:
+2026-05-16 06:48:42,445 [INFO]   MAE: 67.0554
+2026-05-16 06:48:42,445 [INFO]   MSE: 6891.2983
+2026-05-16 06:48:42,446 [INFO]   RMSE: 83.0138
+2026-05-16 06:48:42,447 [INFO]   R2: -0.0955
+2026-05-16 06:48:42,448 [INFO]   MAPE: 17.9111
+2026-05-16 06:48:42,448 [INFO]   MAE_pct: 16.7906
+2026-05-16 06:48:42,449 [INFO]   RMSE_pct: 20.7865
+2026-05-16 06:48:42,449 [INFO]   Direction_Accuracy: 51.9031
+2026-05-16 06:48:44,303 [INFO] [BARUN][BiLSTM_Attention] Epoch 1/150 Train: 0.037649 Val: 0.005991 LR: 1.00e-03
+2026-05-16 06:48:47,813 [INFO] [BARUN][BiLSTM_Attention] Epoch 20/150 Train: 0.005525 Val: 0.003805 LR: 5.00e-04
+2026-05-16 06:48:51,518 [INFO] [BARUN][BiLSTM_Attention] Epoch 40/150 Train: 0.003987 Val: 0.002765 LR: 1.25e-04
+2026-05-16 06:48:52,076 [INFO] [BARUN][BiLSTM_Attention] Early stopping at epoch 43
+2026-05-16 06:48:52,076 [INFO] [BARUN][BiLSTM_Attention] Training done in 8.0s, best val: 0.001280
+2026-05-16 06:48:52,092 [INFO] 
+[BARUN][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:52,093 [INFO]   MAE: 31.9203
+2026-05-16 06:48:52,094 [INFO]   MSE: 1998.2455
+2026-05-16 06:48:52,095 [INFO]   RMSE: 44.7017
+2026-05-16 06:48:52,095 [INFO]   R2: 0.6823
+2026-05-16 06:48:52,096 [INFO]   MAPE: 7.4479
+2026-05-16 06:48:52,097 [INFO]   MAE_pct: 7.9928
+2026-05-16 06:48:52,098 [INFO]   RMSE_pct: 11.1932
+2026-05-16 06:48:52,099 [INFO]   Direction_Accuracy: 52.9412
+2026-05-16 06:48:53,417 [INFO] 
+--- Stock: BFC ---
+2026-05-16 06:48:53,575 [INFO] [BFC][StackedLSTM_Attention] Epoch 1/150 Train: 0.030153 Val: 0.049953 LR: 1.00e-03
+2026-05-16 06:48:55,899 [INFO] [BFC][StackedLSTM_Attention] Epoch 20/150 Train: 0.004210 Val: 0.048688 LR: 5.00e-04
+2026-05-16 06:48:56,255 [INFO] [BFC][StackedLSTM_Attention] Early stopping at epoch 23
+2026-05-16 06:48:56,256 [INFO] [BFC][StackedLSTM_Attention] Training done in 2.8s, best val: 0.036788
+2026-05-16 06:48:56,267 [INFO] 
+[BFC][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:48:56,268 [INFO]   MAE: 14.9703
+2026-05-16 06:48:56,269 [INFO]   MSE: 317.9722
+2026-05-16 06:48:56,269 [INFO]   RMSE: 17.8318
+2026-05-16 06:48:56,270 [INFO]   R2: 0.4946
+2026-05-16 06:48:56,271 [INFO]   MAPE: 3.1146
+2026-05-16 06:48:56,271 [INFO]   MAE_pct: 3.1229
+2026-05-16 06:48:56,272 [INFO]   RMSE_pct: 3.7198
+2026-05-16 06:48:56,272 [INFO]   Direction_Accuracy: 42.5234
+2026-05-16 06:48:57,833 [INFO] [BFC][CNN_LSTM] Epoch 1/150 Train: 0.115496 Val: 0.328489 LR: 5.00e-04
+2026-05-16 06:49:00,313 [INFO] [BFC][CNN_LSTM] Epoch 20/150 Train: 0.005625 Val: 0.054928 LR: 2.50e-04
+2026-05-16 06:49:02,695 [INFO] [BFC][CNN_LSTM] Early stopping at epoch 38
+2026-05-16 06:49:02,696 [INFO] [BFC][CNN_LSTM] Training done in 5.1s, best val: 0.033439
+2026-05-16 06:49:02,716 [INFO] 
+[BFC][CNN_LSTM] TEST Metrics:
+2026-05-16 06:49:02,717 [INFO]   MAE: 13.6536
+2026-05-16 06:49:02,717 [INFO]   MSE: 290.4303
+2026-05-16 06:49:02,718 [INFO]   RMSE: 17.0420
+2026-05-16 06:49:02,718 [INFO]   R2: 0.5384
+2026-05-16 06:49:02,719 [INFO]   MAPE: 2.8613
+2026-05-16 06:49:02,719 [INFO]   MAE_pct: 2.8483
+2026-05-16 06:49:02,720 [INFO]   RMSE_pct: 3.5551
+2026-05-16 06:49:02,721 [INFO]   Direction_Accuracy: 44.8598
+2026-05-16 06:49:04,271 [INFO] [BFC][BiLSTM_Attention] Epoch 1/150 Train: 0.050812 Val: 0.114664 LR: 1.00e-03
+2026-05-16 06:49:07,077 [INFO] [BFC][BiLSTM_Attention] Epoch 20/150 Train: 0.004641 Val: 0.056059 LR: 1.00e-03
+2026-05-16 06:49:09,110 [INFO] [BFC][BiLSTM_Attention] Early stopping at epoch 34
+2026-05-16 06:49:09,110 [INFO] [BFC][BiLSTM_Attention] Training done in 5.0s, best val: 0.040465
+2026-05-16 06:49:09,124 [INFO] 
+[BFC][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:49:09,125 [INFO]   MAE: 8.6661
+2026-05-16 06:49:09,125 [INFO]   MSE: 131.7895
+2026-05-16 06:49:09,126 [INFO]   RMSE: 11.4800
+2026-05-16 06:49:09,127 [INFO]   R2: 0.7905
+2026-05-16 06:49:09,128 [INFO]   MAPE: 1.7909
+2026-05-16 06:49:09,129 [INFO]   MAE_pct: 1.8078
+2026-05-16 06:49:09,129 [INFO]   RMSE_pct: 2.3948
+2026-05-16 06:49:09,130 [INFO]   Direction_Accuracy: 43.4579
+2026-05-16 06:49:10,428 [INFO] 
+--- Stock: BOKL ---
+2026-05-16 06:49:10,536 [INFO] [BOKL][StackedLSTM_Attention] Epoch 1/150 Train: 0.039437 Val: 0.067982 LR: 1.00e-03
+2026-05-16 06:49:12,018 [INFO] [BOKL][StackedLSTM_Attention] Early stopping at epoch 19
+2026-05-16 06:49:12,019 [INFO] [BOKL][StackedLSTM_Attention] Training done in 1.6s, best val: 0.027426
+2026-05-16 06:49:12,029 [INFO] 
+[BOKL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:49:12,030 [INFO]   MAE: 11.1969
+2026-05-16 06:49:12,030 [INFO]   MSE: 170.4169
+2026-05-16 06:49:12,031 [INFO]   RMSE: 13.0544
+2026-05-16 06:49:12,032 [INFO]   R2: 0.8231
+2026-05-16 06:49:12,032 [INFO]   MAPE: 4.6752
+2026-05-16 06:49:12,033 [INFO]   MAE_pct: 4.4040
+2026-05-16 06:49:12,033 [INFO]   RMSE_pct: 5.1345
+2026-05-16 06:49:12,034 [INFO]   Direction_Accuracy: 55.9701
+2026-05-16 06:49:13,454 [INFO] [BOKL][CNN_LSTM] Epoch 1/150 Train: 0.125786 Val: 0.166884 LR: 5.00e-04
+2026-05-16 06:49:15,220 [INFO] [BOKL][CNN_LSTM] Epoch 20/150 Train: 0.005861 Val: 0.071099 LR: 2.50e-04
+2026-05-16 06:49:15,859 [INFO] [BOKL][CNN_LSTM] Early stopping at epoch 27
+2026-05-16 06:49:15,859 [INFO] [BOKL][CNN_LSTM] Training done in 2.5s, best val: 0.026647
+2026-05-16 06:49:15,875 [INFO] 
+[BOKL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:49:15,876 [INFO]   MAE: 8.4436
+2026-05-16 06:49:15,876 [INFO]   MSE: 114.9712
+2026-05-16 06:49:15,877 [INFO]   RMSE: 10.7225
+2026-05-16 06:49:15,878 [INFO]   R2: 0.8807
+2026-05-16 06:49:15,878 [INFO]   MAPE: 3.5110
+2026-05-16 06:49:15,879 [INFO]   MAE_pct: 3.3210
+2026-05-16 06:49:15,879 [INFO]   RMSE_pct: 4.2174
+2026-05-16 06:49:15,880 [INFO]   Direction_Accuracy: 55.9701
+2026-05-16 06:49:17,232 [INFO] [BOKL][BiLSTM_Attention] Epoch 1/150 Train: 0.060649 Val: 0.012079 LR: 1.00e-03
+2026-05-16 06:49:18,939 [INFO] [BOKL][BiLSTM_Attention] Early stopping at epoch 18
+2026-05-16 06:49:18,940 [INFO] [BOKL][BiLSTM_Attention] Training done in 1.8s, best val: 0.009610
+2026-05-16 06:49:18,953 [INFO] 
+[BOKL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:49:18,954 [INFO]   MAE: 10.1912
+2026-05-16 06:49:18,954 [INFO]   MSE: 178.5078
+2026-05-16 06:49:18,955 [INFO]   RMSE: 13.3607
+2026-05-16 06:49:18,956 [INFO]   R2: 0.8147
+2026-05-16 06:49:18,956 [INFO]   MAPE: 4.3495
+2026-05-16 06:49:18,957 [INFO]   MAE_pct: 4.0084
+2026-05-16 06:49:18,958 [INFO]   RMSE_pct: 5.2550
+2026-05-16 06:49:18,959 [INFO]   Direction_Accuracy: 52.9851
+2026-05-16 06:49:20,234 [INFO] 
+--- Stock: BPCL ---
+2026-05-16 06:49:20,514 [INFO] [BPCL][StackedLSTM_Attention] Epoch 1/150 Train: 0.076906 Val: 0.005150 LR: 1.00e-03
+2026-05-16 06:49:25,215 [INFO] [BPCL][StackedLSTM_Attention] Epoch 20/150 Train: 0.011573 Val: 0.000388 LR: 5.00e-04
+2026-05-16 06:49:30,098 [INFO] [BPCL][StackedLSTM_Attention] Epoch 40/150 Train: 0.010042 Val: 0.001467 LR: 2.50e-04
+2026-05-16 06:49:30,838 [INFO] [BPCL][StackedLSTM_Attention] Early stopping at epoch 43
+2026-05-16 06:49:30,839 [INFO] [BPCL][StackedLSTM_Attention] Training done in 10.6s, best val: 0.000337
+2026-05-16 06:49:30,860 [INFO] 
+[BPCL][StackedLSTM_Attention] TEST Metrics:
+2026-05-16 06:49:30,860 [INFO]   MAE: 39.2770
+2026-05-16 06:49:30,861 [INFO]   MSE: 6467.0034
+2026-05-16 06:49:30,862 [INFO]   RMSE: 80.4177
+2026-05-16 06:49:30,862 [INFO]   R2: 0.8351
+2026-05-16 06:49:30,863 [INFO]   MAPE: 5.3976
+2026-05-16 06:49:30,864 [INFO]   MAE_pct: 7.1218
+2026-05-16 06:49:30,864 [INFO]   RMSE_pct: 14.5815
+2026-05-16 06:49:30,865 [INFO]   Direction_Accuracy: 51.9348
+2026-05-16 06:49:32,845 [INFO] [BPCL][CNN_LSTM] Epoch 1/150 Train: 0.155921 Val: 0.014445 LR: 5.00e-04
+2026-05-16 06:49:38,085 [INFO] [BPCL][CNN_LSTM] Epoch 20/150 Train: 0.015100 Val: 0.004736 LR: 2.50e-04
+2026-05-16 06:49:38,922 [INFO] [BPCL][CNN_LSTM] Early stopping at epoch 23
+2026-05-16 06:49:38,923 [INFO] [BPCL][CNN_LSTM] Training done in 6.5s, best val: 0.001631
+2026-05-16 06:49:38,956 [INFO] 
+[BPCL][CNN_LSTM] TEST Metrics:
+2026-05-16 06:49:38,957 [INFO]   MAE: 81.4964
+2026-05-16 06:49:38,957 [INFO]   MSE: 13690.3701
+2026-05-16 06:49:38,958 [INFO]   RMSE: 117.0059
+2026-05-16 06:49:38,959 [INFO]   R2: 0.6510
+2026-05-16 06:49:38,960 [INFO]   MAPE: 12.3872
+2026-05-16 06:49:38,960 [INFO]   MAE_pct: 14.7771
+2026-05-16 06:49:38,961 [INFO]   RMSE_pct: 21.2158
+2026-05-16 06:49:38,962 [INFO]   Direction_Accuracy: 51.1202
+2026-05-16 06:49:40,570 [INFO] [BPCL][BiLSTM_Attention] Epoch 1/150 Train: 0.067319 Val: 0.001470 LR: 1.00e-03
+2026-05-16 06:49:46,353 [INFO] [BPCL][BiLSTM_Attention] Epoch 20/150 Train: 0.011519 Val: 0.001192 LR: 5.00e-04
+2026-05-16 06:49:51,114 [INFO] [BPCL][BiLSTM_Attention] Early stopping at epoch 36
+2026-05-16 06:49:51,116 [INFO] [BPCL][BiLSTM_Attention] Training done in 10.9s, best val: 0.000400
+2026-05-16 06:49:51,140 [INFO] 
+[BPCL][BiLSTM_Attention] TEST Metrics:
+2026-05-16 06:49:51,140 [INFO]   MAE: 57.4386
+2026-05-16 06:49:51,141 [INFO]   MSE: 11074.6787
+2026-05-16 06:49:51,141 [INFO]   RMSE: 105.2363
+2026-05-16 06:49:51,142 [INFO]   R2: 0.7176
+2026-05-16 06:49:51,143 [INFO]   MAPE: 8.0641
+2026-05-16 06:49:51,144 [INFO]   MAE_pct: 10.4149
+2026-05-16 06:49:51,144 [INFO]   RMSE_pct: 19.0817
+2026-05-16 06:49:51,145 [INFO]   Direction_Accuracy: 51.9348
+2026-05-16 06:49:52,497 [INFO] 
+============================================================
+2026-05-16 06:49:52,499 [INFO] FINAL ANALYSIS: Best Tuned Models Comparison
+2026-05-16 06:49:52,500 [INFO] ============================================================
+2026-05-16 06:49:54,886 [INFO]   StackedLSTM_Attention composite: 16.1235
+2026-05-16 06:49:54,886 [INFO]   CNN_LSTM composite: 21.2406
+2026-05-16 06:49:54,887 [INFO]   BiLSTM_Attention composite: 16.5271
+2026-05-16 06:49:54,888 [INFO] 
+Best overall model: StackedLSTM_Attention (composite: 16.1235)
+2026-05-16 06:49:54,889 [INFO] Best hyperparameters: {'hidden_size': 64, 'num_layers': 2, 'dropout': 0.2, 'lr': 0.001}
+2026-05-16 06:49:54,893 [INFO] 
+All logs and results saved to: logs/20260516_060000

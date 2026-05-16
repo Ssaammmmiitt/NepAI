@@ -1,0 +1,20 @@
+{
+  "StackedLSTM_Attention": {
+    "hidden_size": 64,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "lr": 0.001
+  },
+  "CNN_LSTM": {
+    "hidden_size": 128,
+    "num_layers": 4,
+    "dropout": 0.35,
+    "lr": 0.0005
+  },
+  "BiLSTM_Attention": {
+    "hidden_size": 64,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "lr": 0.001
+  }
+}
