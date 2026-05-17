@@ -92,7 +92,7 @@ frontend/
 │   └── utils/
 │       ├── formatters.ts           # Price, date, percentage formatters
 │       └── colors.ts               # Chart color constants
-```
+``` 
 
 ---
 

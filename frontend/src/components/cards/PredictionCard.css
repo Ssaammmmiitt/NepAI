@@ -1,0 +1,29 @@
+.prediction-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.prediction-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prediction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.prediction-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prediction-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

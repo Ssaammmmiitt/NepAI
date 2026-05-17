@@ -1,0 +1,22 @@
+.portfolio-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.portfolio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+.portfolio-empty {
+  text-align: center;
+  padding: var(--space-2xl);
+}

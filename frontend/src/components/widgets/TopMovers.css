@@ -1,0 +1,11 @@
+.top-movers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.top-movers-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
