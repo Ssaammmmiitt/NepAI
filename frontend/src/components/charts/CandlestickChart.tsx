@@ -3,7 +3,6 @@ import { createChart, ColorType, CandlestickSeries } from 'lightweight-charts';
 import type { IChartApi } from 'lightweight-charts';
 import type { OHLCDataPoint } from '../../types';
 import { CHART_COLORS } from '../../utils/colors';
-import './CandlestickChart.css';
 
 interface CandlestickChartProps {
   data: OHLCDataPoint[];
@@ -98,5 +97,5 @@ export function CandlestickChart({ data, height = 400 }: CandlestickChartProps) 
     };
   }, [renderChart]);
 
-  return <div ref={containerRef} className="candlestick-chart" />;
+  return <div ref={containerRef} className="w-full rounded-xl overflow-hidden" />;
 }

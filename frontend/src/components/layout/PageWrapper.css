@@ -1,6 +1,0 @@
-.page-wrapper {
-  flex: 1;
-  padding: var(--space-xl);
-  overflow-y: auto;
-  max-height: calc(100vh - 64px);
-}

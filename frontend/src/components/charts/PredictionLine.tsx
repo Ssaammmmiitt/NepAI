@@ -2,7 +2,6 @@ import { useEffect, useRef, useCallback } from 'react';
 import { createChart, ColorType, LineSeries } from 'lightweight-charts';
 import type { IChartApi } from 'lightweight-charts';
 import { CHART_COLORS } from '../../utils/colors';
-import './PredictionLine.css';
 
 interface PredictionPoint {
   time: string;
@@ -95,5 +94,5 @@ export function PredictionLine({ data, height = 400 }: PredictionLineProps) {
     };
   }, [renderChart]);
 
-  return <div ref={containerRef} className="prediction-line-chart" />;
+  return <div ref={containerRef} className="w-full rounded-xl overflow-hidden" />;
 }

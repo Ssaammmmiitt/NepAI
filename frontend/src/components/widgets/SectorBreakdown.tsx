@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { getMarketOverview } from '../../services/mockData';
 import { Building2 } from 'lucide-react';
 import { Spinner } from '../ui/Spinner';
-import './SectorBreakdown.css';
 
 export function SectorBreakdown() {
   const [sectors, setSectors] = useState<Record<string, number>>({});
@@ -20,27 +19,27 @@ export function SectorBreakdown() {
   const total = sorted.reduce((sum, [, count]) => sum + count, 0);
 
   return (
-    <div className="card sector-breakdown">
-      <div className="sector-header">
-        <Building2 size={20} color="var(--accent-primary)" />
-        <h2 className="text-heading">🏢 Sector Breakdown</h2>
+    <div className="bg-bg-card border border-border-color rounded-2xl p-6 shadow-card transition-all duration-200 hover:border-border-glow flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <Building2 size={20} color="var(--color-accent-primary)" />
+        <h2 className="text-xl font-semibold">🏢 Sector Breakdown</h2>
       </div>
-      <div className="sector-list">
+      <div className="flex flex-col gap-2">
         {sorted.map(([sector, count]) => {
           const pct = total > 0 ? (count / total) * 100 : 0;
           return (
-            <div key={sector} className="sector-item">
-              <div className="sector-info">
-                <span className="text-body">{sector}</span>
-                <span className="text-caption">{count} stocks</span>
+            <div key={sector} className="flex items-center gap-4">
+              <div className="flex flex-col min-w-[160px]">
+                <span className="text-sm">{sector}</span>
+                <span className="text-xs text-text-secondary">{count} stocks</span>
               </div>
-              <div className="sector-bar">
+              <div className="flex-1 h-2 bg-bg-hover rounded-full overflow-hidden">
                 <div
-                  className="sector-bar-fill"
+                  className="h-full bg-accent-primary rounded-full transition-all duration-500"
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="text-price sector-pct">{pct.toFixed(1)}%</span>
+              <span className="font-mono text-xs min-w-[48px] text-right">{pct.toFixed(1)}%</span>
             </div>
           );
         })}

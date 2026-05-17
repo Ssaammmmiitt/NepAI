@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import './LiveClock.css';
 
 const NEPAL_TZ = 'Asia/Kathmandu';
 
@@ -32,10 +31,10 @@ export function LiveClock() {
   }, []);
 
   return (
-    <div className="live-clock">
-      <div className="live-clock-time">{formatNepaliTime(now)}</div>
-      <div className="live-clock-date">{formatNepaliDate(now)}</div>
-      <span className="live-clock-tz">NPT (UTC+5:45)</span>
+    <div className="hidden lg:flex items-center gap-4 px-4 py-2 bg-bg-card border border-border-color rounded-xl">
+      <div className="font-mono text-lg font-bold text-accent-primary">{formatNepaliTime(now)}</div>
+      <div className="text-xs text-text-secondary">{formatNepaliDate(now)}</div>
+      <span className="text-[10px] text-text-muted px-1.5 py-0.5 bg-bg-hover rounded-md">NPT (UTC+5:45)</span>
     </div>
   );
 }

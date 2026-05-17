@@ -3,7 +3,6 @@ import { createChart, ColorType, HistogramSeries } from 'lightweight-charts';
 import type { IChartApi } from 'lightweight-charts';
 import type { OHLCDataPoint } from '../../types';
 import { CHART_COLORS } from '../../utils/colors';
-import './VolumeChart.css';
 
 interface VolumeChartProps {
   data: OHLCDataPoint[];
@@ -90,5 +89,5 @@ export function VolumeChart({ data, height = 120 }: VolumeChartProps) {
     };
   }, [renderChart]);
 
-  return <div ref={containerRef} className="volume-chart" />;
+  return <div ref={containerRef} className="w-full rounded-xl overflow-hidden border-t border-border-color" />;
 }
