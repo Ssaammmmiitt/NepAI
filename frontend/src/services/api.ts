@@ -7,6 +7,7 @@ const api = axios.create({
 
 export const stockAPI = {
   listTickers: () => api.get('/stocks'),
+  getData: (ticker: string) => api.get(`/stocks/${ticker}`),
   getOHLC: (ticker: string, from?: string, to?: string) =>
     api.get(`/stocks/${ticker}/ohlc`, { params: { from, to } }),
   getIndicators: (ticker: string) => api.get(`/stocks/${ticker}/indicators`),
@@ -14,7 +15,17 @@ export const stockAPI = {
 };
 
 export const predictionAPI = {
-  getPrediction: (ticker: string) => api.get(`/predictions/${ticker}`),
+  getPrediction: (ticker: string, days?: number) =>
+    api.get(`/predictions/${ticker}`, { params: days ? { days } : undefined }),
+};
+
+export const trainAPI = {
+  train: (stock_name: string) =>
+    api.post('/train', { stock_name }, { timeout: 300000 }),
+};
+
+export const modelAPI = {
+  list: () => api.get('/models'),
 };
 
 export const portfolioAPI = {

@@ -1,0 +1,33 @@
+name: update-stock-prices
+on:
+  schedule:
+    # NEPSE trades Mon-Fri; run 5 times after market close (13:00-17:00 UTC / 18:45-22:45 NPT)
+    - cron: "0 13,14,15,16,17 * * 1,2,3,4,5"
+  workflow_dispatch:
+defaults:
+  run:
+    working-directory: ./data_scraper
+permissions:
+  contents: write
+jobs:
+  update-stock-prices:
+    name: update-stock-prices
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install packages
+        run: pip install -r requirements.txt
+      - name: Run updater
+        run: python dailyscraper.py
+      - name: Setup Git
+        run: git config --local user.email "github-actions[bot]@users.noreply.github.com" && git config --local user.name "github-actions[bot]"
+      - name: Commit Files
+        run: git add ../data && git diff --cached --quiet || git commit -m "Update data"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main

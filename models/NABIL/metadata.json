@@ -1,0 +1,54 @@
+{
+  "ticker": "NABIL",
+  "date_created": "2026-06-11T22:16:27.811931+05:45",
+  "accuracy": {
+    "mae": 12.2207,
+    "mape": 2.3594,
+    "r2": -0.0684,
+    "rmse": 15.1161,
+    "direction_accuracy": 47.7419
+  },
+  "n_features": 11,
+  "feature_cols": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity",
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "training_rows": 1435,
+  "seq_len": 60,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "engineered_features": [
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2026-05-15"
+  },
+  "split_sizes": {
+    "train": 1004,
+    "val": 215,
+    "test": 216
+  },
+  "training_time_sec": 2.3,
+  "epochs_trained": 20,
+  "best_val_loss": 0.000135
+}
