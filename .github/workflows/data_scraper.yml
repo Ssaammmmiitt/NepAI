@@ -14,8 +14,8 @@ jobs:
     name: update-stock-prices
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install packages
@@ -24,10 +24,5 @@ jobs:
         run: python dailyscraper.py
       - name: Setup Git
         run: git config --local user.email "github-actions[bot]@users.noreply.github.com" && git config --local user.name "github-actions[bot]"
-      - name: Commit Files
-        run: git add ../data && git diff --cached --quiet || git commit -m "Update data"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+      - name: Commit and push
+        run: git add ../data && git diff --cached --quiet || (git commit -m "Update data" && git push)
