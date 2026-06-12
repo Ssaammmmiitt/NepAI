@@ -296,6 +296,57 @@ GET /api/models
 ]
 ```
 
+### GET /model_status/{ticker}
+
+Model status for a single stock: whether a model is trained, currently training, or not available.
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| ticker | path | yes | Stock symbol, case-insensitive |
+
+```
+GET /api/model_status/NABIL
+```
+
+**Trained model** (`model_status: "trained"`):
+
+```json
+{
+  "ticker": "NABIL",
+  "model_status": "trained",
+  "date_created": "2026-06-11T22:05:40+05:45",
+  "stale": false
+}
+```
+
+**Training in progress** (`model_status: "training"`):
+
+```json
+{
+  "ticker": "NABIL",
+  "model_status": "training",
+  "date_created": null,
+  "stale": null
+}
+```
+
+**No model** (`model_status: "not_available"`):
+
+```json
+{
+  "ticker": "ADBL",
+  "model_status": "not_available",
+  "date_created": null,
+  "stale": null
+}
+```
+
+**Stock not found** (404 — ticker doesn't exist in `data/`):
+
+```json
+{"error": "Stock 'ZZZZZ' not found in data", "ticker": "ZZZZZ"}
+```
+
 ### POST /train
 
 Train or retrain a model. Request stays open until training completes.

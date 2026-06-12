@@ -167,7 +167,8 @@ NepAI/
 │           ├── stocks.py                # /api/stocks/* endpoints
 │           ├── predictions.py           # /api/predictions/{ticker}
 │           ├── train.py                 # POST /api/train endpoint
-│           └── models.py               # /api/models endpoint
+│           ├── models.py               # /api/models endpoint
+│           └── model_status.py          # /api/model_status/{ticker} endpoint
 │
 ├── models/                              # One directory per trained stock
 │   ├── NABIL/
@@ -278,6 +279,7 @@ Data is cached in memory on first access (dict keyed by ticker). The cache is in
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/api/models` | List all trained models with metadata and staleness flag |
+| `GET` | `/api/model_status/{ticker}` | Per-stock model status: `trained`, `training`, or `not_available` |
 
 #### Predictions (recursive next-day inference)
 
@@ -521,6 +523,7 @@ export const modelAPI = {
 | 6 | **Indicator endpoint** -- `/api/stocks/{ticker}/indicators` (RSI, MACD, Bollinger, EMA via pandas) | DONE |
 | 7 | **Train endpoint** -- `POST /api/train` with stock-exists + min-rows validation, threaded training | DONE |
 | 8 | **Models endpoint** -- `/api/models` returning trained model metadata + staleness | DONE |
+| 8b | **Model status endpoint** -- `/api/model_status/{ticker}` per-stock status, date_created, staleness | DONE |
 | 9 | **Frontend rewire** -- Switch hooks/stores from mockData -> api.ts | TODO |
 | 10 | **Update Prediction UI** -- `AIPrediction` card with 5-day format + stale warning + retrain button | TODO |
 | 11 | **Wire unused components** -- `IndicatorOverlay`, `PredictionLine`, `TechnicalIndicators` | TODO |

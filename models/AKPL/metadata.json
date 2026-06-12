@@ -1,0 +1,54 @@
+{
+  "ticker": "AKPL",
+  "date_created": "2026-06-12T18:08:42.947579+05:45",
+  "accuracy": {
+    "mae": 9.4592,
+    "mape": 3.6118,
+    "r2": 0.5879,
+    "rmse": 11.2343,
+    "direction_accuracy": 43.949
+  },
+  "n_features": 11,
+  "feature_cols": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity",
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "training_rows": 1452,
+  "seq_len": 60,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "engineered_features": [
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2026-06-11"
+  },
+  "split_sizes": {
+    "train": 1016,
+    "val": 218,
+    "test": 218
+  },
+  "training_time_sec": 4.5,
+  "epochs_trained": 17,
+  "best_val_loss": 0.000469
+}
