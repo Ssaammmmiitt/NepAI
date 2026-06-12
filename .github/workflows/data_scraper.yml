@@ -1,8 +1,8 @@
 name: update-stock-prices
 on:
   schedule:
-    # NEPSE trades Mon-Fri; run 5 times after market close (13:00-17:00 UTC / 18:45-22:45 NPT)
-    - cron: "0 13,14,15,16,17 * * 1,2,3,4,5"
+    # NEPSE trades Mon-Fri; run 5 times after market close (10:00-14:00 UTC / 15:45-19:45 NPT)
+    - cron: "0 10,11,12,13,14 * * 1,2,3,4,5"
   workflow_dispatch:
 defaults:
   run:
