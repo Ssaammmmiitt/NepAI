@@ -6,14 +6,16 @@
 
 ## 1. Project Summary
 
-NepAI is a single-user stock prediction dashboard that:
+NepAI is a **multi-user** stock prediction dashboard that:
 
 1. Reads **NEPSE OHLC data** from CSV files in `data/`, updated daily by a GitHub Actions workflow.
 2. Serves **pre-trained LSTM predictions** via FastAPI. Each model predicts **next-day close only**. Multi-day forecasts are produced by running inference recursively.
 3. Tracks **model freshness** via `metadata.json` in each model's directory — the frontend shows when it was trained and allows retraining if stale (>7 days).
 4. Renders an **interactive dashboard** with candlestick charts, prediction cards, and portfolio tracking.
+5. **Authenticates users** via email/password (signup + login). The backend proxies all auth to **Supabase Auth** — the frontend has zero Supabase knowledge.
+6. **Persists portfolios** in a Supabase PostgreSQL database. Each user's portfolio is isolated via Row Level Security. Adding the same stock again computes a **weighted-average entry price**.
 
-**No database.** All data lives on the filesystem — CSVs for stock data, directories for models.
+**Storage**: CSVs for stock data, filesystem directories for models, Supabase PostgreSQL for users and portfolios.
 
 ### Model Specification
 
@@ -50,31 +52,52 @@ NepAI is a single-user stock prediction dashboard that:
 │  Frontend (React + Vite)    │
 │  localhost:5173              │
 │  ─────────────────────────  │
+│  Login / Signup              │
 │  Dashboard | StockDetail    │
-│  Portfolio (localStorage)   │
+│  Portfolio (DB-backed)      │
 │  TradingView Charts         │
 │  Retrain button (if stale)  │
 └──────────┬──────────────────┘
            │ HTTP/JSON (Vite proxy -> :8000)
+           │ Authorization: Bearer <JWT>
 ┌──────────▼──────────────────┐
 │  Backend (FastAPI + ML)     │
 │  localhost:8000              │
 │  ─────────────────────────  │
+│  /api/auth/*    (auth proxy)│
 │  /api/stocks/*              │
 │  /api/predictions/{ticker}  │
+│  /api/portfolio  (CRUD)     │
 │  /api/train                 │
 │  CLI: python -m backend     │
-└──────┬──────────┬───────────┘
-       │          │
-┌──────▼────┐ ┌──▼──────────────────┐
-│ CSV Files │ │ Model Dirs           │
-│ data/     │ │ models/{TICKER}/     │
-│ *.csv     │ │   model.pt           │
-│           │ │   scaler_feature.pkl │
-│           │ │   scaler_target.pkl  │
-│           │ │   metadata.json      │
-│           │ │   predictions.png    │
-└───────────┘ └──────────────────────┘
+└──────┬──────────┬───────┬───┘
+       │          │       │
+┌──────▼────┐ ┌──▼─────────────┐ ┌──▼──────────────────┐
+│ CSV Files │ │ Supabase        │ │ Model Dirs           │
+│ data/     │ │ Auth + Postgres │ │ models/{TICKER}/     │
+│ *.csv     │ │ profiles table  │ │   model.pt           │
+│           │ │ portfolio table │ │   scaler_feature.pkl │
+│           │ │                 │ │   scaler_target.pkl  │
+│           │ │                 │ │   metadata.json      │
+│           │ │                 │ │   predictions.png    │
+└───────────┘ └─────────────────┘ └──────────────────────┘
+```
+
+**Auth flow** (backend-only — no Supabase JS in frontend):
+
+```
+Signup:   Frontend --{full_name, email, password}--> POST /api/auth/signup
+             --> Backend calls Supabase auth.sign_up()
+             --> DB trigger auto-creates profiles row
+             --> Backend returns {user, access_token, refresh_token}
+
+Login:    Frontend --{email, password}--> POST /api/auth/login
+             --> Backend calls Supabase auth.sign_in_with_password()
+             --> Backend returns {user, access_token, refresh_token}
+
+API Call: Frontend attaches "Authorization: Bearer <access_token>" header
+             --> Backend auth dependency verifies JWT via Supabase
+             --> Extracts user_id --> scopes DB queries to that user
 ```
 
 ---
@@ -143,7 +166,8 @@ NepAI/
 │   ├── __init__.py
 │   ├── __main__.py                      # CLI entry (train / predict / evaluate)
 │   ├── config.py                        # Paths, hyperparameters, feature lists
-│   ├── requirements.txt
+│   ├── requirements.txt                 # + supabase, python-dotenv
+│   ├── .env                             # [NEW] SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
 │   │
 │   ├── ml/                              # ML pipeline (training, inference, storage)
 │   │   ├── __init__.py
@@ -159,16 +183,20 @@ NepAI/
 │   │
 │   └── api/                             # FastAPI server
 │       ├── __init__.py
-│       ├── main.py                      # FastAPI entry, CORS, startup, health
+│       ├── main.py                      # FastAPI entry, CORS, startup, health (MODIFIED)
 │       ├── errors.py                    # Custom exceptions + HTTP error handlers
 │       ├── state.py                     # App state: data cache, ticker registry, training tracker
+│       ├── supabase_client.py           # [NEW] Supabase Python client singleton
+│       ├── auth.py                      # [NEW] get_current_user FastAPI dependency
 │       └── routers/
 │           ├── __init__.py
 │           ├── stocks.py                # /api/stocks/* endpoints
 │           ├── predictions.py           # /api/predictions/{ticker}
 │           ├── train.py                 # POST /api/train endpoint
 │           ├── models.py               # /api/models endpoint
-│           └── model_status.py          # /api/model_status/{ticker} endpoint
+│           ├── model_status.py          # /api/model_status/{ticker} endpoint
+│           ├── auth.py                  # [NEW] /api/auth/signup, /login, /refresh, /me
+│           └── portfolio.py             # [NEW] /api/portfolio CRUD endpoints
 │
 ├── models/                              # One directory per trained stock
 │   ├── NABIL/
@@ -183,7 +211,30 @@ NepAI/
 │   ├── dailyscraper.py                  # Scrapes sharesansar.com, appends to CSVs
 │   └── requirements.txt                 # pandas, requests, lxml, beautifulsoup4
 │
-└── frontend/                            # React app (already built)
+└── frontend/                            # React app
+    └── src/
+        ├── services/
+        │   ├── api.ts                   # (MODIFIED) add auth token interceptor + 401 refresh
+        │   └── mockData.ts              # (to be removed after backend rewire)
+        ├── store/
+        │   ├── authStore.ts             # [NEW] user, tokens, signIn/signUp/signOut/initialize
+        │   ├── portfolioStore.ts        # (MODIFIED) replace localStorage with API calls
+        │   ├── stockStore.ts
+        │   └── themeStore.ts
+        ├── hooks/
+        │   ├── usePortfolio.ts          # (MODIFIED) replace localStorage with API calls
+        │   └── ...
+        ├── pages/
+        │   ├── Login.tsx                # [NEW] login + signup page
+        │   ├── Dashboard.tsx
+        │   ├── StockDetail.tsx
+        │   └── Portfolio.tsx
+        ├── components/
+        │   └── layout/
+        │       ├── ProtectedRoute.tsx   # [NEW] auth route guard
+        │       ├── Sidebar.tsx          # (MODIFIED) add user info + sign out
+        │       └── ...
+        └── App.tsx                      # (MODIFIED) add /login route, wrap with ProtectedRoute
 ```
 
 ### 4.2 Model Directory — `metadata.json`
@@ -262,6 +313,53 @@ All timestamps use Nepal Standard Time (UTC+5:45).
 |--------|----------|-------------|
 | `GET` | `/api/health` | Server status, ticker count, model count |
 
+#### Auth (backend-only — proxies to Supabase Auth) `(DONE)`
+
+| Method | Endpoint | Auth? | Body | Description |
+|--------|----------|-------|------|-------------|
+| `POST` | `/api/auth/signup` | No | `{full_name, email, password}` | Create account |
+| `POST` | `/api/auth/login` | No | `{email, password}` | Sign in, returns tokens |
+| `POST` | `/api/auth/refresh` | No | `{refresh_token}` | Refresh an expired access token |
+| `GET` | `/api/auth/me` | Yes | — | Get current user profile |
+
+**Signup flow**:
+1. Validate input: all three fields required, password ≥ 6 chars.
+2. Call `supabase.auth.sign_up(email=email, password=password, options={"data": {"full_name": full_name}})`.
+3. The DB trigger `handle_new_user()` auto-creates the `profiles` row.
+4. Return: `{user: {id, email, full_name}, access_token, refresh_token}`.
+5. On failure (e.g. email already registered): return HTTP 400 with Supabase's error message.
+
+**Signup response**:
+
+```json
+{
+  "user": {
+    "id": "a1b2c3d4-...",
+    "email": "user@example.com",
+    "full_name": "Ram Shrestha"
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "refresh_token": "v1.MjU2..."
+}
+```
+
+**Login flow**:
+1. Call `supabase.auth.sign_in_with_password(email=email, password=password)`.
+2. Return: `{user: {id, email, full_name}, access_token, refresh_token}`.
+3. On failure (wrong credentials): return HTTP 401 with `{"error": "Invalid email or password"}`.
+
+**Login response**: same shape as signup response.
+
+**Refresh flow**:
+1. Call `supabase.auth.refresh_session(refresh_token)`.
+2. Return: `{access_token, refresh_token}` (new pair).
+3. On failure (expired or invalid refresh token): return HTTP 401.
+
+**Me flow**:
+1. Uses `get_current_user` dependency to extract `user_id` from the JWT.
+2. Queries `profiles` table for `full_name` and `email`.
+3. Return: `{id, email, full_name}`.
+
 #### Stocks (data from CSVs)
 
 | Method | Endpoint | Description |
@@ -309,6 +407,71 @@ Validation order:
 }
 ```
 
+#### Portfolio (authenticated — requires JWT) `(DONE)`
+
+All portfolio endpoints require the `Authorization: Bearer <access_token>` header. The `get_current_user` dependency extracts the `user_id` from the JWT and scopes all queries to that user.
+
+| Method | Endpoint | Body | Description |
+|--------|----------|------|-------------|
+| `GET` | `/api/portfolio` | — | Fetch all holdings for the authenticated user |
+| `POST` | `/api/portfolio` | `{ticker, quantity, entry_price}` | Add stock (or merge via weighted average if already held) |
+| `DELETE` | `/api/portfolio/{ticker}` | — | Remove a stock from portfolio |
+
+**GET `/api/portfolio`** response:
+
+```json
+{
+  "holdings": [
+    {
+      "ticker": "NABIL",
+      "quantity": 15,
+      "entry_price": 533.33,
+      "current_price": 540.00,
+      "pnl": 100.05,
+      "pnl_percent": 1.25,
+      "added_at": "2026-06-12T10:30:00+05:45"
+    },
+    {
+      "ticker": "NMB",
+      "quantity": 20,
+      "entry_price": 310.00,
+      "current_price": 305.50,
+      "pnl": -90.00,
+      "pnl_percent": -1.45,
+      "added_at": "2026-06-11T14:00:00+05:45"
+    }
+  ]
+}
+```
+
+For each holding, the backend:
+1. Reads the stock's latest close price from the data cache (`app_state.get_stock_data(ticker)`).
+2. Computes `current_price` = latest close, `pnl` = `(current_price - entry_price) * quantity`, `pnl_percent` = `((current_price - entry_price) / entry_price) * 100`.
+
+**POST `/api/portfolio`** — weighted-average upsert:
+
+Request body: `{"ticker": "NABIL", "quantity": 5, "entry_price": 600.00}`
+
+Logic:
+1. Validate that `ticker` exists in `app_state.available_tickers` → 404 if not.
+2. Query the `portfolio` table: does this user already hold this ticker?
+3. **If no existing holding**: INSERT a new row.
+4. **If existing holding**: compute weighted average and UPDATE:
+   - `new_quantity = old_quantity + incoming_quantity`
+   - `new_entry_price = (old_quantity × old_price + incoming_quantity × incoming_price) / new_quantity`
+   - UPDATE the row with `new_quantity` and `new_entry_price`.
+5. Return the created/updated row.
+
+**Weighted-average example**:
+- User holds 10 NABIL @ Rs 500.
+- User adds 5 NABIL @ Rs 600.
+- Result: **15 NABIL @ Rs 533.33** `((10×500 + 5×600) / 15)`.
+- This matches real brokerage behavior (average cost basis).
+
+**DELETE `/api/portfolio/{ticker}`**:
+1. Delete from `portfolio` where `user_id` matches and `ticker` matches.
+2. Return 200 on success, 404 if no row found.
+
 #### Train
 
 | Method | Endpoint | Description |
@@ -339,19 +502,25 @@ Training runs in a background thread via `asyncio.to_thread` so the server stays
 
 #### Error responses
 
-All errors return JSON with `error` and `ticker` fields:
+All errors return JSON with `error` and `ticker` fields (where applicable):
 
 | Code | Error | When |
 |------|-------|------|
+| 400 | `InsufficientDataError` | < 500 usable rows after preprocessing |
+| 400 | Validation error | Missing/invalid signup or login fields |
+| 401 | `Unauthorized` | Missing, invalid, or expired JWT |
+| 401 | `Invalid credentials` | Wrong email or password on login |
 | 404 | `StockNotFoundError` | Stock CSV not in `data/` |
 | 404 | `ModelNotFoundError` | No trained model in `models/` |
-| 400 | `InsufficientDataError` | < 500 usable rows after preprocessing |
+| 404 | `Portfolio entry not found` | Trying to delete a stock not in portfolio |
 | 409 | `TrainingInProgressError` | Training already running for this ticker |
 
 ### 4.4 Startup Lifecycle
 
 ```
 App Startup
+    -> Load .env (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+    -> Initialize Supabase Python client
     -> Scan data/ for available CSV files -> build ticker list
     -> Scan models/ for directories with metadata.json -> build available models dict
     -> Load available models into memory: {ticker: (model, scaler, metadata)}
@@ -381,9 +550,220 @@ predict(ticker, days=5):                    # backend/ml/inference.py
 
 > Synthetic row heuristics are imperfect but acceptable for short horizons. Accuracy degrades beyond ~5 days.
 
+### 4.6 Auth Dependency — `get_current_user` `(DONE)`
+
+This is a FastAPI dependency injected into any endpoint that requires authentication.
+
+**Location**: `backend/api/auth.py`
+
+**Behavior**:
+1. Read the `Authorization` header from the incoming request.
+2. If missing or not in `Bearer <token>` format → raise HTTP 401 `{"error": "Missing or invalid authorization header"}`.
+3. Extract the token string.
+4. Call `supabase.auth.get_user(token)` using the service-role Supabase client.
+5. If Supabase returns an error (expired, tampered, revoked) → raise HTTP 401 `{"error": "Invalid or expired token"}`.
+6. Return `user.id` (UUID string) — this is the authenticated user's ID.
+
+**Usage in routers**: any endpoint that needs auth adds `user_id: str = Depends(get_current_user)` to its signature.
+
 ---
 
-## 5. Data Pipeline — GitHub Actions
+## 5. Supabase Setup Guide `(DONE)`
+
+This is a one-time manual setup. Follow every step in order.
+
+### 5.1 Create a Supabase Project
+
+1. Go to [https://supabase.com](https://supabase.com) and sign in (or create a free account).
+2. Click **New Project**.
+3. Choose your organization, name the project `nepai`, set a strong database password (save it somewhere), pick the nearest region.
+4. Click **Create new project** and wait ~2 minutes for provisioning.
+
+### 5.2 Collect API Credentials
+
+1. In the Supabase dashboard, go to **Project Settings → API** (left sidebar, gear icon → API).
+2. Copy these two values:
+
+| Key | Label in dashboard | Where it goes |
+|-----|-------------------|---------------|
+| `SUPABASE_URL` | **Project URL** | `backend/.env` |
+| `SUPABASE_SERVICE_ROLE_KEY` | **service_role** (under "Project API keys", click "Reveal") | `backend/.env` |
+
+3. Create the file `backend/.env`:
+```
+SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
+```
+
+4. Add `backend/.env` to `.gitignore`:
+```
+# in .gitignore at project root
+backend/.env
+```
+
+### 5.3 Enable Email Auth Provider
+
+1. In the Supabase dashboard, go to **Authentication → Providers** (left sidebar).
+2. Click on **Email**.
+3. Ensure **Enable Email provider** is toggled ON.
+4. Set **Confirm email** to OFF (for development — turn ON in production).
+5. Click **Save**.
+
+### 5.4 Create Database Tables and Trigger
+
+1. In the Supabase dashboard, go to **SQL Editor** (left sidebar).
+2. Click **New query**.
+3. Paste and run the following SQL blocks **one at a time, in this exact order**:
+
+**Step 1 — Create `profiles` table:**
+
+```sql
+CREATE TABLE profiles (
+  id         UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name  TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own profile"
+  ON profiles FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile"
+  ON profiles FOR UPDATE
+  USING (auth.uid() = id);
+```
+
+**Step 2 — Create `portfolio` table:**
+
+```sql
+CREATE TABLE portfolio (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id     UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  ticker      TEXT NOT NULL,
+  quantity    INTEGER NOT NULL CHECK (quantity > 0),
+  entry_price NUMERIC(12,2) NOT NULL CHECK (entry_price > 0),
+  added_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (user_id, ticker)
+);
+
+ALTER TABLE portfolio ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own portfolio"
+  ON portfolio FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert into own portfolio"
+  ON portfolio FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own portfolio"
+  ON portfolio FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete from own portfolio"
+  ON portfolio FOR DELETE
+  USING (auth.uid() = user_id);
+```
+
+**Step 3 — Create auto-profile trigger:**
+
+```sql
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = ''
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, email)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
+    COALESCE(NEW.email, '')
+  );
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION handle_new_user();
+```
+
+### 5.5 Verify Setup
+
+1. **Check tables**: Go to **Table Editor** in the Supabase dashboard. You should see `profiles` and `portfolio` tables.
+2. **Check RLS**: Click on each table → **Policies** tab. You should see the policies created above.
+3. **Check trigger**: Go to **Database → Triggers**. You should see `on_auth_user_created` on the `auth.users` table.
+
+---
+
+## 6. Backend Implementation Details `(DONE)`
+
+### 6.1 New File: `backend/api/supabase_client.py` `(DONE)`
+
+Purpose: Initialize and export a singleton Supabase Python client.
+
+Responsibilities:
+- Load `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` from `backend/.env` using `python-dotenv`.
+- Call `create_client(url, key)` from the `supabase` Python package.
+- Export the client as a module-level variable (e.g. `supabase_client`).
+- If either env var is missing, raise a clear error at import time with instructions.
+
+### 6.2 New File: `backend/api/auth.py` `(DONE)`
+
+Purpose: FastAPI dependency that validates JWTs.
+
+See [section 4.6](#46-auth-dependency--get_current_user) for full specification.
+
+### 6.3 New File: `backend/api/routers/auth.py` `(DONE)`
+
+Purpose: Auth endpoints that proxy to Supabase.
+
+4 endpoints: `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/refresh`, `GET /api/auth/me`.
+
+See [section 4.3 → Auth](#auth-backend-only--proxies-to-supabase-auth) for full request/response contracts.
+
+Pydantic models needed:
+- `SignupRequest`: `full_name: str`, `email: str`, `password: str` (all required).
+- `LoginRequest`: `email: str`, `password: str`.
+- `RefreshRequest`: `refresh_token: str`.
+- `AuthResponse`: `user: dict`, `access_token: str`, `refresh_token: str`.
+
+### 6.4 New File: `backend/api/routers/portfolio.py` `(DONE)`
+
+Purpose: Portfolio CRUD with weighted-average upsert.
+
+3 endpoints: `GET /api/portfolio`, `POST /api/portfolio`, `DELETE /api/portfolio/{ticker}`.
+
+See [section 4.3 → Portfolio](#portfolio-authenticated--requires-jwt) for full request/response contracts and the weighted-average algorithm.
+
+Pydantic model needed:
+- `AddStockRequest`: `ticker: str`, `quantity: int`, `entry_price: float`.
+
+Important: All three endpoints use `user_id: str = Depends(get_current_user)`. The Supabase queries are made using the service-role client (bypasses RLS since we filter by `user_id` in the query itself). Alternatively, use the user's JWT to create a per-request client that respects RLS — either approach works, but service-role + explicit `user_id` filter is simpler.
+
+### 6.5 Modify: `backend/api/main.py` `(DONE)`
+
+Changes:
+1. Import the two new routers: `from .routers.auth import router as auth_router` and `from .routers.portfolio import router as portfolio_router`.
+2. Register them: `app.include_router(auth_router, prefix="/api")` and `app.include_router(portfolio_router, prefix="/api")`.
+3. No other changes needed.
+
+### 6.6 Modify: `backend/requirements.txt` `(DONE)`
+
+Add two new lines:
+```
+supabase
+python-dotenv
+```
+
+---
+
+## 7. Data Pipeline — GitHub Actions
 
 A cron workflow in `.github/workflows/data_scraper.yml` runs Mon-Fri (NEPSE trading days), 5 times between 13:00-17:00 UTC (18:45-22:45 NPT, after market close).
 
@@ -394,30 +774,30 @@ A cron workflow in `.github/workflows/data_scraper.yml` runs Mon-Fri (NEPSE trad
 4. For each existing CSV in `data/`, finds the matching ticker row and appends if the date is new
 5. Commits and pushes the updated CSVs as `github-actions[bot]`
 
-**No database writes.** The CSVs are the only data store. The backend reads them directly.
+**No database writes.** The CSVs are the only data store for stock prices. The backend reads them directly.
 
 The scraper uses `pathlib.Path.stem` for cross-platform symbol extraction, and wraps HTML in `StringIO` for pandas compatibility.
 
 ---
 
-## 6. Frontend Changes Needed
+## 8. Frontend Changes Needed
 
-### 6.1 Hook rewiring
+### 8.1 Hook rewiring `(TO BE IMPLEMENTED)`
 
 | Hook | Current source | Target source |
 |------|---------------|---------------|
 | `useStockData` | `mockData.ts → getOHLC()` (CSV parsing in browser) | `api.ts → stockAPI.getOHLC()` |
 | `usePrediction` | `mockData.ts → generateMockPrediction()` (random) | `api.ts → predictionAPI.getPrediction()` |
-| `usePortfolio` | `localStorage` | Keep as-is |
+| `usePortfolio` | `localStorage` | `api.ts → portfolioAPI.getPortfolio()` |
 
-### 6.2 Store rewiring
+### 8.2 Store rewiring `(TO BE IMPLEMENTED)`
 
 | Store | Current source | Target source |
 |-------|---------------|---------------|
 | `stockStore.loadTickers` | `mockData.ts → getTickers()` (CSV) | `api.ts → stockAPI.listTickers()` |
-| `portfolioStore` | `localStorage` | Keep as-is |
+| `portfolioStore` | `localStorage` | `api.ts → portfolioAPI.*` |
 
-### 6.3 `api.ts` — already defined, needs train endpoint added
+### 8.3 `api.ts` — already defined, needs auth interceptor `(TO BE IMPLEMENTED)`
 
 ```
 stockAPI.listTickers()        → GET /api/stocks
@@ -425,12 +805,19 @@ stockAPI.getOHLC(ticker)      → GET /api/stocks/{ticker}/ohlc
 stockAPI.getIndicators()      → GET /api/stocks/{ticker}/indicators
 stockAPI.getSummary()         → GET /api/stocks/{ticker}/summary
 predictionAPI.getPrediction() → GET /api/predictions/{ticker}
-trainAPI.train(stock_name)    → POST /api/train                  (NEW)
+trainAPI.train(stock_name)    → POST /api/train                  (DONE)
+portfolioAPI.getPortfolio()   → GET /api/portfolio               (DONE)
+portfolioAPI.addStock()       → POST /api/portfolio              (DONE)
+portfolioAPI.removeStock()    → DELETE /api/portfolio/{ticker}    (DONE)
 ```
+
+Modifications needed:
+- Add Axios **request interceptor**: reads access token from `authStore`, attaches `Authorization: Bearer <token>` to every request.
+- Add Axios **response interceptor**: catches 401 errors, calls `/api/auth/refresh` with the stored refresh token, retries the original request once with the new access token. If refresh also fails, call `authStore.signOut()` to clear state and redirect to `/login`.
 
 Vite proxy already configured (`/api → localhost:8000`).
 
-### 6.4 Prediction response shape update
+### 8.4 Prediction response shape update `(TO BE IMPLEMENTED)`
 
 ```typescript
 interface Prediction {
@@ -448,7 +835,7 @@ interface Prediction {
 }
 ```
 
-### 6.5 `AIPrediction` card updates
+### 8.5 `AIPrediction` card updates `(TO BE IMPLEMENTED)`
 
 Three states:
 
@@ -467,7 +854,7 @@ Three states:
 - "No trained model for {ticker}"
 - **"Train Model"** button (same endpoint)
 
-### 6.6 `api.ts` additions (DONE)
+### 8.6 `api.ts` additions (DONE)
 
 ```typescript
 export const trainAPI = {
@@ -478,9 +865,17 @@ export const trainAPI = {
 export const modelAPI = {
   list: () => api.get('/models'),
 };
+
+export const portfolioAPI = {
+  getPortfolio: () => api.get('/portfolio'),
+  addStock: (data: { ticker: string; quantity: number; entry_price: number }) =>
+    api.post('/portfolio', data),
+  removeStock: (ticker: string) => api.delete(`/portfolio/${ticker}`),
+  getSummary: () => api.get('/portfolio/summary'),
+};
 ```
 
-### 6.7 Wire unused components
+### 8.7 Wire unused components `(TO BE IMPLEMENTED)`
 
 | Component | Wire to |
 |-----------|---------|
@@ -488,7 +883,7 @@ export const modelAPI = {
 | `PredictionLine` | Real prediction line on the candlestick chart |
 | `TechnicalIndicators` card | Currently receives `indicators={null}`. Pass real data |
 
-### 6.8 Remove after backend is live
+### 8.8 Remove after backend is live `(TO BE IMPLEMENTED)`
 
 | File/Code | Reason |
 |-----------|--------|
@@ -497,21 +892,36 @@ export const modelAPI = {
 | `frontend/src/services/mockData.ts` | Replaced by `api.ts` |
 | `frontend/src/utils/csvParser.ts` | No more client-side CSV parsing |
 
+### 8.9 Frontend changes for auth & portfolio (implementation order) `(TO BE IMPLEMENTED)`
+
+Each item below is one discrete task. Implement in this exact order:
+
+1. Create `frontend/src/store/authStore.ts` — Zustand store managing `user`, `accessToken`, `refreshToken`, `loading`, and methods: `signUp(fullName, email, password)` → `POST /api/auth/signup`, `signIn(email, password)` → `POST /api/auth/login`, `signOut()` → clear tokens + redirect, `initialize()` → calls `/api/auth/me` with stored token on app load, `refreshSession()` → calls `/api/auth/refresh`. Persist `accessToken` and `refreshToken` in `localStorage`.
+2. Modify `frontend/src/services/api.ts` — add Axios request interceptor (attach Bearer token) and response interceptor (401 → refresh → retry).
+3. Create `frontend/src/pages/Login.tsx` — single page with two tabs: **Login** (email + password) and **Sign Up** (full name + email + password), form validation, error display, calls `authStore.signIn` / `authStore.signUp`, redirects to `/` on success.
+4. Create `frontend/src/components/layout/ProtectedRoute.tsx` — wrapper that checks `authStore.user`; redirects to `/login` if unauthenticated, shows spinner while `authStore.initialize()` resolves.
+5. Modify `frontend/src/App.tsx` — add `/login` route, wrap existing routes with `ProtectedRoute`, call `authStore.initialize()` on mount.
+6. Modify `frontend/src/components/layout/Sidebar.tsx` — add user display (name/email) at the bottom and a "Sign Out" button.
+7. Modify `frontend/src/store/portfolioStore.ts` — replace all `localStorage` reads/writes with calls to `portfolioAPI`: `getPortfolio()`, `addStock()`, `removeStock()`.
+8. Modify `frontend/src/hooks/usePortfolio.ts` — replace `localStorage` reads with a call to `portfolioAPI.getPortfolio()`.
+
 ---
 
-## 7. Tech Stack
+## 9. Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19 + TypeScript, Vite, TradingView Lightweight Charts, Zustand, Axios, Tailwind CSS 4 |
-| Backend API | FastAPI, pandas, pandas-ta |
+| Backend API | FastAPI, pandas, pandas-ta, supabase (Python client), python-dotenv |
 | ML Pipeline | PyTorch, scikit-learn (RobustScaler), matplotlib |
-| Storage | Filesystem — CSVs for data, directories for models |
+| Auth | Supabase Auth (email/password), JWT tokens |
+| Database | Supabase PostgreSQL (profiles + portfolio tables, RLS) |
+| Storage | Filesystem — CSVs for stock data, directories for models |
 | Data Pipeline | GitHub Actions cron -> existing scraper -> CSV commit |
 
 ---
 
-## 8. Implementation Order
+## 10. Implementation Order
 
 | # | Task | Status |
 |---|------|--------|
@@ -524,8 +934,20 @@ export const modelAPI = {
 | 7 | **Train endpoint** -- `POST /api/train` with stock-exists + min-rows validation, threaded training | DONE |
 | 8 | **Models endpoint** -- `/api/models` returning trained model metadata + staleness | DONE |
 | 8b | **Model status endpoint** -- `/api/model_status/{ticker}` per-stock status, date_created, staleness | DONE |
-| 9 | **Frontend rewire** -- Switch hooks/stores from mockData -> api.ts | TODO |
-| 10 | **Update Prediction UI** -- `AIPrediction` card with 5-day format + stale warning + retrain button | TODO |
-| 11 | **Wire unused components** -- `IndicatorOverlay`, `PredictionLine`, `TechnicalIndicators` | TODO |
-| 12 | **GitHub Actions workflow** -- `.github/workflows/data_scraper.yml` running `data_scraper/dailyscraper.py` | DONE |
-| 13 | **Cleanup** -- Remove `frontend/public/data/`, mockData.ts, csvParser.ts | TODO |
+| 9 | **Supabase setup** -- create project, collect credentials, enable email auth, run SQL for tables + trigger + RLS | DONE |
+| 10 | **Backend: Supabase client** -- `backend/api/supabase_client.py`, load .env, init client | DONE |
+| 11 | **Backend: Auth dependency** -- `backend/api/auth.py`, `get_current_user` JWT verification | DONE |
+| 12 | **Backend: Auth endpoints** -- `backend/api/routers/auth.py`, signup/login/refresh/me | DONE |
+| 13 | **Backend: Portfolio endpoints** -- `backend/api/routers/portfolio.py`, CRUD with weighted-average upsert | DONE |
+| 14 | **Backend: Register routers** -- add auth + portfolio routers to `main.py` | DONE |
+| 15 | **Frontend: Auth store** -- `authStore.ts` with signIn/signUp/signOut/initialize/refresh | TODO |
+| 16 | **Frontend: API interceptor** -- attach Bearer token, auto-refresh on 401 | TODO |
+| 17 | **Frontend: Login page** -- `Login.tsx` with login/signup tabs | TODO |
+| 18 | **Frontend: Protected routes** -- `ProtectedRoute.tsx` + wrap routes in `App.tsx` | TODO |
+| 19 | **Frontend: Sidebar user info** -- display name, sign out button | TODO |
+| 20 | **Frontend: Portfolio rewire** -- `portfolioStore.ts` + `usePortfolio.ts` → API calls instead of localStorage | TODO |
+| 21 | **Frontend rewire** -- Switch hooks/stores from mockData -> api.ts | TODO |
+| 22 | **Update Prediction UI** -- `AIPrediction` card with 5-day format + stale warning + retrain button | TODO |
+| 23 | **Wire unused components** -- `IndicatorOverlay`, `PredictionLine`, `TechnicalIndicators` | TODO |
+| 24 | **GitHub Actions workflow** -- `.github/workflows/data_scraper.yml` running `data_scraper/dailyscraper.py` | DONE |
+| 25 | **Cleanup** -- Remove `frontend/public/data/`, mockData.ts, csvParser.ts | TODO |
