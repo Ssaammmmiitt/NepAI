@@ -381,15 +381,178 @@ Content-Type: application/json
 }
 ```
 
+### POST /auth/signup
+
+Create a new user account. The backend proxies to Supabase Auth — the frontend never talks to Supabase directly.
+
+```
+POST /api/auth/signup
+Content-Type: application/json
+
+{"full_name": "Ram Shrestha", "email": "ram@example.com", "password": "securepass123"}
+```
+
+```json
+{
+  "user": {
+    "id": "a1b2c3d4-...",
+    "email": "ram@example.com",
+    "full_name": "Ram Shrestha"
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "refresh_token": "v1.MjU2..."
+}
+```
+
+Validation: `full_name`, `email`, and `password` are all required. Password must be ≥ 6 characters. Returns 400 if email is already registered.
+
+### POST /auth/login
+
+Sign in with email and password.
+
+```
+POST /api/auth/login
+Content-Type: application/json
+
+{"email": "ram@example.com", "password": "securepass123"}
+```
+
+Response: same shape as signup. Returns 401 if credentials are wrong.
+
+### POST /auth/refresh
+
+Exchange a refresh token for a new access + refresh token pair.
+
+```
+POST /api/auth/refresh
+Content-Type: application/json
+
+{"refresh_token": "v1.MjU2..."}
+```
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "refresh_token": "v1.Yzdk..."
+}
+```
+
+Returns 401 if the refresh token is expired or invalid.
+
+### GET /auth/me
+
+Get the authenticated user's profile. Requires `Authorization: Bearer <access_token>` header.
+
+```
+GET /api/auth/me
+Authorization: Bearer <access_token>
+```
+
+```json
+{
+  "id": "a1b2c3d4-...",
+  "email": "ram@example.com",
+  "full_name": "Ram Shrestha"
+}
+```
+
+### GET /portfolio
+
+Fetch all holdings for the authenticated user. Requires `Authorization: Bearer <access_token>` header.
+
+```
+GET /api/portfolio
+Authorization: Bearer <access_token>
+```
+
+```json
+{
+  "holdings": [
+    {
+      "ticker": "NABIL",
+      "quantity": 15,
+      "entry_price": 533.33,
+      "current_price": 540.00,
+      "pnl": 100.05,
+      "pnl_percent": 1.25,
+      "added_at": "2026-06-12T10:30:00+05:45"
+    }
+  ]
+}
+```
+
+For each holding, `current_price` is the latest close from the stock CSV, and `pnl`/`pnl_percent` are computed in real time.
+
+### POST /portfolio
+
+Add a stock to the portfolio. If the user already holds the same ticker, a weighted-average merge is performed (matching real brokerage behavior).
+
+```
+POST /api/portfolio
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{"ticker": "NABIL", "quantity": 5, "entry_price": 600.00}
+```
+
+**New holding:**
+
+```json
+{
+  "ticker": "NABIL",
+  "quantity": 5,
+  "entry_price": 600.00,
+  "action": "created",
+  "message": "Added 5 shares of NABIL @ Rs 600.00"
+}
+```
+
+**Merged holding** (user already held 10 NABIL @ Rs 500):
+
+```json
+{
+  "ticker": "NABIL",
+  "quantity": 15,
+  "entry_price": 533.33,
+  "action": "merged",
+  "message": "Merged with existing holding — now 15 shares @ Rs 533.33"
+}
+```
+
+Weighted-average formula: `new_price = (old_qty × old_price + new_qty × new_price) / total_qty`
+
+### DELETE /portfolio/{ticker}
+
+Remove a stock from the portfolio entirely.
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| ticker | path | yes | Stock symbol, case-insensitive |
+
+```
+DELETE /api/portfolio/NABIL
+Authorization: Bearer <access_token>
+```
+
+```json
+{"message": "Removed NABIL from portfolio", "ticker": "NABIL"}
+```
+
+Returns 404 if the ticker is not in the user's portfolio.
+
 ### Error Responses
 
-All errors return JSON with `error` and `ticker` fields:
+All errors return JSON with `error` and `ticker` fields (where applicable):
 
 | Code | Error | When |
 |------|-------|------|
+| 400 | Insufficient data | < 500 usable rows after preprocessing |
+| 400 | Validation error | Missing/invalid signup or login fields |
+| 401 | Unauthorized | Missing, invalid, or expired JWT |
+| 401 | Invalid credentials | Wrong email or password on login |
 | 404 | Stock not found | Stock CSV missing from `data/` |
 | 404 | Model not found | No trained model in `models/` |
-| 400 | Insufficient data | < 500 usable rows after preprocessing |
+| 404 | Portfolio entry not found | Trying to delete a stock not in portfolio |
 | 409 | Training in progress | Training already running for this ticker |
 
 Example:
@@ -416,9 +579,12 @@ Example:
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+|-------|-----------:|
 | Frontend | React 19, TypeScript, Vite, TradingView Charts, Zustand, Axios, Tailwind CSS 4 |
-| Backend API | FastAPI, pandas |
+| Backend API | FastAPI, pandas, supabase (Python client), python-dotenv |
 | ML Pipeline | PyTorch, scikit-learn, matplotlib |
+| Auth | Supabase Auth (email/password), JWT tokens |
+| Database | Supabase PostgreSQL (profiles + portfolio tables, RLS) |
 | Storage | Filesystem (CSVs for data, directories for models) |
 | Data Pipeline | GitHub Actions cron (Mon-Fri) + `data_scraper/dailyscraper.py` |
+
