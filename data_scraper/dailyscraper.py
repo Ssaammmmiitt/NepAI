@@ -40,6 +40,7 @@ for file in fileDir.glob("*.csv"):
         symbol = file.stem
         data = dataTable.loc[dataTable["Symbol"] == symbol]
         if len(data) == 1:
+            data = data.iloc[0]
             status = getStatus(float(data["Open"]), float(data["Close"]))
             dataRow = [
                 [
