@@ -52,6 +52,28 @@ cd frontend
 npm install
 ```
 
+### Environment Variables
+
+The backend requires a `.env` file for Supabase credentials (used by auth and portfolio features). A template is provided at `backend/.env.example`:
+
+```env
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+Copy it and fill in your values:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+| Variable | Description | Where to find it |
+|----------|-------------|------------------|
+| `SUPABASE_URL` | Your Supabase project URL (e.g. `https://xxxxxxxxxxxx.supabase.co`) | Supabase Dashboard → Project Settings → API → Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service-role secret key (full admin access, **never expose publicly**) | Supabase Dashboard → Project Settings → API → `service_role` key |
+
+> **Note:** The `backend/.env` file is git-ignored. Never commit real credentials. Stock data, ML training, and prediction endpoints work without these variables — only auth (`/auth/*`) and portfolio (`/portfolio`) endpoints require them.
+
 ### Running
 
 **Backend (API server):**

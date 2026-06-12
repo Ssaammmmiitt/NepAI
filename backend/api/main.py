@@ -12,6 +12,8 @@ from .routers.predictions import router as predictions_router
 from .routers.train import router as train_router
 from .routers.models import router as models_router
 from .routers.model_status import router as model_status_router
+from .routers.auth import router as auth_router
+from .routers.portfolio import router as portfolio_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,6 +38,8 @@ app.include_router(predictions_router, prefix="/api")
 app.include_router(train_router, prefix="/api")
 app.include_router(models_router, prefix="/api")
 app.include_router(model_status_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
+app.include_router(portfolio_router, prefix="/api")
 
 
 @app.on_event("startup")
