@@ -27,7 +27,7 @@ NepAI/
     config.py          Paths, hyperparameters, feature lists
     ml/                ML pipeline (model, training, inference, evaluation)
     api/               FastAPI server (routers, state, error handling)
-  frontend/            React + Vite dashboard
+  frontend/            React + Vite dashboard (see frontend/FEATURES.md)
 ```
 
 ## Getting Started
@@ -97,6 +97,16 @@ npm run dev
 ```
 
 Opens at `http://localhost:5173`. The Vite proxy forwards `/api` requests to the backend.
+
+**Frontend tests:**
+
+```bash
+cd frontend
+npm run test:run    # single run (CI)
+npm test            # watch mode
+```
+
+See `frontend/FEATURES.md` for a full list of implemented UI features.
 
 ### CLI Commands
 
@@ -602,7 +612,8 @@ Example:
 
 | Layer | Technology |
 |-------|-----------:|
-| Frontend | React 19, TypeScript, Vite, TradingView Charts, Zustand, Axios, Tailwind CSS 4 |
+| Frontend | React 19, TypeScript, Vite, TradingView Lightweight Charts, Zustand, Axios, Tailwind CSS 4, GSAP |
+| Testing | Vitest, Testing Library, jsdom |
 | Backend API | FastAPI, pandas, supabase (Python client), python-dotenv |
 | ML Pipeline | PyTorch, scikit-learn, matplotlib |
 | Auth | Supabase Auth (email/password), JWT tokens |

@@ -102,52 +102,73 @@ API Call: Frontend attaches "Authorization: Bearer <access_token>" header
 
 ---
 
-## 3. What Exists (Frontend — ~90% Done)
+## 3. Frontend Status (Complete)
+
+The React dashboard is fully wired to the FastAPI backend. All data flows through `api.ts` with JWT auth interceptors — no client-side CSV parsing or mock data.
 
 ### Pages
 
 | Route | Page | Status |
 |-------|------|--------|
-| `/` | `Dashboard` | Working — market overview, gainers/losers, sector breakdown, ticker list |
-| `/stock/:ticker` | `StockDetail` | Working — candlestick + volume charts, current snapshot, AI prediction card, add-to-portfolio |
-| `/portfolio` | `Portfolio` | Working — add/remove holdings, summary cards. Uses `localStorage` |
+| `/login` | `Login` | Working — sign in / sign up tabs, theme toggle |
+| `/` | `Dashboard` | Working — market overview, gainers/losers, sector breakdown, ticker list, search |
+| `/stock/:ticker` | `StockDetail` | Working — candlestick + volume charts, prediction/indicator overlays, AI prediction, model health, add-to-portfolio |
+| `/portfolio` | `Portfolio` | Working — API-backed holdings, add/remove with toast notifications |
 
-### Components (built and in use)
+### Components
 
 | Category | Components |
 |----------|-----------|
-| Layout | `Sidebar`, `Header`, `PageWrapper` |
-| Charts | `CandlestickChart` (TradingView), `VolumeChart` |
-| Cards | `AIPrediction`, `CurrentSnapshot`, `TechnicalIndicators`, `PortfolioCard`, `StockSummaryCard` |
+| Layout | `Sidebar`, `Header`, `PageWrapper`, `ProtectedRoute`, `PublicHeader`, `BrandMark`, `BrandLogo` |
+| Charts | `CandlestickChart`, `VolumeChart`, `PredictionOverlay`, `IndicatorOverlay` |
+| Cards | `AIPrediction`, `CurrentSnapshot`, `TechnicalIndicators`, `ModelHealthCard`, `PortfolioCard`, `StockSummaryCard` |
 | Widgets | `MarketOverview`, `TopMovers`, `TickerList`, `SectorBreakdown`, `StockSearch`, `PortfolioSummary`, `LiveClock` |
-| UI | `Button`, `Badge`, `Spinner`, `ThemeToggle` |
+| UI | `Button`, `Badge`, `Spinner`, `Input`, `Card`, `Modal`, `ThemeToggle`, `Toast` |
 
-### Components (built but unused)
-
-| Component | Notes |
-|-----------|-------|
-| `IndicatorOverlay` | Chart overlay for indicators — wire up when indicators are computed |
-| `PredictionLine` | Chart overlay for prediction line — wire up to real predictions |
-| `PredictionCard` | Alternative prediction display |
-| `ModelHealthCard` | Model accuracy display |
-| `Modal` | Generic modal |
-
-### Current data flow (to be replaced)
+### Data flow (current)
 
 ```
-frontend/public/data/tickers.json + *.csv
-        ↓ (client-side CSV parsing)
-mockData.ts → hooks → pages
+FastAPI backend (/api/*)
+        ↓ (Axios + JWT interceptors)
+api.ts → hooks/stores → pages
 ```
 
-- `useStockData` → calls `getOHLC()` from `mockData.ts` (parses CSV in browser)
-- `usePrediction` → calls `generateMockPrediction()` (random numbers)
-- `usePortfolio` → reads `localStorage`
-- `api.ts` → defines the real backend contract (axios), but **nothing uses it yet**
+- `useStockData` → `stockAPI.getOHLC()` + `stockAPI.getSummary()`
+- `usePrediction` → `predictionAPI.getPrediction()`
+- `useIndicators` → `stockAPI.getIndicators()`
+- `usePortfolio` / `portfolioStore` → `portfolioAPI.*`
+- `stockStore.loadTickers` → `stockAPI.listTickers()` (5-min client cache)
+- `authStore` → `authAPI.signup/login/refresh/me` with token persistence
+
+### Design & UX
+
+- **Dark Terminal** design system (`frontend/skills/DESIGN1.md`) with light/dark mode
+- Responsive layout (mobile bottom nav, desktop fixed sidebar with pinned user/logout)
+- Toast notifications for portfolio add/remove
+- GSAP staggered entrances (respects `prefers-reduced-motion`)
+- Theme-aware charts (no recreation on toggle)
+- Unit tests: Vitest + Testing Library (71 tests across utils, stores, components)
+
+### Optional cleanup
+
+Legacy files may remain on disk but are unused by the app:
+
+| File | Status |
+|------|--------|
+| `frontend/public/data/*.csv` | Unused — data served by backend |
+| `frontend/public/data/tickers.json` | Unused |
+| `frontend/src/services/mockData.ts` | Unused — replaced by `api.ts` |
+| `frontend/src/utils/csvParser.ts` | Unused |
+| `frontend/src/components/charts/PredictionLine.tsx` | Replaced by `PredictionOverlay` |
+| `frontend/src/components/cards/PredictionCard.tsx` | Replaced by `AIPrediction` |
+
+See `frontend/FEATURES.md` for the full feature list.
 
 ---
 
-## 4. What Needs to Be Built
+## 4. Project Structure (Reference)
+
+> Backend and frontend are implemented. This section is retained as structural reference.
 
 ### 4.1 Directory Structure
 
@@ -215,7 +236,7 @@ NepAI/
     └── src/
         ├── services/
         │   ├── api.ts                   # (MODIFIED) add auth token interceptor + 401 refresh
-        │   └── mockData.ts              # (to be removed after backend rewire)
+        │   ├── mockData.ts              # (legacy — unused, safe to delete)
         ├── store/
         │   ├── authStore.ts             # [NEW] user, tokens, signIn/signUp/signOut/initialize
         │   ├── portfolioStore.ts        # (MODIFIED) replace localStorage with API calls
@@ -780,130 +801,61 @@ The scraper uses `pathlib.Path.stem` for cross-platform symbol extraction, and w
 
 ---
 
-## 8. Frontend Changes Needed
+## 8. Frontend Implementation (Complete)
 
-### 8.1 Hook rewiring `(TO BE IMPLEMENTED)`
+All items below were implemented. See `frontend/FEATURES.md` for details.
 
-| Hook | Current source | Target source |
-|------|---------------|---------------|
-| `useStockData` | `mockData.ts → getOHLC()` (CSV parsing in browser) | `api.ts → stockAPI.getOHLC()` |
-| `usePrediction` | `mockData.ts → generateMockPrediction()` (random) | `api.ts → predictionAPI.getPrediction()` |
-| `usePortfolio` | `localStorage` | `api.ts → portfolioAPI.getPortfolio()` |
+### 8.1 Hook rewiring `(DONE)`
 
-### 8.2 Store rewiring `(TO BE IMPLEMENTED)`
+| Hook | Source |
+|------|--------|
+| `useStockData` | `api.ts → stockAPI.getOHLC()` + `getSummary()` |
+| `usePrediction` | `api.ts → predictionAPI.getPrediction()` |
+| `usePortfolio` | `api.ts → portfolioAPI.getPortfolio()` |
+| `useIndicators` | `api.ts → stockAPI.getIndicators()` |
 
-| Store | Current source | Target source |
-|-------|---------------|---------------|
-| `stockStore.loadTickers` | `mockData.ts → getTickers()` (CSV) | `api.ts → stockAPI.listTickers()` |
-| `portfolioStore` | `localStorage` | `api.ts → portfolioAPI.*` |
+### 8.2 Store rewiring `(DONE)`
 
-### 8.3 `api.ts` — already defined, needs auth interceptor `(TO BE IMPLEMENTED)`
+| Store | Source |
+|-------|--------|
+| `stockStore.loadTickers` | `api.ts → stockAPI.listTickers()` |
+| `portfolioStore` | `api.ts → portfolioAPI.*` |
+| `authStore` | `api.ts → authAPI.*` with token persistence |
+| `toastStore` | Client-side notification queue |
 
-```
-stockAPI.listTickers()        → GET /api/stocks
-stockAPI.getOHLC(ticker)      → GET /api/stocks/{ticker}/ohlc
-stockAPI.getIndicators()      → GET /api/stocks/{ticker}/indicators
-stockAPI.getSummary()         → GET /api/stocks/{ticker}/summary
-predictionAPI.getPrediction() → GET /api/predictions/{ticker}
-trainAPI.train(stock_name)    → POST /api/train                  (DONE)
-portfolioAPI.getPortfolio()   → GET /api/portfolio               (DONE)
-portfolioAPI.addStock()       → POST /api/portfolio              (DONE)
-portfolioAPI.removeStock()    → DELETE /api/portfolio/{ticker}    (DONE)
-```
+### 8.3 `api.ts` — auth interceptors `(DONE)`
 
-Modifications needed:
-- Add Axios **request interceptor**: reads access token from `authStore`, attaches `Authorization: Bearer <token>` to every request.
-- Add Axios **response interceptor**: catches 401 errors, calls `/api/auth/refresh` with the stored refresh token, retries the original request once with the new access token. If refresh also fails, call `authStore.signOut()` to clear state and redirect to `/login`.
+Request interceptor attaches `Authorization: Bearer <token>`. Response interceptor catches 401, refreshes via `/api/auth/refresh`, retries once, or signs out on failure.
 
-Vite proxy already configured (`/api → localhost:8000`).
+### 8.4 Prediction UI `(DONE)`
 
-### 8.4 Prediction response shape update `(TO BE IMPLEMENTED)`
+`AIPrediction` card handles three states (no model, fresh, stale) with retrain button. `ModelHealthCard` shows accuracy and staleness beside predictions.
 
-```typescript
-interface Prediction {
-  ticker: string;
-  model_available: boolean;
-  trained_on: string | null;     // ISO timestamp from metadata.json
-  stale: boolean;                // true if trained_on > 7 days ago
-  predictions: {
-    day: number;
-    date: string;
-    price: number;
-  }[];
-  model_accuracy: number;
-  generated_at: string;
-}
-```
+### 8.5 Chart overlays `(DONE)`
 
-### 8.5 `AIPrediction` card updates `(TO BE IMPLEMENTED)`
+| Component | Wired to |
+|-----------|----------|
+| `PredictionOverlay` | Real prediction data on candlestick chart |
+| `IndicatorOverlay` | EMA 20/50 + Bollinger bands from `/api/stocks/{ticker}/indicators` |
+| `TechnicalIndicators` card | Same indicator endpoint |
 
-Three states:
+### 8.6 Auth & portfolio `(DONE)`
 
-**State 1 — Fresh model** (`model_available: true, stale: false`):
-- 5-row prediction list (Day 1 "Tomorrow" through Day 5 "1-Week") with prices and % change
-- "Trained on: June 4, 2026" subtitle
-- No retrain button
+1. `authStore.ts` — signIn/signUp/signOut/initialize/refresh with persisted tokens
+2. `api.ts` — Axios interceptors for Bearer token and 401 refresh
+3. `Login.tsx` — login + signup tabs with validation
+4. `ProtectedRoute.tsx` — redirects unauthenticated users to `/login`
+5. `App.tsx` — `/login` route, protected routes, session init on mount
+6. `Sidebar.tsx` — user info + sign out pinned to bottom on desktop
+7. `portfolioStore.ts` + `usePortfolio.ts` — API-backed CRUD
 
-**State 2 — Stale model** (`model_available: true, stale: true`):
-- Show predictions normally
-- Warning badge: "Model is X days old"
-- **"Retrain Model"** button → `POST /api/train {stock_name: ticker}`
-- After click: disable button, show "Training in progress..."
+### 8.7 Unit tests `(DONE)`
 
-**State 3 — No model** (`model_available: false`):
-- "No trained model for {ticker}"
-- **"Train Model"** button (same endpoint)
+Vitest + Testing Library: 71 tests covering formatters, colors, chart heights, stores (theme, toast, stock), and UI components (Button, Badge, Card, Input, Spinner, Toast).
 
-### 8.6 `api.ts` additions (DONE)
+### 8.8 Optional cleanup
 
-```typescript
-export const trainAPI = {
-  train: (stock_name: string) => api.post('/train', { stock_name }),
-  status: (ticker: string) => api.get(`/train/status/${ticker}`),
-};
-
-export const modelAPI = {
-  list: () => api.get('/models'),
-};
-
-export const portfolioAPI = {
-  getPortfolio: () => api.get('/portfolio'),
-  addStock: (data: { ticker: string; quantity: number; entry_price: number }) =>
-    api.post('/portfolio', data),
-  removeStock: (ticker: string) => api.delete(`/portfolio/${ticker}`),
-  getSummary: () => api.get('/portfolio/summary'),
-};
-```
-
-### 8.7 Wire unused components `(TO BE IMPLEMENTED)`
-
-| Component | Wire to |
-|-----------|---------|
-| `IndicatorOverlay` | Real indicator data from `/api/stocks/{ticker}/indicators` |
-| `PredictionLine` | Real prediction line on the candlestick chart |
-| `TechnicalIndicators` card | Currently receives `indicators={null}`. Pass real data |
-
-### 8.8 Remove after backend is live `(TO BE IMPLEMENTED)`
-
-| File/Code | Reason |
-|-----------|--------|
-| `frontend/public/data/*.csv` (124 files) | Data served by backend from `data/` |
-| `frontend/public/data/tickers.json` | Ticker list comes from backend |
-| `frontend/src/services/mockData.ts` | Replaced by `api.ts` |
-| `frontend/src/utils/csvParser.ts` | No more client-side CSV parsing |
-
-### 8.9 Frontend changes for auth & portfolio (implementation order) `(TO BE IMPLEMENTED)`
-
-Each item below is one discrete task. Implement in this exact order:
-
-1. Create `frontend/src/store/authStore.ts` — Zustand store managing `user`, `accessToken`, `refreshToken`, `loading`, and methods: `signUp(fullName, email, password)` → `POST /api/auth/signup`, `signIn(email, password)` → `POST /api/auth/login`, `signOut()` → clear tokens + redirect, `initialize()` → calls `/api/auth/me` with stored token on app load, `refreshSession()` → calls `/api/auth/refresh`. Persist `accessToken` and `refreshToken` in `localStorage`.
-2. Modify `frontend/src/services/api.ts` — add Axios request interceptor (attach Bearer token) and response interceptor (401 → refresh → retry).
-3. Create `frontend/src/pages/Login.tsx` — single page with two tabs: **Login** (email + password) and **Sign Up** (full name + email + password), form validation, error display, calls `authStore.signIn` / `authStore.signUp`, redirects to `/` on success.
-4. Create `frontend/src/components/layout/ProtectedRoute.tsx` — wrapper that checks `authStore.user`; redirects to `/login` if unauthenticated, shows spinner while `authStore.initialize()` resolves.
-5. Modify `frontend/src/App.tsx` — add `/login` route, wrap existing routes with `ProtectedRoute`, call `authStore.initialize()` on mount.
-6. Modify `frontend/src/components/layout/Sidebar.tsx` — add user display (name/email) at the bottom and a "Sign Out" button.
-7. Modify `frontend/src/store/portfolioStore.ts` — replace all `localStorage` reads/writes with calls to `portfolioAPI`: `getPortfolio()`, `addStock()`, `removeStock()`.
-8. Modify `frontend/src/hooks/usePortfolio.ts` — replace `localStorage` reads with a call to `portfolioAPI.getPortfolio()`.
+Remove unused legacy files if still present (see section 3 → Optional cleanup).
 
 ---
 
@@ -911,7 +863,8 @@ Each item below is one discrete task. Implement in this exact order:
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 19 + TypeScript, Vite, TradingView Lightweight Charts, Zustand, Axios, Tailwind CSS 4 |
+| Frontend | React 19 + TypeScript, Vite, TradingView Lightweight Charts, Zustand, Axios, Tailwind CSS 4, GSAP |
+| Testing | Vitest, Testing Library, jsdom |
 | Backend API | FastAPI, pandas, pandas-ta, supabase (Python client), python-dotenv |
 | ML Pipeline | PyTorch, scikit-learn (RobustScaler), matplotlib |
 | Auth | Supabase Auth (email/password), JWT tokens |
@@ -940,14 +893,15 @@ Each item below is one discrete task. Implement in this exact order:
 | 12 | **Backend: Auth endpoints** -- `backend/api/routers/auth.py`, signup/login/refresh/me | DONE |
 | 13 | **Backend: Portfolio endpoints** -- `backend/api/routers/portfolio.py`, CRUD with weighted-average upsert | DONE |
 | 14 | **Backend: Register routers** -- add auth + portfolio routers to `main.py` | DONE |
-| 15 | **Frontend: Auth store** -- `authStore.ts` with signIn/signUp/signOut/initialize/refresh | TODO |
-| 16 | **Frontend: API interceptor** -- attach Bearer token, auto-refresh on 401 | TODO |
-| 17 | **Frontend: Login page** -- `Login.tsx` with login/signup tabs | TODO |
-| 18 | **Frontend: Protected routes** -- `ProtectedRoute.tsx` + wrap routes in `App.tsx` | TODO |
-| 19 | **Frontend: Sidebar user info** -- display name, sign out button | TODO |
-| 20 | **Frontend: Portfolio rewire** -- `portfolioStore.ts` + `usePortfolio.ts` → API calls instead of localStorage | TODO |
-| 21 | **Frontend rewire** -- Switch hooks/stores from mockData -> api.ts | TODO |
-| 22 | **Update Prediction UI** -- `AIPrediction` card with 5-day format + stale warning + retrain button | TODO |
-| 23 | **Wire unused components** -- `IndicatorOverlay`, `PredictionLine`, `TechnicalIndicators` | TODO |
+| 15 | **Frontend: Auth store** -- `authStore.ts` with signIn/signUp/signOut/initialize/refresh | DONE |
+| 16 | **Frontend: API interceptor** -- attach Bearer token, auto-refresh on 401 | DONE |
+| 17 | **Frontend: Login page** -- `Login.tsx` with login/signup tabs | DONE |
+| 18 | **Frontend: Protected routes** -- `ProtectedRoute.tsx` + wrap routes in `App.tsx` | DONE |
+| 19 | **Frontend: Sidebar user info** -- display name, sign out button | DONE |
+| 20 | **Frontend: Portfolio rewire** -- `portfolioStore.ts` + `usePortfolio.ts` → API calls | DONE |
+| 21 | **Frontend rewire** -- Switch hooks/stores from mockData -> api.ts | DONE |
+| 22 | **Update Prediction UI** -- `AIPrediction` card with stale warning + retrain button | DONE |
+| 23 | **Wire chart overlays** -- `PredictionOverlay`, `IndicatorOverlay`, `TechnicalIndicators` | DONE |
 | 24 | **GitHub Actions workflow** -- `.github/workflows/data_scraper.yml` running `data_scraper/dailyscraper.py` | DONE |
-| 25 | **Cleanup** -- Remove `frontend/public/data/`, mockData.ts, csvParser.ts | TODO |
+| 25 | **Frontend: Unit tests** -- Vitest + Testing Library (71 tests) | DONE |
+| 26 | **Cleanup** -- Remove unused `frontend/public/data/`, mockData.ts, csvParser.ts (optional) | OPTIONAL |
