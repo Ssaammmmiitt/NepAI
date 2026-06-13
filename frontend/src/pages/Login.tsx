@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BrandLogo } from '@/components/layout/BrandLogo'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { PublicHeader } from '@/components/layout/PublicHeader'
 import { useAuthStore } from '@/store/authStore'
+import { useFadeIn } from '@/hooks/useAnimations'
 
 export function Login() {
   const navigate = useNavigate()
@@ -15,7 +16,7 @@ export function Login() {
   const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const formRef = useRef<HTMLDivElement>(null)
+  const formRef = useFadeIn({ delay: 0.1 })
 
   useEffect(() => {
     if (!initialized) void initialize()

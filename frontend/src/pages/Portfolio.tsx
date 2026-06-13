@@ -11,6 +11,8 @@ import { Spinner } from '@/components/ui/Spinner'
 import { usePortfolio } from '@/hooks/usePortfolio'
 import { useStockStore } from '@/store/stockStore'
 import { useToastStore } from '@/store/toastStore'
+import { formatCurrency } from '@/utils/formatters'
+import { usePageEntrance, useRowEntrance } from '@/hooks/useAnimations'
 
 export function Portfolio() {
   const {
@@ -26,6 +28,7 @@ export function Portfolio() {
   const { tickers, loadTickers } = useStockStore()
 
   const [showAdd, setShowAdd] = useState(false)
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null)
   const [ticker, setTicker] = useState('')
   const [quantity, setQuantity] = useState('')
   const [entryPrice, setEntryPrice] = useState('')
@@ -33,6 +36,12 @@ export function Portfolio() {
   const [removing, setRemoving] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
   const showToast = useToastStore((s) => s.show)
+  const containerRef = usePageEntrance('[data-section]', { enabled: !loading || holdings.length > 0 })
+  const gridRef = useRowEntrance('[data-animate]', { enabled: holdings.length > 0 })
+
+  const holdingToRemove = confirmRemove
+    ? holdings.find((h) => h.ticker === confirmRemove)
+    : null
 
   const openAdd = () => {
     void loadTickers(true)
@@ -64,10 +73,17 @@ export function Portfolio() {
     }
   }
 
-  const handleRemove = async (t: string) => {
+  const closeConfirmRemove = () => {
+    if (!removing) setConfirmRemove(null)
+  }
+
+  const handleConfirmRemove = async () => {
+    if (!confirmRemove) return
+    const t = confirmRemove
     setRemoving(t)
     try {
       await removeStock(t)
+      setConfirmRemove(null)
       showToast(`Removed ${t} from portfolio`)
     } catch {
       showToast(`Failed to remove ${t}`, 'error')
@@ -94,38 +110,90 @@ export function Portfolio() {
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
-            <PortfolioSummary
-              totalValue={totalValue}
-              totalPnl={totalPnl}
-              totalPnlPercent={totalPnlPercent}
-              holdingsCount={holdings.length}
-            />
+          <div ref={containerRef} className="flex flex-col gap-5 sm:gap-6">
+            <section
+              data-section
+              className="border border-dt-border bg-dt-surface p-4 sm:p-5"
+            >
+              <p className="dt-eyebrow mb-4">Portfolio Overview</p>
+              <PortfolioSummary
+                totalValue={totalValue}
+                totalPnl={totalPnl}
+                totalPnlPercent={totalPnlPercent}
+                holdingsCount={holdings.length}
+              />
+            </section>
 
             {error ? <p className="text-dt-negative">{error}</p> : null}
 
-            {holdings.length === 0 ? (
-              <div className="border border-dt-border bg-dt-surface p-12 text-center">
-                <p className="text-dt-meta">No holdings yet</p>
-                <Button className="mt-4" onClick={openAdd}>
-                  Add your first stock
-                </Button>
-              </div>
-            ) : (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {holdings.map((h) => (
-                  <PortfolioCard
-                    key={h.ticker}
-                    holding={h}
-                    onRemove={handleRemove}
-                    removing={removing === h.ticker}
-                  />
-                ))}
-              </div>
-            )}
+            <section
+              data-section
+              className="border border-dt-border bg-dt-bg p-4 sm:p-5"
+            >
+              <p className="dt-eyebrow mb-4">Your Holdings</p>
+
+              {holdings.length === 0 ? (
+                <div className="border border-dashed border-dt-border bg-dt-surface p-12 text-center">
+                  <p className="text-dt-meta">No holdings yet</p>
+                  <Button className="mt-4" onClick={openAdd}>
+                    Add your first stock
+                  </Button>
+                </div>
+              ) : (
+                <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {holdings.map((h) => (
+                    <div key={h.ticker} data-animate>
+                      <PortfolioCard
+                        holding={h}
+                        onRemove={setConfirmRemove}
+                        removing={removing === h.ticker}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
           </div>
         )}
       </PageWrapper>
+
+      <Modal open={confirmRemove !== null} onClose={closeConfirmRemove} title="Remove Holding">
+        {holdingToRemove ? (
+          <div className="flex flex-col gap-5">
+            <p className="text-sm text-dt-text">
+              Remove{' '}
+              <span className="font-mono font-semibold text-dt-text">{holdingToRemove.ticker}</span>{' '}
+              from your portfolio? This cannot be undone.
+            </p>
+            <div className="border border-dt-border bg-dt-bg px-4 py-3">
+              <p className="dt-eyebrow">Position</p>
+              <p className="mt-1 font-mono text-sm text-dt-text">
+                {holdingToRemove.quantity} shares @ {formatCurrency(holdingToRemove.entry_price)}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={closeConfirmRemove}
+                disabled={removing === confirmRemove}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="danger"
+                className="flex-1"
+                onClick={handleConfirmRemove}
+                loading={removing === confirmRemove}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
 
       <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add Stock">
         <form onSubmit={handleAdd} className="flex flex-col gap-4">

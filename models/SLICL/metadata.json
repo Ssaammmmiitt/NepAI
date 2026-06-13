@@ -1,0 +1,54 @@
+{
+  "ticker": "SLICL",
+  "date_created": "2026-06-13T13:43:44.454657+05:45",
+  "accuracy": {
+    "mae": 53.5136,
+    "mape": 13.2678,
+    "r2": -2.86,
+    "rmse": 54.8578,
+    "direction_accuracy": 45.0
+  },
+  "n_features": 11,
+  "feature_cols": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity",
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "training_rows": 539,
+  "seq_len": 60,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "engineered_features": [
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2022-06-26"
+  },
+  "split_sizes": {
+    "train": 377,
+    "val": 81,
+    "test": 81
+  },
+  "training_time_sec": 7.7,
+  "epochs_trained": 37,
+  "best_val_loss": 0.001452
+}

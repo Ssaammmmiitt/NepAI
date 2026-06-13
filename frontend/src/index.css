@@ -6,15 +6,15 @@
 :root {
   --dt-text: #0a0a0a;
   --dt-meta: #7a7a7a;
-  --dt-accent: #10b981;
-  --dt-accent-bright: #00ff88;
+  --dt-accent: #047857;
+  --dt-accent-bright: #059669;
   --dt-bg: #fafafa;
   --dt-surface: #ffffff;
   --dt-border: #e0e0e0;
   --dt-border-strong: #2a2a2a;
   --dt-negative: #b91c1c;
-  --dt-btn-primary-bg: #00ff88;
-  --dt-btn-primary-fg: #000000;
+  --dt-btn-primary-bg: #059669;
+  --dt-btn-primary-fg: #ffffff;
   --dt-btn-secondary-bg: #ffffff;
   --dt-shadow: #0a0a0a;
 }

@@ -22,6 +22,7 @@ import { useIndicators } from '@/hooks/useIndicators'
 import { useChartHeight } from '@/hooks/useChartHeight'
 import { usePortfolioStore } from '@/store/portfolioStore'
 import { useToastStore } from '@/store/toastStore'
+import { usePageEntrance, useRowEntrance } from '@/hooks/useAnimations'
 
 export function StockDetail() {
   const { ticker = '' } = useParams<{ ticker: string }>()
@@ -39,6 +40,9 @@ export function StockDetail() {
   const { indicators, loading: indLoading } = useIndicators(upperTicker)
   const { addStock, loading: portfolioLoading } = usePortfolioStore()
   const showToast = useToastStore((s) => s.show)
+  const ready = !stockLoading || ohlc.length > 0
+  const containerRef = usePageEntrance('[data-section]', { enabled: ready })
+  const cardsRef = useRowEntrance('[data-animate]', { enabled: ready })
 
   const chartData = useMemo(() => ohlc.slice(-120), [ohlc])
   const lastRow = chartData[chartData.length - 1]
@@ -86,53 +90,64 @@ export function StockDetail() {
         }
       />
       <PageWrapper>
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6">
-          {/* Mobile: snapshot first for quick context */}
-          <div className="lg:hidden">
+        <div
+          ref={containerRef}
+          className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6"
+        >
+          <div className="lg:hidden" data-section>
             <CurrentSnapshot summary={summary} loading={stockLoading} />
           </div>
 
           <div className="flex flex-col gap-3 lg:col-span-2 lg:gap-4">
-            <Card className="!p-2 sm:!p-4">
-              <div className="overflow-x-auto">
-                <CandlestickChart
-                  data={chartData}
-                  height={chartHeights.candle}
-                  onChartReady={handleChartReady}
-                />
-                <PredictionOverlay
-                  chart={chart}
-                  lastDate={lastRow?.date}
-                  lastClose={lastRow?.close}
-                  predictions={prediction?.predictions ?? []}
-                />
-                <IndicatorOverlay
-                  chart={chart}
-                  lastDate={lastRow?.date}
-                  indicators={indicators}
-                />
-                <VolumeChart data={chartData} height={chartHeights.volume} />
-              </div>
-            </Card>
+            <div data-section>
+              <Card className="!p-2 sm:!p-4">
+                <div className="overflow-x-auto">
+                  <CandlestickChart
+                    data={chartData}
+                    height={chartHeights.candle}
+                    onChartReady={handleChartReady}
+                  />
+                  <PredictionOverlay
+                    chart={chart}
+                    lastDate={lastRow?.date}
+                    lastClose={lastRow?.close}
+                    predictions={prediction?.predictions ?? []}
+                  />
+                  <IndicatorOverlay
+                    chart={chart}
+                    lastDate={lastRow?.date}
+                    indicators={indicators}
+                  />
+                  <VolumeChart data={chartData} height={chartHeights.volume} />
+                </div>
+              </Card>
+            </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
-              <AIPrediction
-                ticker={upperTicker}
-                prediction={prediction}
-                loading={predLoading}
-                onRetrainComplete={refetchPrediction}
-              />
-              <ModelHealthCard prediction={prediction} className="w-full shrink-0 sm:w-44" />
+            <div
+              ref={cardsRef}
+              data-section
+              className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4"
+            >
+              <div data-animate className="min-w-0 flex-1">
+                <AIPrediction
+                  ticker={upperTicker}
+                  prediction={prediction}
+                  loading={predLoading}
+                  onRetrainComplete={refetchPrediction}
+                />
+              </div>
+              <div data-animate className="w-full shrink-0 sm:w-44">
+                <ModelHealthCard prediction={prediction} className="w-full" />
+              </div>
             </div>
           </div>
 
-          <div className="hidden flex-col gap-3 lg:flex lg:gap-4">
+          <div className="hidden flex-col gap-3 lg:flex lg:gap-4" data-section>
             <CurrentSnapshot summary={summary} loading={stockLoading} />
             <TechnicalIndicators indicators={indicators} loading={indLoading} />
           </div>
 
-          {/* Mobile: indicators below predictions */}
-          <div className="lg:hidden">
+          <div className="lg:hidden" data-section>
             <TechnicalIndicators indicators={indicators} loading={indLoading} />
           </div>
         </div>

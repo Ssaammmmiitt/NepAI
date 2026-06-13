@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
 import { useStockStore } from '@/store/stockStore'
 
@@ -10,13 +11,31 @@ export function SectorBreakdown() {
   const total = tickers.length || 1
 
   const segments = [
-    { label: 'Gainers', count: gainers, color: 'bg-dt-accent-bright', pct: (gainers / total) * 100 },
-    { label: 'Losers', count: losers, color: 'bg-dt-negative', pct: (losers / total) * 100 },
-    { label: 'Unchanged', count: neutral, color: 'bg-dt-meta', pct: (neutral / total) * 100 },
+    {
+      label: 'Gainers',
+      count: gainers,
+      color: 'bg-dt-accent-bright',
+      pct: (gainers / total) * 100,
+      href: '/gainers',
+    },
+    {
+      label: 'Losers',
+      count: losers,
+      color: 'bg-dt-negative',
+      pct: (losers / total) * 100,
+      href: '/losers',
+    },
+    {
+      label: 'Unchanged',
+      count: neutral,
+      color: 'bg-dt-meta',
+      pct: (neutral / total) * 100,
+      href: null,
+    },
   ]
 
   return (
-    <Card title="Market Sentiment">
+    <Card title="Market Sentiment" className="h-fit w-full self-start">
       <div className="mb-5 flex h-2 overflow-hidden border border-dt-border bg-dt-bg">
         {segments.map(
           (s) =>
@@ -31,17 +50,36 @@ export function SectorBreakdown() {
         )}
       </div>
       <ul className="flex flex-col gap-3">
-        {segments.map((s) => (
-          <li key={s.label} className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 ${s.color}`} />
-              <span className="text-dt-meta">{s.label}</span>
-            </div>
-            <span className="font-mono text-sm font-medium text-dt-text">
-              {s.count} <span className="text-dt-meta">({s.pct.toFixed(0)}%)</span>
-            </span>
-          </li>
-        ))}
+        {segments.map((s) => {
+          const isLink = s.href && s.count > 0
+
+          const row = (
+            <>
+              <div className="flex items-center gap-2">
+                <span className={`h-2 w-2 ${s.color}`} />
+                <span className="text-dt-meta">{s.label}</span>
+              </div>
+              <span className="font-mono text-sm font-medium text-dt-text">
+                {s.count} <span className="text-dt-meta">({s.pct.toFixed(0)}%)</span>
+              </span>
+            </>
+          )
+
+          return (
+            <li key={s.label}>
+              {isLink ? (
+                <Link
+                  to={s.href}
+                  className="flex cursor-pointer items-center justify-between text-sm px-1 py-0.5 -mx-1 transition-colors hover:bg-dt-bg"
+                >
+                  {row}
+                </Link>
+              ) : (
+                <div className="flex items-center justify-between text-sm">{row}</div>
+              )}
+            </li>
+          )
+        })}
       </ul>
     </Card>
   )

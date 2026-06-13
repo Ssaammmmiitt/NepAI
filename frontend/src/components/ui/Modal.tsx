@@ -6,9 +6,10 @@ interface ModalProps {
   onClose: () => void
   title: string
   children: ReactNode
+  panelClassName?: string
 }
 
-export function Modal({ open, onClose, title, children }: ModalProps) {
+export function Modal({ open, onClose, title, children, panelClassName = '' }: ModalProps) {
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -31,7 +32,9 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
         onClick={onClose}
         aria-hidden
       />
-      <div className="relative w-full max-w-md border border-dt-border bg-dt-surface p-6 shadow-[6px_6px_0_0_var(--dt-shadow)]">
+      <div
+        className={`relative w-full max-w-md border border-dt-border bg-dt-surface p-6 shadow-[6px_6px_0_0_var(--dt-shadow)] ${panelClassName}`}
+      >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="font-mono text-sm font-bold uppercase tracking-[0.06em] text-dt-text">
             {title}

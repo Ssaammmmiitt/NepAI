@@ -10,7 +10,7 @@ const PAGE_SIZE = 15
 export function TickerList() {
   const { tickers } = useStockStore()
   const [page, setPage] = useState(0)
-  const [sort, setSort] = useState<'ticker' | 'change' | 'volume'>('ticker')
+  const [sort, setSort] = useState<'ticker' | 'change' | 'volume' | 'price_high' | 'price_low'>('ticker')
 
   const sorted = useMemo(() => {
     const copy = [...tickers]
@@ -19,6 +19,10 @@ export function TickerList() {
         return copy.sort((a, b) => b.change - a.change)
       case 'volume':
         return copy.sort((a, b) => b.volume - a.volume)
+      case 'price_high':
+        return copy.sort((a, b) => b.latest_close - a.latest_close)
+      case 'price_low':
+        return copy.sort((a, b) => a.latest_close - b.latest_close)
       default:
         return copy.sort((a, b) => a.ticker.localeCompare(b.ticker))
     }
@@ -41,6 +45,8 @@ export function TickerList() {
         >
           <option value="ticker">Ticker</option>
           <option value="change">Change %</option>
+          <option value="price_high">Price (High)</option>
+          <option value="price_low">Price (Low)</option>
           <option value="volume">Volume</option>
         </select>
       }

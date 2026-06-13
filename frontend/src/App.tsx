@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 import { ToastContainer } from '@/components/ui/Toast'
 import { Login } from '@/pages/Login'
 import { Dashboard } from '@/pages/Dashboard'
+import { MoversPage } from '@/pages/MoversPage'
 import { StockDetail } from '@/pages/StockDetail'
 import { Portfolio } from '@/pages/Portfolio'
 import { useAuthStore } from '@/store/authStore'
@@ -42,6 +43,8 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="gainers" element={<MoversPage type="gainer" />} />
+            <Route path="losers" element={<MoversPage type="loser" />} />
             <Route path="stock/:ticker" element={<StockDetail />} />
             <Route path="portfolio" element={<Portfolio />} />
             <Route path="*" element={<Navigate to="/" replace />} />
