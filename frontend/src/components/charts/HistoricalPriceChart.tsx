@@ -28,6 +28,7 @@ export function HistoricalPriceChart({ data, height = 260 }: HistoricalPriceChar
     const dark = useThemeStore.getState().theme === 'dark'
     const themeConfig = getChartTheme(dark)
     const chart = createChart(containerRef.current, {
+      autoSize: true,
       height,
       layout: themeConfig.layout,
       grid: themeConfig.grid,
@@ -47,14 +48,7 @@ export function HistoricalPriceChart({ data, height = 260 }: HistoricalPriceChar
     chartRef.current = chart
     seriesRef.current = series
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const { width } = entries[0].contentRect
-      chart.applyOptions({ width })
-    })
-    resizeObserver.observe(containerRef.current)
-
     return () => {
-      resizeObserver.disconnect()
       chart.remove()
       chartRef.current = null
       seriesRef.current = null

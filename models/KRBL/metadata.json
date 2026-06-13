@@ -1,0 +1,54 @@
+{
+  "ticker": "KRBL",
+  "date_created": "2026-06-14T01:00:33.888554+05:45",
+  "accuracy": {
+    "mae": 100.0968,
+    "mape": 14.8533,
+    "r2": -0.1179,
+    "rmse": 104.5013,
+    "direction_accuracy": 39.4958
+  },
+  "n_features": 11,
+  "feature_cols": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity",
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "training_rows": 1195,
+  "seq_len": 60,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "engineered_features": [
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2024-12-25"
+  },
+  "split_sizes": {
+    "train": 836,
+    "val": 179,
+    "test": 180
+  },
+  "training_time_sec": 11.0,
+  "epochs_trained": 17,
+  "best_val_loss": 0.003736
+}
