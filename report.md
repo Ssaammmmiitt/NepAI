@@ -19,9 +19,10 @@
 10. [Testing](#10-testing)
 11. [CI/CD & Automation](#11-cicd--automation)
 12. [Project Structure](#12-project-structure)
-13. [Trained Models & Performance](#13-trained-models--performance)
-14. [Screenshots & Visual Assets](#14-screenshots--visual-assets)
-15. [Known Limitations](#15-known-limitations)
+13. [File Reference](#13-file-reference)
+14. [Trained Models & Performance](#14-trained-models--performance)
+15. [Screenshots & Visual Assets](#15-screenshots--visual-assets)
+16. [Known Limitations](#16-known-limitations)
 
 ---
 
@@ -618,7 +619,175 @@ NepAI/
 
 ---
 
-## 13. Trained Models & Performance
+## 13. File Reference
+
+Brief description of every project file (CSV data files excluded). Files are listed alphabetically within each section. Only the filename is shown — no directory paths.
+
+### Backend
+
+- **`.env.example`** — Template for Supabase URL and service-role key environment variables.
+- **`__main__.py`** — CLI entry point; exposes `train`, `predict`, `evaluate`, and `serve` commands.
+- **`auth.py`** (api) — FastAPI dependency that validates JWT tokens and returns the current user ID.
+- **`auth.py`** (routers) — Signup, login, token refresh, and user profile endpoints proxied to Supabase.
+- **`circuit_breaker.py`** — Clamps predicted prices to ±15% of the previous close (NEPSE daily limit).
+- **`config.py`** — Central configuration: file paths, model hyperparameters, feature lists, and training thresholds.
+- **`dataset.py`** — PyTorch `StockDataset` with 60-day sliding windows and DataLoader factory.
+- **`errors.py`** — Custom HTTP exceptions (`StockNotFoundError`, `InsufficientDataError`, etc.) with JSON error bodies.
+- **`evaluation.py`** — Computes test-set metrics: MAE, RMSE, MAPE, R², and direction accuracy.
+- **`inference.py`** — Recursive multi-day forecast logic; appends each prediction to the rolling input window.
+- **`main.py`** — FastAPI app factory; registers routers, configures CORS, and runs startup ticker/model scan.
+- **`metadata.py`** — Loads `name_data.json` and `sector_mappings.json`; enriches responses with `stock_name` and `stock_sector`.
+- **`model.py`** — `StackedLSTMAttention` PyTorch network (LSTM + multi-head attention + FC head).
+- **`model_status.py`** — Returns per-ticker model status: `trained`, `training`, or `not_available`.
+- **`models.py`** — Lists all trained models with accuracy metrics and staleness flag.
+- **`plotting.py`** — Generates 2×2 matplotlib predicted-vs-actual evaluation plots saved as `predictions.png`.
+- **`portfolio.py`** — Portfolio CRUD endpoints; computes live P&L from latest CSV close prices.
+- **`predictions.py`** — Serves recursive LSTM forecasts for 1–14 days via `GET /predictions/{ticker}`.
+- **`preprocessing.py`** — CSV loading, feature engineering (MA, volatility, etc.), and chronological train/val/test split.
+- **`requirements.txt`** — Python package dependencies (FastAPI, PyTorch, pandas, supabase, etc.).
+- **`state.py`** — In-memory CSV DataFrame cache, available-ticker registry, and per-ticker training status tracker.
+- **`stocks.py`** — Stock list, full history, OHLC (with date filter), summary, and on-the-fly technical indicators.
+- **`storage.py`** — Save/load model weights (`.pt`), RobustScaler pickles, and `metadata.json` artifacts.
+- **`supabase_client.py`** — Supabase client singleton initialized from environment variables.
+- **`train.py`** (routers) — `POST /train` endpoint; validates data, runs training in a background thread, returns metrics.
+- **`training.py`** — Full training loop: HuberLoss, AdamW, ReduceLROnPlateau, early stopping, gradient clipping.
+
+### Frontend
+
+- **`AIPrediction.tsx`** — AI forecast card; handles no-model, fresh, and stale states with train/retrain and error banners.
+- **`.gitignore`** — Git ignore rules for frontend build artifacts and dependencies.
+- **`api.ts`** — Axios HTTP client with JWT interceptors, token refresh, and grouped API methods.
+- **`apiError.ts`** — Extracts human-readable error messages from Axios/backend error responses.
+- **`App.tsx`** — Root component; sets up React Router routes, auth initialization, and app layout shell.
+- **`authStore.ts`** — Zustand auth store: user, tokens, sign in/up/out, session init and refresh.
+- **`Badge.test.tsx`** — Unit tests for the Badge component variants.
+- **`Badge.tsx`** — Small status label component (positive, negative, warning, neutral, info).
+- **`BrandLogo.tsx`** — NepAI logo icon used in login and branding contexts.
+- **`BrandMark.tsx`** — Combined logo + wordmark branding component for sidebar and headers.
+- **`Button.test.tsx`** — Unit tests for Button variants and loading state.
+- **`Button.tsx`** — Reusable button with primary, secondary, outline, ghost, and danger variants.
+- **`CandlestickChart.tsx`** — TradingView Lightweight Charts candlestick renderer with theme-aware resize.
+- **`Card.test.tsx`** — Unit tests for Card title, description, and action slot rendering.
+- **`Card.tsx`** — Bordered surface container with optional title, description, and action slot.
+- **`chartHeight.test.ts`** — Unit tests for responsive chart height calculation by breakpoint.
+- **`chartHelpers.ts`** — Utility to safely remove chart overlay series on theme change.
+- **`colors.test.ts`** — Unit tests for chart color palette and `getChartTheme()` helper.
+- **`colors.ts`** — Chart color constants and `getChartTheme()` for light/dark chart surfaces.
+- **`CurrentSnapshot.tsx`** — Stock summary card: latest price, change %, 52-week high/low, volume, data points.
+- **`Dashboard.tsx`** — Homepage: market overview, top movers, sentiment bar, ticker table, and search.
+- **`DateInput.tsx`** — Theme-aware date picker input with click-to-open calendar and Lucide calendar icon.
+- **`eslint.config.js`** — ESLint configuration for TypeScript and React linting rules.
+- **`favicon.svg`** — Browser tab favicon.
+- **`FEATURES.md`** — Detailed inventory of all implemented frontend features.
+- **`formatters.test.ts`** — Unit tests for NPR currency, percentage, date, and null-value formatting.
+- **`formatters.ts`** — Formatting utilities: currency (NPR), percentages, NPT dates, prediction labels.
+- **`Header.tsx`** — Page header with title, subtitle, optional action slot, and live clock.
+- **`hero.png`** — Hero/marketing image asset.
+- **`HistoricalDataTable.tsx`** — Paginated OHLC history table with date filtering and CSV download.
+- **`HistoricalPriceChart.tsx`** — Close-price line chart for the history tab using Lightweight Charts.
+- **`index.css`** — Global CSS including theme variables and base component classes.
+- **`index.html`** — HTML document shell that mounts the React application.
+- **`IndicatorOverlay.tsx`** — Overlays EMA 20/50 and Bollinger band lines on the candlestick chart.
+- **`Input.test.tsx`** — Unit tests for Input fields and password visibility toggle.
+- **`Input.tsx`** — Labeled text input with focus styling and optional password show/hide toggle.
+- **`LiveClock.tsx`** — Live Nepal Standard Time clock displayed in page headers.
+- **`Login.tsx`** — Public login/signup page with form validation and structured error banners.
+- **`main.tsx`** — React DOM entry point; mounts `<App />` inside `StrictMode`.
+- **`MarketOverview.tsx`** — Dashboard stat cards: listed, gainers, losers, volume, average change.
+- **`Modal.tsx`** — Reusable modal dialog with backdrop, title, Escape-to-close, and custom panel width.
+- **`ModelHealthCard.tsx`** — Compact card showing model accuracy %, freshness, and training timestamp.
+- **`MoversList.tsx`** — Full sortable table of all market gainers or losers with sector and tooltips.
+- **`MoversPage.tsx`** — Dedicated gainers or losers page with market overview and top-movers sidebar.
+- **`package-lock.json`** — Locked npm dependency versions for reproducible installs.
+- **`package.json`** — Frontend dependencies, devDependencies, and npm scripts.
+- **`PageWrapper.tsx`** — Consistent page content padding wrapper for all authenticated pages.
+- **`portfolioStore.ts`** — Zustand store for portfolio holdings CRUD via the backend API.
+- **`Portfolio.tsx`** — Portfolio page: summary stats, holdings grid, add/remove modals, and toasts.
+- **`PortfolioCard.tsx`** — Individual holding card with entry price, current price, P&L, and remove action.
+- **`PortfolioSummary.tsx`** — Portfolio overview row: total value, total P&L, and holdings count.
+- **`PredictionOverlay.tsx`** — Dashed forecast line overlay on the candlestick chart from last close onward.
+- **`ProtectedRoute.tsx`** — Route guard that redirects unauthenticated users to `/login`.
+- **`PublicHeader.tsx`** — Header bar for the public login page with branding and theme toggle.
+- **`react.svg`** — React framework logo asset.
+- **`README.md`** — Frontend quick-start and development instructions.
+- **`SectorBreakdown.tsx`** — Market sentiment bar showing gainers, losers, and unchanged stock counts.
+- **`setup.ts`** — Vitest global test setup (mocks, cleanup, jsdom configuration).
+- **`Sidebar.tsx`** — Desktop sidebar and mobile bottom navigation with nav links and sign-out.
+- **`Spinner.test.tsx`** — Unit tests for the Spinner loading indicator.
+- **`Spinner.tsx`** — Animated loading spinner with configurable size.
+- **`StockChartTabs.tsx`** — Tabbed chart panel: Candlestick tab (period filters + overlays) and History tab (stats, line chart, table).
+- **`StockDetail.tsx`** — Stock detail page: chart tabs, snapshot, AI prediction, indicators, add-to-portfolio.
+- **`StockSearch.tsx`** — Typeahead search bar filtering tickers by symbol or company name.
+- **`stockStore.test.ts`** — Unit tests for ticker list caching and loading logic.
+- **`stockStore.ts`** — Zustand store for the full ticker list with 5-minute client-side cache.
+- **`StockSummaryCard.tsx`** — Compact stock summary card used in search results and lists.
+- **`StockTickerTooltip.tsx`** — Hover tooltip showing company name and sector for a ticker.
+- **`TechnicalIndicators.tsx`** — Card displaying RSI, MACD, Bollinger Bands, and EMA values.
+- **`themeStore.test.ts`** — Unit tests for light/dark theme persistence.
+- **`themeStore.ts`** — Zustand store for light/dark theme toggle persisted to localStorage.
+- **`ThemeToggle.tsx`** — Button that switches between light and dark mode.
+- **`TickerList.tsx`** — Paginated, sortable all-tickers table on the dashboard.
+- **`toastStore.test.ts`** — Unit tests for the global toast notification queue.
+- **`toastStore.ts`** — Zustand store managing a queue of success/error toast messages.
+- **`Toast.test.tsx`** — Unit tests for toast rendering and auto-dismiss behavior.
+- **`Toast.tsx`** — Toast notification component and global `ToastContainer`.
+- **`Tooltip.test.tsx`** — Unit tests for tooltip show/hide and portal rendering.
+- **`Tooltip.tsx`** — Generic fixed-position hover/focus tooltip rendered via React portal.
+- **`TopMovers.tsx`** — Top-5 gainers and losers panels; exports reusable `TopMoversPanel`.
+- **`tsconfig.app.json`** — TypeScript compiler options scoped to application source files.
+- **`tsconfig.json`** — Root TypeScript project references configuration.
+- **`tsconfig.node.json`** — TypeScript compiler options for Vite/Node build tooling.
+- **`index.ts`** (types) — TypeScript interfaces for all API request/response shapes.
+- **`useAnimations.ts`** — GSAP hooks: `usePageEntrance`, `useRowEntrance`, `useStaggerEntrance`, `useFadeIn`.
+- **`useChartHeight.ts`** — Hook returning responsive candlestick and volume chart heights by viewport.
+- **`useIndicators.ts`** — Hook fetching technical indicators for a given ticker.
+- **`useMediaQuery.ts`** — Hook subscribing to a CSS media query for responsive layout decisions.
+- **`usePortfolio.ts`** — Hook loading portfolio holdings and computing aggregate totals.
+- **`usePrediction.ts`** — Hook fetching AI predictions with a `refetch()` callback after retraining.
+- **`useStockData.ts`** — Hook fetching OHLC rows and stock summary in parallel for a ticker.
+- **`vite.config.ts`** — Vite dev server and build configuration; proxies `/api` to the backend.
+- **`vite.svg`** — Vite build tool logo asset.
+- **`vitest.config.ts`** — Vitest unit test runner configuration with jsdom environment.
+- **`VolumeChart.tsx`** — Volume histogram chart colored by bullish/bearish trading days.
+
+### Data Scraper
+
+- **`requirements.txt`** — Python dependencies for the scraper (BeautifulSoup, Selenium, pandas, etc.).
+- **`scrape_details.py`** — Fetches company name and sector metadata for newly listed NEPSE tickers.
+- **`scrape_nepse.py`** — Scrapes ShareSansar daily OHLC prices and appends/updates stock data files.
+
+### Data & Metadata
+
+- **`name_data.json`** — Lookup table mapping each ticker to its full company name and sector ID (585 entries).
+- **`sector_mappings.json`** — Maps numeric sector IDs to human-readable sector labels (18 sectors).
+
+### Model Artifacts
+
+Each trained ticker directory contains the following files (9 tickers currently: ACLBSL, AKPL, ALICL, HDHPC, NABIL, SBI, SCB, SLICL, UNL):
+
+- **`metadata.json`** — Training metadata: accuracy metrics, feature list, date range, split sizes, epochs trained.
+- **`model.pt`** — Saved PyTorch state dict for the trained LSTM+Attention network.
+- **`predictions.png`** — 2×2 matplotlib plot comparing predicted vs actual close prices on the test set.
+- **`scaler_feature.pkl`** — Fitted RobustScaler for the 11 input features (saved at training time).
+- **`scaler_target.pkl`** — Fitted RobustScaler for the close-price target (saved at training time).
+
+### ML Research & Experiment Results
+
+- **`all_results.json`** — Per-stock, per-architecture metric comparisons from hyperparameter experiments.
+- **`best_hyperparameters.json`** — Best hyperparameter sets found for each model architecture variant.
+- **`nepai-lstm-train.ipynb`** — Jupyter notebook comparing StackedLSTM+Attention, CNN_LSTM, and BiLSTM_Attention architectures.
+
+### Project Root, CI & Documentation
+
+- **`data_scraper.yml`** — GitHub Actions workflow; runs the NEPSE scraper Mon–Fri at 18:00 NPT and commits data updates.
+- **`.gitignore`** — Root Git ignore rules for environment files, caches, and build outputs.
+- **`implementation_plan.md`** — Detailed implementation plan with architecture, Supabase schema, and task tracker.
+- **`README.md`** — Project setup guide, API reference, model architecture, and tech stack overview.
+- **`report.md`** — This document.
+
+---
+
+## 14. Trained Models & Performance
 
 ### Currently trained (9 tickers)
 
@@ -640,7 +809,7 @@ Models are considered **stale** if trained more than 7 days ago. The frontend pr
 
 ---
 
-## 14. Screenshots & Visual Assets
+## 15. Screenshots & Visual Assets
 
 ### ML evaluation plots (`predictions.png`)
 
@@ -683,7 +852,7 @@ All 9 trained models include `predictions.png`:
 
 ---
 
-## 15. Known Limitations
+## 16. Known Limitations
 
 1. **No backend tests** — The Python API and ML pipeline lack automated test coverage
 2. **Filesystem storage** — Models and CSVs are stored on disk, not in a database or object store
