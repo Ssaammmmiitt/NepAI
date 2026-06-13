@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom'
+import { SessionExpiredHandler } from '@/components/auth/SessionExpiredHandler'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 import { ToastContainer } from '@/components/ui/Toast'
@@ -38,6 +39,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
+      <SessionExpiredHandler />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
