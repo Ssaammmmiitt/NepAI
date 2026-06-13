@@ -35,6 +35,11 @@ describe('formatNumber', () => {
     const result = formatNumber(10, 0)
     expect(result).toBe('10')
   })
+
+  it('returns em dash for null or undefined', () => {
+    expect(formatNumber(null)).toBe('—')
+    expect(formatNumber(undefined)).toBe('—')
+  })
 })
 
 describe('daysSince', () => {

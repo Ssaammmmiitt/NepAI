@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Brain, RefreshCw } from 'lucide-react'
+import { Brain, RefreshCw, AlertTriangle } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
 import { trainAPI } from '@/services/api'
+import { getApiErrorMessage, getApiErrorStatus } from '@/utils/apiError'
 import type { Prediction, PredictionDay } from '@/types'
 import {
   daysSince,
@@ -74,18 +75,53 @@ function PredictionColumns({ items }: { items: PredictionDay[] }) {
   )
 }
 
+interface TrainErrorBannerProps {
+  message: string
+  isInsufficientData: boolean
+  ticker: string
+}
+
+function TrainErrorBanner({ message, isInsufficientData, ticker }: TrainErrorBannerProps) {
+  return (
+    <div className="flex flex-col gap-3 border border-dt-negative bg-dt-negative/5 p-4">
+      <div className="flex items-start gap-3">
+        <AlertTriangle
+          className="mt-0.5 h-4 w-4 shrink-0 text-dt-negative"
+          strokeWidth={1.5}
+        />
+        <div className="min-w-0">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-dt-negative">
+            {isInsufficientData ? 'Insufficient Training Data' : 'Training Failed'}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-dt-text">{message}</p>
+          {isInsufficientData ? (
+            <p className="mt-2 text-[10px] leading-relaxed text-dt-meta">
+              At least 500 rows of historical data are required to train a model for{' '}
+              <span className="font-mono font-medium">{ticker}</span>. This stock does not have
+              enough trading history yet.
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }: AIPredictionProps) {
   const [training, setTraining] = useState(false)
   const [trainError, setTrainError] = useState('')
+  const [trainErrorStatus, setTrainErrorStatus] = useState<number | null>(null)
 
   const handleTrain = async () => {
     setTraining(true)
     setTrainError('')
+    setTrainErrorStatus(null)
     try {
       await trainAPI.train(ticker)
       onRetrainComplete?.()
-    } catch {
-      setTrainError('Training failed. Please try again.')
+    } catch (err) {
+      setTrainError(getApiErrorMessage(err, 'Training failed. Please try again.'))
+      setTrainErrorStatus(getApiErrorStatus(err))
     } finally {
       setTraining(false)
     }
@@ -110,10 +146,22 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
             <p className="font-mono text-sm font-medium text-dt-text">No trained model</p>
             <p className="mt-1 text-xs text-dt-meta">Train an LSTM model for {ticker}</p>
           </div>
-          <Button onClick={handleTrain} loading={training}>
+          <Button
+            onClick={handleTrain}
+            loading={training}
+            disabled={trainErrorStatus === 400}
+          >
             Train Model
           </Button>
-          {trainError ? <p className="text-xs text-dt-negative">{trainError}</p> : null}
+          {trainError ? (
+            <div className="w-full">
+              <TrainErrorBanner
+                message={trainError}
+                isInsufficientData={trainErrorStatus === 400}
+                ticker={ticker}
+              />
+            </div>
+          ) : null}
         </div>
       </Card>
     )
@@ -146,7 +194,15 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
         </Button>
       ) : null}
 
-      {trainError ? <p className="mt-2 text-xs text-dt-negative">{trainError}</p> : null}
+      {trainError ? (
+        <div className="mt-4">
+          <TrainErrorBanner
+            message={trainError}
+            isInsufficientData={trainErrorStatus === 400}
+            ticker={ticker}
+          />
+        </div>
+      ) : null}
     </Card>
   )
 }

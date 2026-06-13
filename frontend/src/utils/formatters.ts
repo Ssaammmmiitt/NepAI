@@ -23,7 +23,8 @@ export function formatPercent(value: number, decimals = 2): string {
   return `${sign}${value.toFixed(decimals)}%`
 }
 
-export function formatNumber(value: number, decimals = 2): string {
+export function formatNumber(value: number | null | undefined, decimals = 2): string {
+  if (value == null || Number.isNaN(value)) return '—'
   return value.toLocaleString('en-NP', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,

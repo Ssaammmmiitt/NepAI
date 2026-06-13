@@ -8,6 +8,7 @@ import type {
   PortfolioResponse,
   Prediction,
   RefreshResponse,
+  StockHistory,
   StockSummary,
   StockTicker,
   TrainResponse,
@@ -99,6 +100,7 @@ export const authAPI = {
 
 export const stockAPI = {
   listTickers: () => api.get<StockTicker[]>('/stocks'),
+  getHistory: (ticker: string) => api.get<StockHistory>(`/stocks/${ticker}`),
   getOHLC: (ticker: string, from?: string, to?: string) =>
     api.get<OHLCRow[]>(`/stocks/${ticker}/ohlc`, { params: { from, to } }),
   getSummary: (ticker: string) => api.get<StockSummary>(`/stocks/${ticker}/summary`),

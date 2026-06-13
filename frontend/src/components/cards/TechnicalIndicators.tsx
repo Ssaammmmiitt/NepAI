@@ -17,6 +17,18 @@ function IndicatorRow({ label, value, highlight }: { label: string; value: strin
   )
 }
 
+function rsiHighlight(rsi: number | null): string | undefined {
+  if (rsi == null) return undefined
+  if (rsi > 70) return 'text-dt-negative'
+  if (rsi < 30) return 'text-dt-accent-bright'
+  return undefined
+}
+
+function histogramHighlight(value: number | null): string | undefined {
+  if (value == null) return undefined
+  return value >= 0 ? 'text-dt-accent-bright' : 'text-dt-negative'
+}
+
 export function TechnicalIndicators({ indicators, loading }: TechnicalIndicatorsProps) {
   if (loading) {
     return (
@@ -34,19 +46,16 @@ export function TechnicalIndicators({ indicators, loading }: TechnicalIndicators
     )
   }
 
-  const rsiColor =
-    indicators.rsi > 70 ? 'text-dt-negative' : indicators.rsi < 30 ? 'text-dt-accent-bright' : undefined
-
   return (
     <Card title="Indicators">
       <div className="divide-y divide-dt-border">
-        <IndicatorRow label="RSI (14)" value={formatNumber(indicators.rsi, 1)} highlight={rsiColor} />
+        <IndicatorRow label="RSI (14)" value={formatNumber(indicators.rsi, 1)} highlight={rsiHighlight(indicators.rsi)} />
         <IndicatorRow label="MACD" value={formatNumber(indicators.macd.macd, 2)} />
         <IndicatorRow label="Signal" value={formatNumber(indicators.macd.signal, 2)} />
         <IndicatorRow
           label="Histogram"
           value={formatNumber(indicators.macd.histogram, 2)}
-          highlight={indicators.macd.histogram >= 0 ? 'text-dt-accent-bright' : 'text-dt-negative'}
+          highlight={histogramHighlight(indicators.macd.histogram)}
         />
         <IndicatorRow label="BB Upper" value={formatNumber(indicators.bollinger.upper, 2)} />
         <IndicatorRow label="BB Middle" value={formatNumber(indicators.bollinger.middle, 2)} />

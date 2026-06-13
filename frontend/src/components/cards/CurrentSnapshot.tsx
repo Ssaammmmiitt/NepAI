@@ -8,67 +8,77 @@ interface CurrentSnapshotProps {
   loading?: boolean
 }
 
+function StatCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0">
+      <p className="dt-eyebrow truncate">{label}</p>
+      <p className="truncate font-mono text-sm font-medium tabular-nums text-dt-text" title={value}>
+        {value}
+      </p>
+    </div>
+  )
+}
+
 export function CurrentSnapshot({ summary, loading }: CurrentSnapshotProps) {
   if (loading || !summary) {
     return (
-      <Card className="flex items-center justify-center py-12">
+      <Card className="flex min-w-0 w-full items-center justify-center py-12">
         <Spinner />
       </Card>
     )
   }
 
   const isPositive = summary.change >= 0
+  const price = formatCurrency(summary.latest_close)
+  const change = formatPercent(summary.change)
 
   return (
-    <Card>
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="dt-eyebrow">{summary.ticker}</p>
-          {summary.stock_name ? (
-            <p className="mt-0.5 text-xs text-dt-meta">{summary.stock_name}</p>
-          ) : null}
-          <p className="mt-1 font-mono text-2xl font-bold text-dt-text sm:text-3xl">
-            {formatCurrency(summary.latest_close)}
-          </p>
+    <Card className="min-w-0 w-full overflow-hidden">
+      <div className="flex min-w-0 items-start justify-between gap-2">
+        <p className="dt-eyebrow shrink-0">{summary.ticker}</p>
+        {summary.stock_sector ? (
           <p
-            className={`mt-1 font-mono text-sm font-semibold ${
-              isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
-            }`}
+            className="min-w-0 max-w-[58%] truncate text-right font-mono text-[10px] uppercase tracking-[0.06em] text-dt-accent"
+            title={summary.stock_sector}
           >
-            {formatPercent(summary.change)}
+            {summary.stock_sector}
           </p>
-        </div>
-        <div className="text-right">
-          {summary.stock_sector ? (
-            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.06em] text-dt-accent">
-              {summary.stock_sector}
-            </p>
-          ) : null}
-          <p className="text-xs text-dt-meta">As of {formatDate(summary.latest_date)}</p>
-        </div>
+        ) : null}
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 border-t border-dt-border pt-4">
-        <div>
-          <p className="dt-eyebrow">52W High</p>
-          <p className="font-mono text-sm font-medium text-dt-text">{formatCurrency(summary.high_52w)}</p>
-        </div>
-        <div>
-          <p className="dt-eyebrow">52W Low</p>
-          <p className="font-mono text-sm font-medium text-dt-text">{formatCurrency(summary.low_52w)}</p>
-        </div>
-        <div>
-          <p className="dt-eyebrow">Avg Volume</p>
-          <p className="font-mono text-sm font-medium text-dt-text">
-            {summary.avg_volume.toLocaleString()}
-          </p>
-        </div>
-        <div>
-          <p className="dt-eyebrow">Data Points</p>
-          <p className="font-mono text-sm font-medium text-dt-text">
-            {summary.total_rows.toLocaleString()}
-          </p>
-        </div>
+      {summary.stock_name ? (
+        <p
+          className="mt-1 line-clamp-2 break-words text-xs leading-snug text-dt-meta"
+          title={summary.stock_name}
+        >
+          {summary.stock_name}
+        </p>
+      ) : null}
+
+      <div className="mt-3 min-w-0">
+        <p
+          className="truncate font-mono text-2xl font-bold tabular-nums text-dt-text sm:text-3xl lg:text-2xl xl:text-3xl"
+          title={price}
+        >
+          {price}
+        </p>
+        <p
+          className={`mt-1 truncate font-mono text-sm font-semibold tabular-nums ${
+            isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
+          }`}
+        >
+          {change}
+        </p>
+        <p className="mt-1 truncate text-xs text-dt-meta">
+          As of {formatDate(summary.latest_date)}
+        </p>
+      </div>
+
+      <div className="mt-5 grid min-w-0 grid-cols-2 gap-x-3 gap-y-4 border-t border-dt-border pt-4">
+        <StatCell label="52W High" value={formatCurrency(summary.high_52w)} />
+        <StatCell label="52W Low" value={formatCurrency(summary.low_52w)} />
+        <StatCell label="Avg Volume" value={summary.avg_volume.toLocaleString()} />
+        <StatCell label="Data Points" value={summary.total_rows.toLocaleString()} />
       </div>
     </Card>
   )

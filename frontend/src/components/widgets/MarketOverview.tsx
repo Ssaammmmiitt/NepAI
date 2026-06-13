@@ -79,7 +79,7 @@ export function MarketOverview({ activeMover }: MarketOverviewProps) {
   ]
 
   return (
-    <div ref={containerRef} className="grid grid-cols-2 gap-3 lg:grid-cols-5">
+    <div ref={containerRef} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {stats.map(({ label, value, icon: Icon, color, moverType, href, dashboardLink }) => {
         const isMoverActive = moverType !== undefined && moverType === activeMover
         const isListedActive = dashboardLink === true && isDashboard

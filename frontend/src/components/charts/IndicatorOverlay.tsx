@@ -14,7 +14,7 @@ export function IndicatorOverlay({ chart, lastDate, indicators }: IndicatorOverl
   useEffect(() => {
     if (!chart || !lastDate || !indicators) return
 
-    const lines: { color: string; value: number; title: string }[] = [
+    const lines: { color: string; value: number | null; title: string }[] = [
       { color: chartColors.ema20, value: indicators.ema.ema20, title: 'EMA 20' },
       { color: chartColors.ema50, value: indicators.ema.ema50, title: 'EMA 50' },
       { color: chartColors.bullish, value: indicators.bollinger.upper, title: 'BB Upper' },
@@ -24,6 +24,7 @@ export function IndicatorOverlay({ chart, lastDate, indicators }: IndicatorOverl
     const created: ISeriesApi<'Line'>[] = []
 
     for (const line of lines) {
+      if (line.value == null) continue
       const series = chart.addSeries(LineSeries, {
         color: line.color,
         lineWidth: 1,

@@ -1,0 +1,54 @@
+{
+  "ticker": "ALICL",
+  "date_created": "2026-06-14T00:09:00.459328+05:45",
+  "accuracy": {
+    "mae": 12.5459,
+    "mape": 2.6995,
+    "r2": -0.3847,
+    "rmse": 16.4076,
+    "direction_accuracy": 42.0455
+  },
+  "n_features": 11,
+  "feature_cols": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity",
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "training_rows": 1578,
+  "seq_len": 60,
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "per_change",
+    "traded_quantity"
+  ],
+  "engineered_features": [
+    "ma_7",
+    "ma_21",
+    "volatility",
+    "price_range",
+    "day_of_week"
+  ],
+  "date_range": {
+    "start": "2020-01-01",
+    "end": "2026-06-12"
+  },
+  "split_sizes": {
+    "train": 1104,
+    "val": 237,
+    "test": 237
+  },
+  "training_time_sec": 25.5,
+  "epochs_trained": 29,
+  "best_val_loss": 0.00354
+}

@@ -50,10 +50,12 @@ export interface StockSummary {
 
 export interface Indicators {
   ticker: string
-  rsi: number
-  macd: { macd: number; signal: number; histogram: number }
-  bollinger: { upper: number; middle: number; lower: number }
-  ema: { ema20: number; ema50: number }
+  stock_name?: string | null
+  stock_sector?: string | null
+  rsi: number | null
+  macd: { macd: number | null; signal: number | null; histogram: number | null }
+  bollinger: { upper: number | null; middle: number | null; lower: number | null }
+  ema: { ema20: number | null; ema50: number | null }
 }
 
 export interface PredictionDay {
@@ -110,6 +112,14 @@ export interface PortfolioHolding {
 
 export interface PortfolioResponse {
   holdings: PortfolioHolding[]
+}
+
+export interface StockHistory {
+  ticker: string
+  stock_name: string | null
+  stock_sector: string | null
+  total_rows: number
+  data: OHLCRow[]
 }
 
 export interface TrainResponse {

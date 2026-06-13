@@ -1,17 +1,12 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { IChartApi } from 'lightweight-charts'
 import { Header } from '@/components/layout/Header'
 import { PageWrapper } from '@/components/layout/PageWrapper'
-import { CandlestickChart } from '@/components/charts/CandlestickChart'
-import { VolumeChart } from '@/components/charts/VolumeChart'
-import { PredictionOverlay } from '@/components/charts/PredictionOverlay'
-import { IndicatorOverlay } from '@/components/charts/IndicatorOverlay'
+import { StockChartTabs } from '@/components/cards/StockChartTabs'
 import { CurrentSnapshot } from '@/components/cards/CurrentSnapshot'
 import { AIPrediction } from '@/components/cards/AIPrediction'
 import { TechnicalIndicators } from '@/components/cards/TechnicalIndicators'
 import { ModelHealthCard } from '@/components/cards/ModelHealthCard'
-import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
@@ -29,7 +24,6 @@ export function StockDetail() {
   const upperTicker = ticker.toUpperCase()
   const chartHeights = useChartHeight()
 
-  const [chart, setChart] = useState<IChartApi | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
   const [quantity, setQuantity] = useState('')
   const [entryPrice, setEntryPrice] = useState('')
@@ -44,12 +38,8 @@ export function StockDetail() {
   const containerRef = usePageEntrance('[data-section]', { enabled: ready })
   const cardsRef = useRowEntrance('[data-animate]', { enabled: ready })
 
-  const chartData = useMemo(() => ohlc.slice(-120), [ohlc])
-  const lastRow = chartData[chartData.length - 1]
-
-  const handleChartReady = useCallback((c: IChartApi | null) => {
-    setChart(c)
-  }, [])
+  // Keep all ohlc rows; period filtering done inside StockChartTabs
+  const allOhlc = useMemo(() => ohlc, [ohlc])
 
   const handleAddToPortfolio = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,63 +86,59 @@ export function StockDetail() {
       <PageWrapper>
         <div
           ref={containerRef}
-          className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-6"
+          className="flex flex-col gap-4 lg:gap-6"
         >
-          <div className="lg:hidden" data-section>
+          {/* Row 1 — snapshot (mobile) */}
+          <div className="min-w-0 lg:hidden" data-section>
             <CurrentSnapshot summary={summary} loading={stockLoading} />
           </div>
 
-          <div className="flex flex-col gap-3 lg:col-span-2 lg:gap-4">
-            <div data-section>
-              <Card className="!p-2 sm:!p-4">
-                <div className="overflow-x-auto">
-                  <CandlestickChart
-                    data={chartData}
-                    height={chartHeights.candle}
-                    onChartReady={handleChartReady}
-                  />
-                  <PredictionOverlay
-                    chart={chart}
-                    lastDate={lastRow?.date}
-                    lastClose={lastRow?.close}
-                    predictions={prediction?.predictions ?? []}
-                  />
-                  <IndicatorOverlay
-                    chart={chart}
-                    lastDate={lastRow?.date}
-                    indicators={indicators}
-                  />
-                  <VolumeChart data={chartData} height={chartHeights.volume} />
-                </div>
-              </Card>
+          {/* Row 2 — chart + sidebar */}
+          <div
+            className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]"
+            data-section
+          >
+            {/* Chart tabs (left / full on mobile) */}
+            <div className="min-w-0">
+              <StockChartTabs
+                ticker={upperTicker}
+                ohlc={allOhlc}
+                prediction={prediction}
+                indicators={indicators}
+                chartHeights={chartHeights}
+                onChartReady={() => {}}
+              />
             </div>
 
-            <div
-              ref={cardsRef}
-              data-section
-              className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4"
-            >
-              <div data-animate className="min-w-0 flex-1">
-                <AIPrediction
-                  ticker={upperTicker}
-                  prediction={prediction}
-                  loading={predLoading}
-                  onRetrainComplete={refetchPrediction}
-                />
-              </div>
-              <div data-animate className="w-full shrink-0 sm:w-44">
-                <ModelHealthCard prediction={prediction} className="w-full" />
-              </div>
+            {/* Sidebar — snapshot + indicators (desktop only) */}
+            <div className="hidden min-w-0 flex-col gap-4 lg:flex">
+              <CurrentSnapshot summary={summary} loading={stockLoading} />
+              <TechnicalIndicators indicators={indicators} loading={indLoading} />
             </div>
           </div>
 
-          <div className="hidden flex-col gap-3 lg:flex lg:gap-4" data-section>
-            <CurrentSnapshot summary={summary} loading={stockLoading} />
-            <TechnicalIndicators indicators={indicators} loading={indLoading} />
-          </div>
-
+          {/* Row 3 — indicators (mobile) */}
           <div className="lg:hidden" data-section>
             <TechnicalIndicators indicators={indicators} loading={indLoading} />
+          </div>
+
+          {/* Row 4 — AI prediction + model health */}
+          <div
+            ref={cardsRef}
+            data-section
+            className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4"
+          >
+            <div data-animate className="min-w-0 flex-1">
+              <AIPrediction
+                ticker={upperTicker}
+                prediction={prediction}
+                loading={predLoading}
+                onRetrainComplete={refetchPrediction}
+              />
+            </div>
+            <div data-animate className="w-full shrink-0 sm:w-44">
+              <ModelHealthCard prediction={prediction} className="w-full" />
+            </div>
           </div>
         </div>
       </PageWrapper>
