@@ -1,8 +1,7 @@
 name: update-stock-prices
 on:
   schedule:
-    # NEPSE trades Mon-Fri; run 5 times after market close (10:00-14:00 UTC / 15:45-19:45 NPT)
-    - cron: "0 10,11,12,13,14 * * 1,2,3,4,5"
+    - cron: "15 12 * * 1-5" # 6:00pm Nepal Time Mon-Fri
   workflow_dispatch:
 defaults:
   run:
@@ -21,7 +20,7 @@ jobs:
       - name: Install packages
         run: pip install -r requirements.txt
       - name: Run updater
-        run: python dailyscraper.py
+        run: python scrape_nepse.py
       - name: Setup Git
         run: git config --local user.email "github-actions[bot]@users.noreply.github.com" && git config --local user.name "github-actions[bot]"
       - name: Commit and push

@@ -1,5 +1,5 @@
-pandas
-requests
-lxml
-beautifulsoup4
-black
+beautifulsoup4>=4.12
+chromedriver-autoinstaller>=0.6
+lxml>=5.0
+pandas>=2.0
+selenium>=4.15

@@ -8,3 +8,6 @@ uvicorn
 pydantic
 supabase
 python-dotenv
+plotly
+transformers
+sentence-transformers
