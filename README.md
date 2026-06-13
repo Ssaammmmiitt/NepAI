@@ -10,22 +10,25 @@ and serves recursive multi-day forecasts through a FastAPI backend + React front
 ```
 NepAI/
   .github/workflows/
-    data_scraper.yml   GitHub Actions cron (Mon-Fri, scrapes NEPSE prices)
+    data_scraper.yml   GitHub Actions cron (Mon-Fri 18:00 NPT, runs scrape_nepse.py)
   data/
-    companies/         124 stock CSVs (updated daily by GitHub Actions)
+    companies/         585 stock CSVs (updated daily by GitHub Actions)
     metadata/
       name_data.json       Ticker → full company name + sector ID
       sector_mappings.json Sector ID → human-readable sector label
   data_scraper/
-    dailyscraper.py    Scrapes sharesansar.com, appends to data/ CSVs
-    requirements.txt   pandas, requests, lxml, beautifulsoup4
-  models/              Trained model artifacts (one directory per stock)
+    scrape_nepse.py    Scrapes ShareSansar daily prices, appends to data/companies/
+    scrape_details.py  Fetches company name + sector for new tickers
+    requirements.txt   pandas, beautifulsoup4, selenium, lxml
+  models/              Trained model artifacts (6 models; one directory per stock)
     {TICKER}/
       model.pt           PyTorch state dict
       scaler_feature.pkl RobustScaler for 11 input features
       scaler_target.pkl  RobustScaler for close target
       metadata.json      Training metadata + accuracy metrics
       predictions.png    Predicted-vs-actual plot
+  testing_results/     ML experiment outputs (hyperparameter tuning benchmarks)
+  nepai-lstm-train.ipynb  Research notebook for model experimentation
   backend/             Python package (FastAPI + ML pipeline)
     __main__.py        CLI: train, predict, evaluate, serve
     config.py          Paths, hyperparameters, feature lists
@@ -111,7 +114,7 @@ npm run test:run    # single run (CI)
 npm test            # watch mode
 ```
 
-See `frontend/FEATURES.md` for a full list of implemented UI features (including stock metadata tooltips on ticker tables).
+See `frontend/FEATURES.md` for a full list of implemented UI features (gainers/losers pages, stock metadata tooltips, portfolio toasts, and more).
 
 ### CLI Commands
 
@@ -140,7 +143,7 @@ GET /api/health
 ```
 
 ```json
-{"status": "ok", "tickers": 124, "models": 2}
+{"status": "ok", "tickers": 585, "models": 6}
 ```
 
 ### GET /stocks
@@ -402,7 +405,7 @@ GET /api/model_status/NABIL
 }
 ```
 
-**Stock not found** (404 — ticker doesn't exist in `data/`):
+**Stock not found** (404 — ticker doesn't exist in `data/companies/`):
 
 ```json
 {"error": "Stock 'ZZZZZ' not found in data", "ticker": "ZZZZZ"}
@@ -624,7 +627,7 @@ All errors return JSON with `error` and `ticker` fields (where applicable):
 | 400 | Validation error | Missing/invalid signup or login fields |
 | 401 | Unauthorized | Missing, invalid, or expired JWT |
 | 401 | Invalid credentials | Wrong email or password on login |
-| 404 | Stock not found | Stock CSV missing from `data/` |
+| 404 | Stock not found | Stock CSV missing from `data/companies/` |
 | 404 | Model not found | No trained model in `models/` |
 | 404 | Portfolio entry not found | Trying to delete a stock not in portfolio |
 | 409 | Training in progress | Training already running for this ticker |
@@ -661,5 +664,5 @@ Example:
 | Auth | Supabase Auth (email/password), JWT tokens |
 | Database | Supabase PostgreSQL (profiles + portfolio tables, RLS) |
 | Storage | Filesystem (CSVs for data, directories for models) |
-| Data Pipeline | GitHub Actions cron (Mon-Fri) + `data_scraper/dailyscraper.py` |
+| Data Pipeline | GitHub Actions cron (Mon-Fri, 18:00 NPT) + `data_scraper/scrape_nepse.py` |
 
