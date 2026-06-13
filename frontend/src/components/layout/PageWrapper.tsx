@@ -1,7 +1,14 @@
+import type { ReactNode } from 'react'
+
 interface PageWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode
+  className?: string
 }
 
-export function PageWrapper({ children }: PageWrapperProps) {
-  return <main className="flex-1 p-4 md:p-8 overflow-y-auto max-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)]">{children}</main>;
+export function PageWrapper({ children, className = '' }: PageWrapperProps) {
+  return (
+    <div className={`px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6 ${className}`}>
+      {children}
+    </div>
+  )
 }

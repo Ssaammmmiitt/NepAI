@@ -1,49 +1,48 @@
-import { useState, useEffect } from 'react';
-import { getMarketOverview } from '../../services/mockData';
-import { Building2 } from 'lucide-react';
-import { Spinner } from '../ui/Spinner';
+import { Card } from '@/components/ui/Card'
+import { useStockStore } from '@/store/stockStore'
 
 export function SectorBreakdown() {
-  const [sectors, setSectors] = useState<Record<string, number>>({});
-  const [loading, setLoading] = useState(true);
+  const { tickers } = useStockStore()
 
-  useEffect(() => {
-    getMarketOverview()
-      .then((data) => setSectors(data.sectorBreakdown))
-      .finally(() => setLoading(false));
-  }, []);
+  const gainers = tickers.filter((t) => t.change > 0).length
+  const losers = tickers.filter((t) => t.change < 0).length
+  const neutral = tickers.filter((t) => t.change === 0).length
+  const total = tickers.length || 1
 
-  if (loading) return <Spinner label="Loading sectors..." />;
-
-  const sorted = Object.entries(sectors).sort((a, b) => b[1] - a[1]);
-  const total = sorted.reduce((sum, [, count]) => sum + count, 0);
+  const segments = [
+    { label: 'Gainers', count: gainers, color: 'bg-dt-accent-bright', pct: (gainers / total) * 100 },
+    { label: 'Losers', count: losers, color: 'bg-dt-negative', pct: (losers / total) * 100 },
+    { label: 'Unchanged', count: neutral, color: 'bg-dt-meta', pct: (neutral / total) * 100 },
+  ]
 
   return (
-    <div className="bg-bg-card border border-border-color rounded-2xl p-6 shadow-card transition-all duration-200 hover:border-border-glow flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <Building2 size={20} color="var(--color-accent-primary)" />
-        <h2 className="text-xl font-semibold">🏢 Sector Breakdown</h2>
+    <Card title="Market Sentiment">
+      <div className="mb-5 flex h-2 overflow-hidden border border-dt-border bg-dt-bg">
+        {segments.map(
+          (s) =>
+            s.count > 0 && (
+              <div
+                key={s.label}
+                className={s.color}
+                style={{ width: `${s.pct}%` }}
+                title={`${s.label}: ${s.count}`}
+              />
+            ),
+        )}
       </div>
-      <div className="flex flex-col gap-2">
-        {sorted.map(([sector, count]) => {
-          const pct = total > 0 ? (count / total) * 100 : 0;
-          return (
-            <div key={sector} className="flex items-center gap-4">
-              <div className="flex flex-col min-w-[160px]">
-                <span className="text-sm">{sector}</span>
-                <span className="text-xs text-text-secondary">{count} stocks</span>
-              </div>
-              <div className="flex-1 h-2 bg-bg-hover rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-accent-primary rounded-full transition-all duration-500"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <span className="font-mono text-xs min-w-[48px] text-right">{pct.toFixed(1)}%</span>
+      <ul className="flex flex-col gap-3">
+        {segments.map((s) => (
+          <li key={s.label} className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <span className={`h-2 w-2 ${s.color}`} />
+              <span className="text-dt-meta">{s.label}</span>
             </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+            <span className="font-mono text-sm font-medium text-dt-text">
+              {s.count} <span className="text-dt-meta">({s.pct.toFixed(0)}%)</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  )
 }

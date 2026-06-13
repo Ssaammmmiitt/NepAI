@@ -1,33 +1,32 @@
-import { useState, useEffect } from 'react';
-import type { PortfolioItem } from '../types';
-
-const STORAGE_KEY = 'nepai_portfolio';
+import { useEffect } from 'react'
+import { usePortfolioStore } from '@/store/portfolioStore'
 
 export function usePortfolio() {
-  const [holdings, setHoldings] = useState<PortfolioItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchPortfolio = () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setHoldings(JSON.parse(stored));
-      } else {
-        setHoldings([]);
-      }
-    } catch (err) {
-      setError('Failed to load portfolio');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { holdings, loading, error, fetchPortfolio, addStock, removeStock } =
+    usePortfolioStore()
 
   useEffect(() => {
-    fetchPortfolio();
-  }, []);
+    void fetchPortfolio()
+  }, [fetchPortfolio])
 
-  return { holdings, loading, error, refetch: fetchPortfolio };
+  const totalValue = holdings.reduce(
+    (sum, h) => sum + h.current_price * h.quantity,
+    0,
+  )
+  const totalCost = holdings.reduce((sum, h) => sum + h.entry_price * h.quantity, 0)
+  const totalPnl = holdings.reduce((sum, h) => sum + h.pnl, 0)
+  const totalPnlPercent = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0
+
+  return {
+    holdings,
+    loading,
+    error,
+    totalValue,
+    totalCost,
+    totalPnl,
+    totalPnlPercent,
+    addStock,
+    removeStock,
+    refetch: fetchPortfolio,
+  }
 }

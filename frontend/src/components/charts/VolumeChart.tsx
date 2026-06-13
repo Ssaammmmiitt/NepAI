@@ -1,93 +1,85 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { createChart, ColorType, HistogramSeries } from 'lightweight-charts';
-import type { IChartApi } from 'lightweight-charts';
-import type { OHLCDataPoint } from '../../types';
-import { CHART_COLORS } from '../../utils/colors';
+import { useEffect, useRef } from 'react'
+import {
+  HistogramSeries,
+  createChart,
+  type HistogramData,
+  type IChartApi,
+  type ISeriesApi,
+  type Time,
+} from 'lightweight-charts'
+import type { OHLCRow } from '@/types'
+import { chartColors, getChartTheme } from '@/utils/colors'
+import { useThemeStore } from '@/store/themeStore'
+
+import { defaultChartHeights } from '@/hooks/useChartHeight'
 
 interface VolumeChartProps {
-  data: OHLCDataPoint[];
-  height?: number;
+  data: OHLCRow[]
+  height?: number
 }
 
-export function VolumeChart({ data, height = 120 }: VolumeChartProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<IChartApi | null>(null);
-  const disposedRef = useRef(false);
-
-  const renderChart = useCallback(() => {
-    if (!containerRef.current || data.length === 0) return;
-
-    if (chartRef.current && !disposedRef.current) {
-      try {
-        chartRef.current.remove();
-      } catch {
-        // Chart may already be disposed
-      }
-      disposedRef.current = false;
-    }
-
-    const chart = createChart(containerRef.current, {
-      width: containerRef.current.clientWidth,
-      height,
-      layout: {
-        background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: '#98989D',
-        fontSize: 11,
-      },
-      grid: {
-        vertLines: { color: CHART_COLORS.grid },
-        horzLines: { color: CHART_COLORS.grid },
-      },
-      rightPriceScale: {
-        visible: false,
-        borderColor: CHART_COLORS.grid,
-      },
-      timeScale: {
-        visible: false,
-        borderColor: CHART_COLORS.grid,
-      },
-    });
-
-    const volumeSeries = chart.addSeries(HistogramSeries, {
-      priceFormat: { type: 'volume' },
-      priceLineVisible: false,
-    });
-
-    const formattedData = data.map((d) => ({
-      time: d.time as unknown as string,
-      value: d.volume,
-      color: d.close >= d.open ? CHART_COLORS.candleUp : CHART_COLORS.candleDown,
-    }));
-
-    volumeSeries.setData(formattedData);
-    chart.timeScale().fitContent();
-
-    chartRef.current = chart;
-  }, [data, height]);
+export function VolumeChart({ data, height = defaultChartHeights.volume }: VolumeChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const chartRef = useRef<IChartApi | null>(null)
+  const seriesRef = useRef<ISeriesApi<'Histogram'> | null>(null)
+  const { theme } = useThemeStore()
+  const isDark = theme === 'dark'
 
   useEffect(() => {
-    disposedRef.current = false;
-    renderChart();
+    if (!containerRef.current) return
 
-    const handleResize = () => {
-      if (containerRef.current && chartRef.current && !disposedRef.current) {
-        chartRef.current.applyOptions({ width: containerRef.current.clientWidth });
-      }
-    };
+    const dark = useThemeStore.getState().theme === 'dark'
+    const themeConfig = getChartTheme(dark)
+    const chart = createChart(containerRef.current, {
+      height,
+      layout: themeConfig.layout,
+      grid: themeConfig.grid,
+      rightPriceScale: { borderVisible: false },
+      timeScale: { borderVisible: false, visible: false },
+    })
 
-    window.addEventListener('resize', handleResize);
+    const series = chart.addSeries(HistogramSeries, {
+      priceFormat: { type: 'volume' },
+      priceScaleId: '',
+    })
+
+    chartRef.current = chart
+    seriesRef.current = series
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const { width } = entries[0].contentRect
+      chart.applyOptions({ width })
+    })
+    resizeObserver.observe(containerRef.current)
+
     return () => {
-      window.removeEventListener('resize', handleResize);
-      if (chartRef.current && !disposedRef.current) {
-        try {
-          chartRef.current.remove();
-          disposedRef.current = true;
-        } catch {
-          // Already disposed
-        }
-      }
-    };
-  }, [renderChart]);
+      resizeObserver.disconnect()
+      chart.remove()
+      chartRef.current = null
+      seriesRef.current = null
+    }
+  }, [height])
 
-  return <div ref={containerRef} className="w-full rounded-xl overflow-hidden border-t border-border-color" />;
+  useEffect(() => {
+    if (!chartRef.current) return
+    const themeConfig = getChartTheme(isDark)
+    chartRef.current.applyOptions({
+      layout: themeConfig.layout,
+      grid: themeConfig.grid,
+    })
+  }, [isDark])
+
+  useEffect(() => {
+    if (!seriesRef.current || data.length === 0) return
+
+    const volumeData: HistogramData<Time>[] = data.map((row) => ({
+      time: row.date as Time,
+      value: row.volume,
+      color: row.per_change >= 0 ? chartColors.volumeUp : chartColors.volumeDown,
+    }))
+    seriesRef.current.setData(volumeData)
+    chartRef.current?.timeScale().fitContent()
+  }, [data])
+
+  return <div ref={containerRef} className="w-full" />
 }

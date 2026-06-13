@@ -1,17 +1,28 @@
-import { Sun, Moon } from 'lucide-react';
-import { useThemeStore } from '../../store/themeStore';
+import { Moon, Sun } from 'lucide-react'
+import { useThemeStore } from '@/store/themeStore'
 
-export function ThemeToggle() {
-  const theme = useThemeStore((s) => s.theme);
-  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+interface ThemeToggleProps {
+  className?: string
+  showLabel?: boolean
+}
+
+export function ThemeToggle({ className = '', showLabel = true }: ThemeToggleProps) {
+  const { theme, toggleTheme } = useThemeStore()
+  const isDark = theme === 'dark'
 
   return (
     <button
-      className="flex items-center justify-center w-9 h-9 bg-toggle-bg border border-border-color rounded-xl text-toggle-icon cursor-pointer transition-all duration-200 flex-shrink-0 hover:border-accent-primary hover:shadow-glow"
+      type="button"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
+      className={`inline-flex cursor-pointer items-center gap-2 border border-dt-border bg-dt-bg px-3 py-2 font-mono text-xs font-medium uppercase tracking-[0.06em] text-dt-meta hover:border-dt-text hover:text-dt-text ${className}`}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? (
+        <Sun className="h-4 w-4 text-dt-accent-bright" strokeWidth={1.5} />
+      ) : (
+        <Moon className="h-4 w-4" strokeWidth={1.5} />
+      )}
+      {showLabel ? (isDark ? 'Light' : 'Dark') : null}
     </button>
-  );
+  )
 }

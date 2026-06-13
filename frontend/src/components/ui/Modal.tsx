@@ -1,42 +1,52 @@
-import { X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, type ReactNode } from 'react'
+import { X } from 'lucide-react'
 
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
+  open: boolean
+  onClose: () => void
+  title: string
+  children: ReactNode
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
+export function Modal({ open, onClose, title, children }: ModalProps) {
   useEffect(() => {
-    if (isOpen) {
-      dialogRef.current?.showModal();
-    } else {
-      dialogRef.current?.close();
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
     }
-  }, [isOpen]);
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
 
-  if (!isOpen) return null;
+  if (!open) return null
 
   return (
-    <dialog
-      ref={dialogRef}
-      className="bg-bg-card border border-border-color rounded-2xl p-0 max-w-md w-[90%] shadow-card text-text-primary backdrop:bg-black/60 backdrop:backdrop-blur-sm"
-      onClose={onClose}
-    >
-      <div className="flex items-center justify-between px-6 py-4 border-b border-border-color">
-        <h2 className="text-xl font-semibold">{title}</h2>
-        <button
-          className="bg-none border-none text-text-secondary cursor-pointer p-1 rounded-lg transition-all duration-200 hover:bg-bg-hover hover:text-text-primary"
-          onClick={onClose}
-        >
-          <X size={20} />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-dt-bg/80"
+        onClick={onClose}
+        aria-hidden
+      />
+      <div className="relative w-full max-w-md border border-dt-border bg-dt-surface p-6 shadow-[6px_6px_0_0_var(--dt-shadow)]">
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="font-mono text-sm font-bold uppercase tracking-[0.06em] text-dt-text">
+            {title}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="cursor-pointer p-1 text-dt-meta hover:text-dt-text"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" strokeWidth={1.5} />
+          </button>
+        </div>
+        {children}
       </div>
-      <div className="p-6">{children}</div>
-    </dialog>
-  );
+    </div>
+  )
 }

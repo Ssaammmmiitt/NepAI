@@ -1,24 +1,34 @@
-import { useState, useEffect } from 'react';
-import { getOHLC, generateMockIndicators } from '../services/mockData';
-import type { IndicatorData } from '../types';
+import { useEffect, useState } from 'react'
+import { stockAPI } from '@/services/api'
+import type { Indicators } from '@/types'
 
 export function useIndicators(ticker: string) {
-  const [indicators, setIndicators] = useState<IndicatorData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [indicators, setIndicators] = useState<Indicators | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!ticker) return;
-    setLoading(true);
-    setError(null);
-    getOHLC(ticker)
-      .then((ohlc) => {
-        const ind = generateMockIndicators(ohlc);
-        setIndicators(ind);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [ticker]);
+    if (!ticker) return
+    let cancelled = false
 
-  return { indicators, loading, error };
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        const { data } = await stockAPI.getIndicators(ticker)
+        if (!cancelled) setIndicators(data)
+      } catch {
+        if (!cancelled) setError('Failed to load indicators')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    void load()
+    return () => {
+      cancelled = true
+    }
+  }, [ticker])
+
+  return { indicators, loading, error }
 }

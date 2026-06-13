@@ -1,85 +1,63 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { getTickers } from '../../services/mockData';
+import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Search } from 'lucide-react'
+import { useStockStore } from '@/store/stockStore'
 
 export function StockSearch() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<{ ticker: string; name: string; sector: string }[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [allTickers, setAllTickers] = useState<{ ticker: string; name: string; sector: string }[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { tickers } = useStockStore()
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    getTickers().then((tickers) => {
-      setAllTickers(tickers.map((t) => ({ ticker: t.ticker, name: t.name, sector: t.sector })));
-    });
-  }, []);
+  const results = useMemo(() => {
+    if (!query.trim()) return []
+    const q = query.toUpperCase()
+    return tickers.filter((t) => t.ticker.includes(q)).slice(0, 8)
+  }, [tickers, query])
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSearch = (value: string) => {
-    setQuery(value);
-    if (value.length < 1) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
-    const filtered = allTickers
-      .filter(
-        (t) =>
-          t.ticker.toLowerCase().includes(value.toLowerCase()) ||
-          t.name.toLowerCase().includes(value.toLowerCase())
-      )
-      .slice(0, 8);
-    setResults(filtered);
-    setIsOpen(true);
-  };
-
-  const handleSelect = (ticker: string) => {
-    setQuery(ticker);
-    setIsOpen(false);
-    navigate(`/stock/${ticker}`);
-  };
+  const select = (ticker: string) => {
+    setQuery('')
+    setOpen(false)
+    navigate(`/stock/${ticker}`)
+  }
 
   return (
-    <div ref={containerRef} className="relative w-full">
-      <div className="flex items-center gap-2 px-3 py-2 bg-bg-card border border-border-color rounded-lg transition-all duration-200 focus-within:border-accent-primary focus-within:shadow-glow">
-        <Search size={16} color="var(--color-text-secondary)" />
+    <div className="relative w-full min-w-[14rem] sm:max-w-xs">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dt-meta" strokeWidth={1.5} />
         <input
-          ref={inputRef}
           type="text"
-          placeholder="Search ticker..."
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
-          onFocus={() => results.length > 0 && setIsOpen(true)}
-          className="flex-1 bg-none border-none text-text-primary font-sans text-sm outline-none placeholder:text-text-secondary"
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setOpen(true)
+          }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder="Search ticker..."
+          className="w-full border border-dt-border bg-dt-bg py-2 pl-9 pr-4 font-mono text-xs text-dt-text outline-none placeholder:text-dt-meta hover:border-dt-text focus:border-dt-text focus:shadow-[4px_4px_0_0_var(--dt-shadow)]"
         />
       </div>
-      {isOpen && results.length > 0 && (
-        <ul className="absolute top-full mt-1 left-0 right-0 bg-bg-card border border-border-color rounded-lg list-none p-1 max-h-60 overflow-y-auto z-[100] shadow-card">
-          {results.map((r) => (
-            <li
-              key={r.ticker}
-              onClick={() => handleSelect(r.ticker)}
-              className="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 hover:bg-bg-hover"
-            >
-              <span className="text-sm">{r.ticker}</span>
-              <span className="text-xs text-text-secondary">{r.name}</span>
+      {open && results.length > 0 ? (
+        <ul className="absolute z-20 mt-1.5 w-full min-w-full overflow-hidden border border-dt-border bg-dt-surface shadow-[4px_4px_0_0_var(--dt-shadow)]">
+          {results.map((t) => (
+            <li key={t.ticker}>
+              <button
+                type="button"
+                className="flex w-full cursor-pointer items-center justify-between gap-6 px-4 py-2.5 text-left hover:bg-dt-bg"
+                onMouseDown={() => select(t.ticker)}
+              >
+                <span className="shrink-0 font-mono text-sm font-medium text-dt-text">
+                  {t.ticker}
+                </span>
+                <span className="ml-auto shrink-0 font-mono text-xs tabular-nums text-dt-meta">
+                  Rs {t.latest_close.toFixed(2)}
+                </span>
+              </button>
             </li>
           ))}
         </ul>
-      )}
+      ) : null}
     </div>
-  );
+  )
 }

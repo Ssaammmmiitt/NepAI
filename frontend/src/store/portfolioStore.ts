@@ -1,51 +1,52 @@
-import { create } from 'zustand';
-import type { PortfolioItem, PortfolioSummary, NewHolding } from '../types';
+import { create } from 'zustand'
+import { portfolioAPI } from '@/services/api'
+import type { PortfolioHolding } from '@/types'
 
-const STORAGE_KEY = 'nepai_portfolio';
-
-function loadFromStorage(): PortfolioItem[] {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
+interface PortfolioState {
+  holdings: PortfolioHolding[]
+  loading: boolean
+  error: string | null
+  fetchPortfolio: () => Promise<void>
+  addStock: (ticker: string, quantity: number, entry_price: number) => Promise<void>
+  removeStock: (ticker: string) => Promise<void>
 }
 
-function saveToStorage(holdings: PortfolioItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(holdings));
-}
+export const usePortfolioStore = create<PortfolioState>((set, get) => ({
+  holdings: [],
+  loading: false,
+  error: null,
 
-interface PortfolioStore {
-  holdings: PortfolioItem[];
-  summary: PortfolioSummary | null;
-  addHolding: (item: NewHolding) => Promise<void>;
-  removeHolding: (ticker: string) => Promise<void>;
-  fetchPortfolio: () => Promise<void>;
-}
-
-export const usePortfolioStore = create<PortfolioStore>((set, get) => ({
-  holdings: loadFromStorage(),
-  summary: null,
-  addHolding: async (item) => {
-    const newHolding: PortfolioItem = {
-      ...item,
-      current_price: item.entry_price,
-      predicted_price: item.entry_price,
-      pnl: 0,
-      pnl_percent: 0,
-    };
-    const updated = [...get().holdings, newHolding];
-    saveToStorage(updated);
-    set({ holdings: updated });
-  },
-  removeHolding: async (ticker) => {
-    const updated = get().holdings.filter((h) => h.ticker !== ticker);
-    saveToStorage(updated);
-    set({ holdings: updated });
-  },
   fetchPortfolio: async () => {
-    const holdings = loadFromStorage();
-    set({ holdings });
+    set({ loading: true, error: null })
+    try {
+      const { data } = await portfolioAPI.getPortfolio()
+      set({ holdings: data.holdings })
+    } catch {
+      set({ error: 'Failed to load portfolio' })
+    } finally {
+      set({ loading: false })
+    }
   },
-}));
+
+  addStock: async (ticker, quantity, entry_price) => {
+    set({ loading: true, error: null })
+    try {
+      await portfolioAPI.addStock({ ticker, quantity, entry_price })
+      await get().fetchPortfolio()
+    } catch {
+      set({ error: 'Failed to add stock', loading: false })
+      throw new Error('Failed to add stock')
+    }
+  },
+
+  removeStock: async (ticker) => {
+    set({ loading: true, error: null })
+    try {
+      await portfolioAPI.removeStock(ticker)
+      await get().fetchPortfolio()
+    } catch {
+      set({ error: 'Failed to remove stock', loading: false })
+      throw new Error('Failed to remove stock')
+    }
+  },
+}))

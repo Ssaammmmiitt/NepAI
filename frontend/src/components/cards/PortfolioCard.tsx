@@ -1,47 +1,65 @@
-import type { PortfolioItem } from '../../types';
-import { formatPrice, formatPercent } from '../../utils/formatters';
-import { X } from 'lucide-react';
+import { Link } from 'react-router-dom'
+import { Trash2 } from 'lucide-react'
+import { Card } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import type { PortfolioHolding } from '@/types'
+import { formatCurrency, formatPercent } from '@/utils/formatters'
 
 interface PortfolioCardProps {
-  item: PortfolioItem;
-  onRemoveClick?: (ticker: string) => void;
+  holding: PortfolioHolding
+  onRemove: (ticker: string) => void
+  removing?: boolean
 }
 
-export function PortfolioCard({ item, onRemoveClick }: PortfolioCardProps) {
-  const isBullish = item.pnl >= 0;
+export function PortfolioCard({ holding, onRemove, removing }: PortfolioCardProps) {
+  const isPositive = holding.pnl >= 0
 
   return (
-    <div className="bg-bg-card border border-border-color rounded-2xl p-6 shadow-card transition-all duration-200 hover:border-accent-primary">
+    <Card className="!p-4">
       <div className="flex items-start justify-between">
         <div>
-          <span className="text-xl font-semibold">{item.ticker}</span>
-          <p className="text-xs text-text-secondary">{item.quantity} shares @ {formatPrice(item.entry_price)}</p>
-        </div>
-        {onRemoveClick && (
-          <button
-            className="bg-none border-none text-text-secondary cursor-pointer p-1 rounded-lg transition-all duration-200 hover:bg-bearish-bg hover:text-bearish"
-            onClick={() => onRemoveClick(item.ticker)}
+          <Link
+            to={`/stock/${holding.ticker}`}
+            className="cursor-pointer font-mono text-base font-semibold text-dt-text hover:text-dt-accent-bright"
           >
-            <X size={16} />
-          </button>
-        )}
+            {holding.ticker}
+          </Link>
+          <p className="mt-0.5 text-xs text-dt-meta">
+            {holding.quantity} shares @ {formatCurrency(holding.entry_price)}
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          className="group !min-h-0 !px-2 !py-1.5 hover:no-underline border border-transparent hover:border-dt-negative hover:bg-dt-negative/10 hover:shadow-[2px_2px_0_0_var(--dt-negative)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:shadow-none active:translate-x-0 active:translate-y-0"
+          onClick={() => onRemove(holding.ticker)}
+          loading={removing}
+          aria-label={`Remove ${holding.ticker}`}
+        >
+          <Trash2
+            className="h-3.5 w-3.5 text-dt-negative group-hover:text-dt-negative"
+            strokeWidth={1.5}
+          />
+        </Button>
       </div>
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        <div className="flex flex-col gap-1">
-          <span className="text-xs text-text-secondary">Current</span>
-          <p className="font-mono">{formatPrice(item.current_price)}</p>
+
+      <div className="mt-3 flex items-end justify-between border-t border-dt-border pt-3">
+        <div>
+          <p className="dt-eyebrow">Current</p>
+          <p className="font-mono text-sm font-medium text-dt-text">
+            {formatCurrency(holding.current_price)}
+          </p>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-xs text-text-secondary">Predicted</span>
-          <p className="font-mono" style={{ color: 'var(--color-chart-prediction)' }}>{formatPrice(item.predicted_price)}</p>
-        </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-xs text-text-secondary">P&L</span>
-          <p className={`font-mono ${isBullish ? 'text-bullish' : 'text-bearish'}`}>
-            {formatPercent(item.pnl_percent)}
+        <div className="text-right">
+          <p className="dt-eyebrow">P&L</p>
+          <p
+            className={`font-mono text-sm font-medium ${
+              isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
+            }`}
+          >
+            {formatCurrency(holding.pnl)} ({formatPercent(holding.pnl_percent)})
           </p>
         </div>
       </div>
-    </div>
-  );
+    </Card>
+  )
 }

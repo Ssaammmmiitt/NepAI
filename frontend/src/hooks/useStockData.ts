@@ -1,21 +1,41 @@
-import { useState, useEffect } from 'react';
-import { getOHLC } from '../services/mockData';
-import type { OHLCDataPoint } from '../types';
+import { useEffect, useState } from 'react'
+import { stockAPI } from '@/services/api'
+import type { OHLCRow, StockSummary } from '@/types'
 
 export function useStockData(ticker: string, from?: string, to?: string) {
-  const [data, setData] = useState<OHLCDataPoint[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [ohlc, setOhlc] = useState<OHLCRow[]>([])
+  const [summary, setSummary] = useState<StockSummary | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!ticker) return;
-    setLoading(true);
-    setError(null);
-    getOHLC(ticker, from, to)
-      .then((res) => setData(res))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [ticker, from, to]);
+    if (!ticker) return
+    let cancelled = false
 
-  return { data, loading, error };
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        const [ohlcRes, summaryRes] = await Promise.all([
+          stockAPI.getOHLC(ticker, from, to),
+          stockAPI.getSummary(ticker),
+        ])
+        if (!cancelled) {
+          setOhlc(ohlcRes.data)
+          setSummary(summaryRes.data)
+        }
+      } catch {
+        if (!cancelled) setError('Failed to load stock data')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    void load()
+    return () => {
+      cancelled = true
+    }
+  }, [ticker, from, to])
+
+  return { ohlc, summary, loading, error }
 }

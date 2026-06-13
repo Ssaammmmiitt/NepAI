@@ -1,68 +1,119 @@
-export interface OHLCDataPoint {
-  time: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-  per_change: number;
+export interface User {
+  id: string
+  email: string
+  full_name: string
 }
 
-export interface IndicatorData {
-  rsi: { time: string; value: number }[];
-  macd: {
-    macd: { time: string; value: number }[];
-    signal: { time: string; value: number }[];
-    histogram: { time: string; value: number }[];
-  };
-  bollinger: {
-    upper: { time: string; value: number }[];
-    middle: { time: string; value: number }[];
-    lower: { time: string; value: number }[];
-  };
-  ema: {
-    ema12: { time: string; value: number }[];
-    ema26: { time: string; value: number }[];
-  };
+export interface AuthResponse {
+  user: User
+  access_token: string
+  refresh_token: string
 }
 
-export interface Prediction {
-  ticker: string;
-  next_day: { price: number; confidence_low: number; confidence_high: number };
-  next_week: { price: number; confidence_low: number; confidence_high: number };
-  model_accuracy: number;
-  generated_at: string;
-}
-
-export interface PortfolioItem {
-  ticker: string;
-  quantity: number;
-  entry_price: number;
-  current_price: number;
-  predicted_price: number;
-  pnl: number;
-  pnl_percent: number;
-}
-
-export interface PortfolioSummary {
-  total_value: number;
-  total_invested: number;
-  total_pnl: number;
-  total_pnl_percent: number;
-  holdings_count: number;
+export interface RefreshResponse {
+  access_token: string
+  refresh_token: string
 }
 
 export interface StockTicker {
-  ticker: string;
-  name: string;
-  sector: string;
-  latest_close: number;
-  change: number;
-  volume: number;
+  ticker: string
+  latest_close: number
+  change: number
+  volume: number
+  latest_date: string
 }
 
-export interface NewHolding {
-  ticker: string;
-  quantity: number;
-  entry_price: number;
+export interface OHLCRow {
+  date: string
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+  per_change: number
+}
+
+export interface StockSummary {
+  ticker: string
+  latest_close: number
+  change: number
+  high_52w: number
+  low_52w: number
+  avg_volume: number
+  latest_date: string
+  total_rows: number
+}
+
+export interface Indicators {
+  ticker: string
+  rsi: number
+  macd: { macd: number; signal: number; histogram: number }
+  bollinger: { upper: number; middle: number; lower: number }
+  ema: { ema20: number; ema50: number }
+}
+
+export interface PredictionDay {
+  day: number
+  date: string
+  price: number
+  change_pct: number
+}
+
+export interface Prediction {
+  ticker: string
+  model_available: boolean
+  trained_on: string | null
+  stale: boolean
+  predictions: PredictionDay[]
+  model_accuracy: number
+  generated_at: string
+}
+
+export interface ModelStatus {
+  ticker: string
+  model_status: 'trained' | 'training' | 'not_available'
+  date_created: string | null
+  stale: boolean | null
+}
+
+export interface ModelMetadata {
+  ticker: string
+  date_created: string
+  accuracy: {
+    mae: number
+    mape: number
+    r2: number
+    rmse: number
+    direction_accuracy: number
+  }
+  training_rows: number
+  stale: boolean
+}
+
+export interface PortfolioHolding {
+  ticker: string
+  quantity: number
+  entry_price: number
+  current_price: number
+  pnl: number
+  pnl_percent: number
+  added_at: string
+}
+
+export interface PortfolioResponse {
+  holdings: PortfolioHolding[]
+}
+
+export interface TrainResponse {
+  ticker: string
+  status: string
+  metrics: Record<string, number>
+  training_time_sec: number
+  epochs_trained: number
+  date_created: string
+}
+
+export interface ApiError {
+  error: string
+  ticker?: string
 }

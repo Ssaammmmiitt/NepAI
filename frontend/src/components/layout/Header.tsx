@@ -1,47 +1,33 @@
-import { useState } from 'react';
-import { StockSearch } from '../widgets/StockSearch';
-import { ThemeToggle } from '../ui/ThemeToggle';
-import { Search, X } from 'lucide-react';
+import type { ReactNode } from 'react'
+import { LiveClock } from '@/components/widgets/LiveClock'
 
 interface HeaderProps {
-  title: string;
-  subtitle?: string;
-  rightSlot?: React.ReactNode;
+  title: string
+  subtitle?: string
+  action?: ReactNode
 }
 
-export function Header({ title, subtitle, rightSlot }: HeaderProps) {
-  const [searchOpen, setSearchOpen] = useState(false);
-
+export function Header({ title, subtitle, action }: HeaderProps) {
   return (
-    <header className="flex flex-col md:flex-row md:items-center md:justify-between px-4 py-4 md:px-8 md:py-6 border-b border-border-color bg-bg-secondary gap-3">
-      <div className="flex items-center justify-between w-full md:w-auto">
+    <header className="border-b border-dt-border bg-dt-surface px-4 py-3 sm:px-5 sm:py-4 lg:px-6">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
-          <h1 className="text-xl md:text-3xl font-bold leading-tight truncate">{title}</h1>
-          {subtitle && <p className="text-xs text-text-secondary mt-0.5">{subtitle}</p>}
+          <h1 className="truncate font-mono text-lg font-bold uppercase tracking-[0.06em] text-dt-text sm:text-xl lg:text-2xl">
+            {title}
+          </h1>
+          {subtitle ? (
+            <p className="mt-0.5 truncate text-xs text-dt-meta sm:text-sm">{subtitle}</p>
+          ) : null}
         </div>
-        <div className="flex items-center gap-2 md:hidden">
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="flex items-center justify-center w-9 h-9 bg-bg-hover border border-border-color rounded-xl text-text-secondary cursor-pointer transition-all duration-200 hover:border-accent-primary hover:text-accent-primary"
-            aria-label="Toggle search"
-          >
-            {searchOpen ? <X size={18} /> : <Search size={18} />}
-          </button>
-          <ThemeToggle />
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+          {action ? (
+            <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto [&_input]:w-full sm:[&_input]:w-auto">
+              {action}
+            </div>
+          ) : null}
+          <LiveClock />
         </div>
       </div>
-      <div className="hidden md:flex items-center gap-3 md:gap-4 flex-shrink-0">
-        {rightSlot}
-        <div className="w-48 lg:w-64">
-          <StockSearch />
-        </div>
-        <ThemeToggle />
-      </div>
-      {searchOpen && (
-        <div className="md:hidden w-full animate-[slideIn_0.2s_ease]">
-          <StockSearch />
-        </div>
-      )}
     </header>
-  );
+  )
 }

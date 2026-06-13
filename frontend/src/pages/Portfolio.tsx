@@ -1,142 +1,172 @@
-import { useState } from 'react';
-import { Header } from '../components/layout/Header';
-import { PortfolioSummary } from '../components/widgets/PortfolioSummary';
-import { PortfolioCard } from '../components/cards/PortfolioCard';
-import { Button } from '../components/ui/Button';
-import { Spinner } from '../components/ui/Spinner';
-import { usePortfolio } from '../hooks/usePortfolio';
-import { usePortfolioStore } from '../store/portfolioStore';
-import { Plus, AlertTriangle } from 'lucide-react';
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Header } from '@/components/layout/Header'
+import { PageWrapper } from '@/components/layout/PageWrapper'
+import { PortfolioSummary } from '@/components/widgets/PortfolioSummary'
+import { PortfolioCard } from '@/components/cards/PortfolioCard'
+import { Button } from '@/components/ui/Button'
+import { Modal } from '@/components/ui/Modal'
+import { Input } from '@/components/ui/Input'
+import { Spinner } from '@/components/ui/Spinner'
+import { usePortfolio } from '@/hooks/usePortfolio'
+import { useStockStore } from '@/store/stockStore'
+import { useToastStore } from '@/store/toastStore'
 
-export default function Portfolio() {
-  const { holdings, loading } = usePortfolio();
-  const removeHolding = usePortfolioStore((s) => s.removeHolding);
-  const [showAdd, setShowAdd] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [tickerToDelete, setTickerToDelete] = useState('');
-  const [ticker, setTicker] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [entryPrice, setEntryPrice] = useState(0);
+export function Portfolio() {
+  const {
+    holdings,
+    loading,
+    error,
+    totalValue,
+    totalPnl,
+    totalPnlPercent,
+    addStock,
+    removeStock,
+  } = usePortfolio()
+  const { tickers, loadTickers } = useStockStore()
 
-  const handleAdd = async () => {
-    if (!ticker || !entryPrice) return;
-    await usePortfolioStore.getState().addHolding({ ticker, quantity, entry_price: entryPrice });
-    setShowAdd(false);
-    setTicker('');
-    setQuantity(1);
-    setEntryPrice(0);
-  };
+  const [showAdd, setShowAdd] = useState(false)
+  const [ticker, setTicker] = useState('')
+  const [quantity, setQuantity] = useState('')
+  const [entryPrice, setEntryPrice] = useState('')
+  const [formError, setFormError] = useState('')
+  const [removing, setRemoving] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
+  const showToast = useToastStore((s) => s.show)
 
-  const handleRemoveClick = (ticker: string) => {
-    setTickerToDelete(ticker);
-    setShowDeleteConfirm(true);
-  };
+  const openAdd = () => {
+    void loadTickers(true)
+    setShowAdd(true)
+  }
 
-  const handleConfirmDelete = async () => {
-    if (tickerToDelete) {
-      await removeHolding(tickerToDelete);
-      setTickerToDelete('');
-      setShowDeleteConfirm(false);
+  const handleAdd = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormError('')
+    const qty = parseInt(quantity, 10)
+    const price = parseFloat(entryPrice)
+    if (!ticker.trim() || !qty || qty <= 0 || !price || price <= 0) {
+      setFormError('Fill all fields with valid values')
+      return
     }
-  };
+    setAdding(true)
+    try {
+      await addStock(ticker.toUpperCase(), qty, price)
+      setShowAdd(false)
+      setTicker('')
+      setQuantity('')
+      setEntryPrice('')
+      showToast(`Added ${ticker.toUpperCase()} to portfolio`)
+    } catch {
+      setFormError('Failed to add stock')
+      showToast('Failed to add stock', 'error')
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  const handleRemove = async (t: string) => {
+    setRemoving(t)
+    try {
+      await removeStock(t)
+      showToast(`Removed ${t} from portfolio`)
+    } catch {
+      showToast(`Failed to remove ${t}`, 'error')
+    } finally {
+      setRemoving(null)
+    }
+  }
 
   return (
     <>
-      <Header title="Portfolio" subtitle="Track your NEPSE holdings" />
-      <div className="flex flex-col gap-8">
-        <PortfolioSummary />
-
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Holdings</h2>
-          <Button variant="primary" onClick={() => setShowAdd(true)}>
-            <Plus size={16} /> Add Stock
+      <Header
+        title="Portfolio"
+        subtitle="Track your NEPSE holdings"
+        action={
+          <Button onClick={openAdd}>
+            <Plus className="h-4 w-4" />
+            Add Stock
           </Button>
-        </div>
-
-        {loading ? (
-          <Spinner label="Loading portfolio..." />
-        ) : holdings.length === 0 ? (
-          <div className="bg-bg-card border border-border-color rounded-2xl p-12 shadow-card text-center">
-            <p className="text-sm">No holdings yet. Add stocks to start tracking.</p>
+        }
+      />
+      <PageWrapper>
+        {loading && holdings.length === 0 ? (
+          <div className="flex justify-center py-16">
+            <Spinner size="lg" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {holdings.map((item) => (
-              <PortfolioCard key={item.ticker} item={item} onRemoveClick={handleRemoveClick} />
-            ))}
-          </div>
-        )}
+          <div className="flex flex-col gap-6">
+            <PortfolioSummary
+              totalValue={totalValue}
+              totalPnl={totalPnl}
+              totalPnlPercent={totalPnlPercent}
+              holdingsCount={holdings.length}
+            />
 
-        {showAdd && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[1000]" onClick={() => setShowAdd(false)}>
-            <div className="bg-bg-card border border-border-color rounded-2xl p-6 w-[400px] max-w-[90%] shadow-card" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-xl font-semibold">Add Stock</h3>
-              <div className="flex flex-col gap-4 mt-6">
-                <label className="flex flex-col gap-1">
-                  <span className="text-xs text-text-secondary">Ticker</span>
-                  <input
-                    type="text"
-                    value={ticker}
-                    onChange={(e) => setTicker(e.target.value.toUpperCase())}
-                    placeholder="e.g. NABIL"
-                    className="px-3 py-2 bg-bg-hover border border-border-color rounded-lg text-text-primary font-mono text-sm outline-none focus:border-accent-primary placeholder:text-text-muted"
-                  />
-                </label>
-                <label className="flex flex-col gap-1">
-                  <span className="text-xs text-text-secondary">Quantity</span>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Number(e.target.value))}
-                    min={1}
-                    className="px-3 py-2 bg-bg-hover border border-border-color rounded-lg text-text-primary font-mono text-sm outline-none focus:border-accent-primary"
-                  />
-                </label>
-                <label className="flex flex-col gap-1">
-                  <span className="text-xs text-text-secondary">Entry Price (Rs.)</span>
-                  <input
-                    type="number"
-                    value={entryPrice}
-                    onChange={(e) => setEntryPrice(Number(e.target.value))}
-                    min={0}
-                    step={0.01}
-                    className="px-3 py-2 bg-bg-hover border border-border-color rounded-lg text-text-primary font-mono text-sm outline-none focus:border-accent-primary"
-                  />
-                </label>
-                <div className="flex gap-2 justify-end mt-2">
-                  <Button variant="secondary" onClick={() => setShowAdd(false)}>Cancel</Button>
-                  <Button variant="primary" onClick={handleAdd}>Add</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+            {error ? <p className="text-dt-negative">{error}</p> : null}
 
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[1000]" onClick={() => setShowDeleteConfirm(false)}>
-            <div className="bg-bg-card border border-border-alert rounded-2xl p-6 w-[400px] max-w-[90%] shadow-card" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-bearish-bg">
-                  <AlertTriangle size={20} className="text-bearish" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">Remove Stock</h3>
-                  <p className="text-xs text-text-secondary">This action cannot be undone</p>
-                </div>
+            {holdings.length === 0 ? (
+              <div className="border border-dt-border bg-dt-surface p-12 text-center">
+                <p className="text-dt-meta">No holdings yet</p>
+                <Button className="mt-4" onClick={openAdd}>
+                  Add your first stock
+                </Button>
               </div>
-              <div className="px-4 py-3 bg-bg-alert rounded-lg border-l-[3px] border-border-alert mb-6">
-                <p className="text-sm text-bearish">
-                  Are you sure you want to remove <strong>{tickerToDelete}</strong> from your portfolio? All tracking data for this stock will be lost.
-                </p>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {holdings.map((h) => (
+                  <PortfolioCard
+                    key={h.ticker}
+                    holding={h}
+                    onRemove={handleRemove}
+                    removing={removing === h.ticker}
+                  />
+                ))}
               </div>
-              <div className="flex gap-2 justify-end">
-                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>Cancel</Button>
-                <Button variant="danger" onClick={handleConfirmDelete}>Remove</Button>
-              </div>
-            </div>
+            )}
           </div>
         )}
-      </div>
+      </PageWrapper>
+
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add Stock">
+        <form onSubmit={handleAdd} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-dt-meta">
+              Ticker
+            </label>
+            <input
+              list="tickers"
+              value={ticker}
+              onChange={(e) => setTicker(e.target.value.toUpperCase())}
+              placeholder="NABIL"
+              className="border border-dt-border bg-dt-surface px-4 py-2.5 font-mono text-sm text-dt-text outline-none placeholder:text-dt-meta hover:border-dt-text focus:border-dt-text focus:shadow-[4px_4px_0_0_var(--dt-shadow)]"
+            />
+            <datalist id="tickers">
+              {tickers.map((t) => (
+                <option key={t.ticker} value={t.ticker} />
+              ))}
+            </datalist>
+          </div>
+          <Input
+            label="Quantity"
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
+          <Input
+            label="Entry price (NPR)"
+            type="number"
+            min="0.01"
+            step="0.01"
+            value={entryPrice}
+            onChange={(e) => setEntryPrice(e.target.value)}
+          />
+          {formError ? <p className="text-sm text-dt-negative">{formError}</p> : null}
+          <Button type="submit" loading={adding} className="w-full">
+            Add Stock
+          </Button>
+        </form>
+      </Modal>
     </>
-  );
+  )
 }

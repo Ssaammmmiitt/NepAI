@@ -1,36 +1,30 @@
-import type { StockTicker } from '../../types';
-import { formatPrice, formatPercent } from '../../utils/formatters';
+import { Link } from 'react-router-dom'
+import type { StockTicker } from '@/types'
+import { formatCurrency, formatPercent } from '@/utils/formatters'
 
 interface StockSummaryCardProps {
-  stock: StockTicker;
-  onClick?: () => void;
+  stock: StockTicker
 }
 
-export function StockSummaryCard({ stock, onClick }: StockSummaryCardProps) {
-  const isBullish = stock.change >= 0;
+export function StockSummaryCard({ stock }: StockSummaryCardProps) {
+  const isPositive = stock.change >= 0
 
   return (
-    <div
-      className="bg-bg-card border border-border-color rounded-2xl p-6 shadow-card transition-all duration-200 hover:border-border-glow hover:shadow-glow cursor-pointer"
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
+    <Link
+      to={`/stock/${stock.ticker}`}
+      className="flex cursor-pointer items-center justify-between border border-dt-border bg-dt-surface p-4 hover:border-dt-accent-bright hover:shadow-[4px_4px_0_0_var(--dt-shadow)] hover:-translate-x-0.5 hover:-translate-y-0.5"
     >
-      <div className="flex items-start justify-between">
-        <div>
-          <span className="text-xl font-semibold">{stock.ticker}</span>
-          <p className="text-xs text-text-secondary">{stock.name}</p>
-        </div>
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold font-mono ${isBullish ? 'bg-bullish-bg text-bullish' : 'bg-bearish-bg text-bearish'}`}>
+      <span className="font-mono text-sm font-semibold text-dt-text">{stock.ticker}</span>
+      <div className="text-right">
+        <p className="font-mono text-sm text-dt-text">{formatCurrency(stock.latest_close)}</p>
+        <p
+          className={`font-mono text-xs font-semibold ${
+            isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
+          }`}
+        >
           {formatPercent(stock.change)}
-        </span>
+        </p>
       </div>
-      <div className="flex items-baseline gap-2 mt-2">
-        <span className="font-mono font-bold text-2xl">{formatPrice(stock.latest_close)}</span>
-        <span className={`text-xs ${isBullish ? 'text-bullish' : 'text-bearish'}`}>
-          {isBullish ? '▲' : '▼'} {stock.change.toFixed(2)}%
-        </span>
-      </div>
-    </div>
-  );
+    </Link>
+  )
 }

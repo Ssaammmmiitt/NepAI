@@ -1,39 +1,66 @@
-import { useState, useEffect } from 'react';
-import { StockSummaryCard } from '../cards/StockSummaryCard';
-import { useNavigate } from 'react-router-dom';
-import { getTickers } from '../../services/mockData';
-import type { StockTicker } from '../../types';
-import { Spinner } from '../ui/Spinner';
+import { Link } from 'react-router-dom'
+import { Card } from '@/components/ui/Card'
+import { useStockStore } from '@/store/stockStore'
+import { formatCurrency, formatPercent } from '@/utils/formatters'
 
-interface TopMoversProps {
-  type: 'gainers' | 'losers';
+function MoverList({
+  title,
+  stocks,
+  type,
+}: {
+  title: string
+  stocks: ReturnType<typeof useStockStore.getState>['tickers']
+  type: 'gainer' | 'loser'
+}) {
+  return (
+    <Card title={title}>
+      <ul className="flex flex-col gap-1">
+        {stocks.length === 0 ? (
+          <li className="text-sm text-dt-meta">No data</li>
+        ) : (
+          stocks.map((s) => (
+            <li key={s.ticker}>
+              <Link
+                to={`/stock/${s.ticker}`}
+                className="flex cursor-pointer items-center justify-between border border-transparent px-3 py-2 hover:border-dt-border hover:bg-dt-bg"
+              >
+                <span className="font-mono text-sm font-medium text-dt-text">{s.ticker}</span>
+                <div className="text-right">
+                  <p className="font-mono text-xs text-dt-meta">{formatCurrency(s.latest_close)}</p>
+                  <p
+                    className={`font-mono text-xs font-semibold ${
+                      type === 'gainer' ? 'text-dt-accent-bright' : 'text-dt-negative'
+                    }`}
+                  >
+                    {formatPercent(s.change)}
+                  </p>
+                </div>
+              </Link>
+            </li>
+          ))
+        )}
+      </ul>
+    </Card>
+  )
 }
 
-export function TopMovers({ type }: TopMoversProps) {
-  const [stocks, setStocks] = useState<StockTicker[]>([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+export function TopMovers() {
+  const { tickers } = useStockStore()
 
-  useEffect(() => {
-    getTickers().then((tickers) => {
-      const sorted = [...tickers].sort((a, b) =>
-        type === 'gainers' ? b.change - a.change : a.change - b.change
-      );
-      setStocks(sorted.slice(0, 5));
-      setLoading(false);
-    });
-  }, [type]);
+  const gainers = [...tickers]
+    .filter((t) => t.change > 0)
+    .sort((a, b) => b.change - a.change)
+    .slice(0, 5)
 
-  if (loading) return <Spinner label="Loading movers..." />;
+  const losers = [...tickers]
+    .filter((t) => t.change < 0)
+    .sort((a, b) => a.change - b.change)
+    .slice(0, 5)
 
   return (
-    <div className="bg-bg-card border border-border-color rounded-2xl p-6 shadow-card transition-all duration-200 hover:border-border-glow flex flex-col gap-4">
-      <h3 className="text-xl font-semibold">{type === 'gainers' ? 'Top Gainers' : 'Top Losers'}</h3>
-      <div className="flex flex-col gap-2">
-        {stocks.map((s) => (
-          <StockSummaryCard key={s.ticker} stock={s} onClick={() => navigate(`/stock/${s.ticker}`)} />
-        ))}
-      </div>
+    <div className="grid gap-3 md:grid-cols-2">
+      <MoverList title="Top Gainers" stocks={gainers} type="gainer" />
+      <MoverList title="Top Losers" stocks={losers} type="loser" />
     </div>
-  );
+  )
 }

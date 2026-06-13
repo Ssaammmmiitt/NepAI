@@ -1,15 +1,20 @@
-import { Loader2 } from 'lucide-react';
-
 interface SpinnerProps {
-  size?: number;
-  label?: string;
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
 }
 
-export function Spinner({ size = 24, label }: SpinnerProps) {
+const sizes = {
+  sm: 'h-4 w-4 border-2',
+  md: 'h-6 w-6 border-2',
+  lg: 'h-10 w-10 border-[3px]',
+}
+
+export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
   return (
-    <div className="flex flex-col items-center gap-2" role="status">
-      <Loader2 size={size} className="animate-spin text-accent-primary" />
-      {label && <span className="text-xs text-text-secondary">{label}</span>}
-    </div>
-  );
+    <div
+      className={`animate-spin rounded-full border-dt-border border-t-dt-accent-bright ${sizes[size]} ${className}`}
+      role="status"
+      aria-label="Loading"
+    />
+  )
 }

@@ -1,78 +1,49 @@
-import { useEffect, useRef } from 'react';
-import type { IChartApi, ISeriesApi } from 'lightweight-charts';
-import { LineSeries } from 'lightweight-charts';
-import type { IndicatorData } from '../../types';
-import { CHART_COLORS } from '../../utils/colors';
+import { useEffect } from 'react'
+import { LineSeries, type IChartApi, type ISeriesApi, type LineData, type Time } from 'lightweight-charts'
+import type { Indicators } from '@/types'
+import { chartColors } from '@/utils/colors'
+import { safeRemoveSeries } from '@/utils/chartHelpers'
 
 interface IndicatorOverlayProps {
-  indicators: IndicatorData | null;
-  chart: IChartApi | null;
-  visibleIndicators: string[];
+  chart: IChartApi | null
+  lastDate?: string
+  indicators: Indicators | null
 }
 
-export function IndicatorOverlay({ indicators, chart, visibleIndicators }: IndicatorOverlayProps) {
-  const seriesRef = useRef<Map<string, ISeriesApi<'Line'>>>(new Map());
-
+export function IndicatorOverlay({ chart, lastDate, indicators }: IndicatorOverlayProps) {
   useEffect(() => {
-    if (!chart || !indicators) return;
+    if (!chart || !lastDate || !indicators) return
 
-    seriesRef.current.forEach((s) => {
-      chart.removeSeries(s);
-    });
-    seriesRef.current.clear();
+    const lines: { color: string; value: number; title: string }[] = [
+      { color: chartColors.ema20, value: indicators.ema.ema20, title: 'EMA 20' },
+      { color: chartColors.ema50, value: indicators.ema.ema50, title: 'EMA 50' },
+      { color: chartColors.bullish, value: indicators.bollinger.upper, title: 'BB Upper' },
+      { color: chartColors.bearish, value: indicators.bollinger.lower, title: 'BB Lower' },
+    ]
 
-    if (visibleIndicators.includes('bollinger') && indicators.bollinger) {
-      const upper = chart.addSeries(LineSeries, {
-        color: CHART_COLORS.bollinger,
+    const created: ISeriesApi<'Line'>[] = []
+
+    for (const line of lines) {
+      const series = chart.addSeries(LineSeries, {
+        color: line.color,
         lineWidth: 1,
-        crosshairMarkerRadius: 0,
-        lastValueVisible: false,
+        lineStyle: 0,
+        crosshairMarkerVisible: false,
+        lastValueVisible: true,
         priceLineVisible: false,
-      });
-      const middle = chart.addSeries(LineSeries, {
-        color: CHART_COLORS.bollinger,
-        lineWidth: 1,
-        lineStyle: 2,
-        crosshairMarkerRadius: 0,
-        lastValueVisible: false,
-        priceLineVisible: false,
-      });
-      const lower = chart.addSeries(LineSeries, {
-        color: CHART_COLORS.bollinger,
-        lineWidth: 1,
-        crosshairMarkerRadius: 0,
-        lastValueVisible: false,
-        priceLineVisible: false,
-      });
-      upper.setData(indicators.bollinger.upper.map((d) => ({ time: d.time as unknown as string, value: d.value })));
-      middle.setData(indicators.bollinger.middle.map((d) => ({ time: d.time as unknown as string, value: d.value })));
-      lower.setData(indicators.bollinger.lower.map((d) => ({ time: d.time as unknown as string, value: d.value })));
-      seriesRef.current.set('bb-upper', upper);
-      seriesRef.current.set('bb-middle', middle);
-      seriesRef.current.set('bb-lower', lower);
+        title: line.title,
+      })
+      const point: LineData<Time> = { time: lastDate as Time, value: line.value }
+      series.setData([point])
+      created.push(series)
     }
 
-    if (visibleIndicators.includes('ema') && indicators.ema) {
-      const ema12 = chart.addSeries(LineSeries, {
-        color: CHART_COLORS.ema,
-        lineWidth: 1,
-        crosshairMarkerRadius: 0,
-        lastValueVisible: false,
-        priceLineVisible: false,
-      });
-      const ema26 = chart.addSeries(LineSeries, {
-        color: '#0891b2',
-        lineWidth: 1,
-        crosshairMarkerRadius: 0,
-        lastValueVisible: false,
-        priceLineVisible: false,
-      });
-      ema12.setData(indicators.ema.ema12.map((d) => ({ time: d.time as unknown as string, value: d.value })));
-      ema26.setData(indicators.ema.ema26.map((d) => ({ time: d.time as unknown as string, value: d.value })));
-      seriesRef.current.set('ema-12', ema12);
-      seriesRef.current.set('ema-26', ema26);
+    return () => {
+      for (const series of created) {
+        safeRemoveSeries(chart, series)
+      }
     }
-  }, [chart, indicators, visibleIndicators]);
+  }, [chart, lastDate, indicators])
 
-  return null;
+  return null
 }
