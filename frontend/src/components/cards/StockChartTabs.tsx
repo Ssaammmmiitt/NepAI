@@ -6,6 +6,7 @@ import { PredictionOverlay } from '@/components/charts/PredictionOverlay'
 import { IndicatorOverlay } from '@/components/charts/IndicatorOverlay'
 import { HistoricalPriceChart } from '@/components/charts/HistoricalPriceChart'
 import { HistoricalDataTable } from '@/components/cards/HistoricalDataTable'
+import { DateInput } from '@/components/ui/DateInput'
 import { Spinner } from '@/components/ui/Spinner'
 import { stockAPI } from '@/services/api'
 import type { Indicators, OHLCRow, Prediction } from '@/types'
@@ -247,28 +248,8 @@ export function StockChartTabs({
         <div className="flex flex-col gap-4 p-2 sm:p-4">
           {/* Date filter row */}
           <div className="flex flex-wrap items-end gap-3">
-            <div className="flex flex-col gap-1">
-              <label className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
-                From
-              </label>
-              <input
-                type="date"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                className="cursor-pointer border border-dt-border bg-dt-bg px-3 py-1.5 font-mono text-xs text-dt-text outline-none hover:border-dt-text focus:border-dt-text"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
-                To
-              </label>
-              <input
-                type="date"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-                className="cursor-pointer border border-dt-border bg-dt-bg px-3 py-1.5 font-mono text-xs text-dt-text outline-none hover:border-dt-text focus:border-dt-text"
-              />
-            </div>
+            <DateInput label="From" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+            <DateInput label="To" value={toDate} onChange={(e) => setToDate(e.target.value)} />
             {(fromDate || toDate) && (
               <button
                 type="button"
@@ -288,29 +269,29 @@ export function StockChartTabs({
 
           {/* Mini stats */}
           {historyStats && !historyLoading && (
-            <div className="flex flex-wrap gap-4 border border-dt-border bg-dt-bg px-4 py-3">
-              <div>
+            <div className="grid grid-cols-2 gap-4 border border-dt-border bg-dt-bg px-4 py-3 sm:grid-cols-4 sm:gap-6">
+              <div className="min-w-0 text-center sm:text-left">
                 <p className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
                   Period High
                 </p>
-                <p className="font-mono text-sm font-semibold text-dt-text">
+                <p className="mt-1 truncate font-mono text-sm font-semibold tabular-nums text-dt-text">
                   {formatCurrency(historyStats.high)}
                 </p>
               </div>
-              <div>
+              <div className="min-w-0 text-center sm:text-left">
                 <p className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
                   Period Low
                 </p>
-                <p className="font-mono text-sm font-semibold text-dt-text">
+                <p className="mt-1 truncate font-mono text-sm font-semibold tabular-nums text-dt-text">
                   {formatCurrency(historyStats.low)}
                 </p>
               </div>
-              <div>
+              <div className="min-w-0 text-center sm:text-left">
                 <p className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
                   Net Change
                 </p>
                 <p
-                  className={`font-mono text-sm font-semibold ${
+                  className={`mt-1 truncate font-mono text-sm font-semibold tabular-nums ${
                     historyStats.pct >= 0 ? 'text-dt-accent-bright' : 'text-dt-negative'
                   }`}
                 >
@@ -318,11 +299,11 @@ export function StockChartTabs({
                   {historyStats.pct.toFixed(2)}%
                 </p>
               </div>
-              <div>
+              <div className="min-w-0 text-center sm:text-left">
                 <p className="font-mono text-[10px] uppercase tracking-[0.06em] text-dt-meta">
                   Data Points
                 </p>
-                <p className="font-mono text-sm font-semibold text-dt-text">
+                <p className="mt-1 truncate font-mono text-sm font-semibold tabular-nums text-dt-text">
                   {historyChartData.length.toLocaleString()}
                 </p>
               </div>

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AlertTriangle } from 'lucide-react'
 import { BrandLogo } from '@/components/layout/BrandLogo'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { PublicHeader } from '@/components/layout/PublicHeader'
 import { useAuthStore } from '@/store/authStore'
 import { useFadeIn } from '@/hooks/useAnimations'
+import { getApiErrorMessage } from '@/utils/apiError'
 
 export function Login() {
   const navigate = useNavigate()
@@ -38,7 +40,12 @@ export function Login() {
       }
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setError(
+        getApiErrorMessage(
+          err,
+          mode === 'login' ? 'Invalid email or password' : 'Something went wrong',
+        ),
+      )
     } finally {
       setLoading(false)
     }
@@ -105,7 +112,21 @@ export function Login() {
             />
 
             {error ? (
-              <p className="border border-dt-negative px-3 py-2 text-xs text-dt-negative">{error}</p>
+              <div
+                role="alert"
+                className="flex items-start gap-3 border border-dt-negative bg-dt-negative/5 px-3 py-3"
+              >
+                <AlertTriangle
+                  className="mt-0.5 h-4 w-4 shrink-0 text-dt-negative"
+                  strokeWidth={1.5}
+                />
+                <div className="min-w-0">
+                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-dt-negative">
+                    {mode === 'login' ? 'Sign in failed' : 'Sign up failed'}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-dt-text">{error}</p>
+                </div>
+              </div>
             ) : null}
 
             <Button type="submit" loading={loading} className="mt-2 w-full">

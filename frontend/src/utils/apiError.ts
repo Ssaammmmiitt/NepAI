@@ -6,16 +6,29 @@ import type { AxiosError } from 'axios'
  */
 export function getApiErrorMessage(err: unknown, fallback = 'Something went wrong'): string {
   if (err && typeof err === 'object' && 'response' in err) {
-    const axiosErr = err as AxiosError<{ error?: string; detail?: string | { msg: string }[] }>
+    const axiosErr = err as AxiosError<{
+      error?: string
+      detail?: string | { error?: string; msg?: string }[] | { error?: string }
+    }>
     const data = axiosErr.response?.data
     if (typeof data?.error === 'string' && data.error) return data.error
-    // FastAPI validation errors
-    if (Array.isArray(data?.detail)) {
-      return data.detail.map((d) => (typeof d === 'object' ? d.msg : d)).join(', ')
+
+    const detail = data?.detail
+    if (detail && typeof detail === 'object' && !Array.isArray(detail)) {
+      if (typeof detail.error === 'string' && detail.error) return detail.error
     }
-    if (typeof data?.detail === 'string') return data.detail
+
+    // FastAPI validation errors
+    if (Array.isArray(detail)) {
+      return detail
+        .map((d) => (typeof d === 'object' ? (d.msg ?? d.error ?? String(d)) : d))
+        .join(', ')
+    }
+    if (typeof detail === 'string') return detail
   }
-  if (err instanceof Error) return err.message
+  if (err instanceof Error && err.message && !err.message.startsWith('Request failed with status code')) {
+    return err.message
+  }
   return fallback
 }
 
