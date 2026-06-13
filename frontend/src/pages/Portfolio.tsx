@@ -162,7 +162,10 @@ export function Portfolio() {
           <div className="flex flex-col gap-5">
             <p className="text-sm text-dt-text">
               Remove{' '}
-              <span className="font-mono font-semibold text-dt-text">{holdingToRemove.ticker}</span>{' '}
+              <span className="font-mono font-semibold text-dt-text">{holdingToRemove.ticker}</span>
+              {holdingToRemove.stock_name ? (
+                <span className="text-dt-meta"> ({holdingToRemove.stock_name})</span>
+              ) : null}{' '}
               from your portfolio? This cannot be undone.
             </p>
             <div className="border border-dt-border bg-dt-bg px-4 py-3">

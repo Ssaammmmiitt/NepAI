@@ -17,6 +17,8 @@ export interface RefreshResponse {
 
 export interface StockTicker {
   ticker: string
+  stock_name: string | null
+  stock_sector: string | null
   latest_close: number
   change: number
   volume: number
@@ -35,6 +37,8 @@ export interface OHLCRow {
 
 export interface StockSummary {
   ticker: string
+  stock_name: string | null
+  stock_sector: string | null
   latest_close: number
   change: number
   high_52w: number
@@ -61,6 +65,8 @@ export interface PredictionDay {
 
 export interface Prediction {
   ticker: string
+  stock_name: string | null
+  stock_sector: string | null
   model_available: boolean
   trained_on: string | null
   stale: boolean
@@ -92,6 +98,8 @@ export interface ModelMetadata {
 
 export interface PortfolioHolding {
   ticker: string
+  stock_name: string | null
+  stock_sector: string | null
   quantity: number
   entry_price: number
   current_price: number

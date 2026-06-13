@@ -39,6 +39,18 @@ describe('Input', () => {
     expect(input.id).toBe('full-name')
   })
 
+  it('toggles password visibility', () => {
+    render(<Input label="Password" type="password" />)
+    const input = screen.getByLabelText('Password')
+    expect(input).toHaveAttribute('type', 'password')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Show password' }))
+    expect(input).toHaveAttribute('type', 'text')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Hide password' }))
+    expect(input).toHaveAttribute('type', 'password')
+  })
+
   it('uses provided id over generated', () => {
     render(<Input label="Email" id="custom-id" />)
     expect(screen.getByLabelText('Email').id).toBe('custom-id')

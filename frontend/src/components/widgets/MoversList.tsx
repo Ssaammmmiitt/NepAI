@@ -1,7 +1,12 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
+import {
+  StockTickerTooltip,
+  TruncatedSectorTooltip,
+} from '@/components/widgets/StockTickerTooltip'
 import { useStockStore } from '@/store/stockStore'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { formatCurrency, formatPercent } from '@/utils/formatters'
 
 type MoverType = 'gainer' | 'loser'
@@ -11,8 +16,22 @@ interface MoversListProps {
   type: MoverType
 }
 
+const meta: Record<MoverType, { title: string; description: string; empty: string }> = {
+  gainer: {
+    title: 'All Gainers',
+    description: 'Every stock up today · sorted by performance',
+    empty: 'No gainers today',
+  },
+  loser: {
+    title: 'All Losers',
+    description: 'Every stock down today · sorted by performance',
+    empty: 'No losers today',
+  },
+}
+
 export function MoversList({ type }: MoversListProps) {
   const { tickers } = useStockStore()
+  const isSmUp = useMediaQuery('(min-width: 640px)')
   const [sort, setSort] = useState<SortKey>('change')
 
   const stocks = useMemo(() => {
@@ -29,12 +48,13 @@ export function MoversList({ type }: MoversListProps) {
     })
   }, [tickers, type, sort])
 
-  const title = type === 'gainer' ? `All Gainers (${stocks.length})` : `All Losers (${stocks.length})`
+  const { title, description, empty } = meta[type]
   const changeColor = type === 'gainer' ? 'text-dt-accent-bright' : 'text-dt-negative'
 
   return (
     <Card
       title={title}
+      description={`${stocks.length} stocks · ${description}`}
       action={
         <select
           value={sort}
@@ -48,13 +68,14 @@ export function MoversList({ type }: MoversListProps) {
       }
     >
       {stocks.length === 0 ? (
-        <p className="text-sm text-dt-meta">No {type === 'gainer' ? 'gainers' : 'losers'} today</p>
+        <p className="text-sm text-dt-meta">{empty}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-dt-border text-left">
                 <th className="dt-eyebrow pb-3 pr-4">Ticker</th>
+                <th className="dt-eyebrow hidden pb-3 pr-4 sm:table-cell">Sector</th>
                 <th className="dt-eyebrow pb-3 pr-4 text-right">Price</th>
                 <th className="dt-eyebrow pb-3 pr-4 text-right">Change</th>
                 <th className="dt-eyebrow pb-3 text-right">Volume</th>
@@ -66,13 +87,26 @@ export function MoversList({ type }: MoversListProps) {
                   key={s.ticker}
                   className="border-b border-dt-border last:border-0 hover:bg-dt-bg"
                 >
-                  <td className="py-2.5 pr-4">
-                    <Link
-                      to={`/stock/${s.ticker}`}
-                      className="cursor-pointer font-mono text-sm font-medium text-dt-text hover:text-dt-accent-bright"
+                  <td className="max-w-[8rem] py-2.5 pr-4 sm:max-w-[10rem]">
+                    <StockTickerTooltip
+                      stockName={s.stock_name}
+                      stockSector={s.stock_sector}
+                      showSector={!isSmUp}
                     >
-                      {s.ticker}
-                    </Link>
+                      <Link
+                        to={`/stock/${s.ticker}`}
+                        className="cursor-pointer font-mono text-sm font-medium text-dt-text hover:text-dt-accent-bright"
+                      >
+                        {s.ticker}
+                      </Link>
+                    </StockTickerTooltip>
+                  </td>
+                  <td className="hidden max-w-[9rem] py-2.5 pr-4 sm:table-cell">
+                    {s.stock_sector ? (
+                      <TruncatedSectorTooltip sector={s.stock_sector} />
+                    ) : (
+                      <span className="text-xs text-dt-meta">—</span>
+                    )}
                   </td>
                   <td className="py-2.5 pr-4 text-right font-mono text-xs text-dt-text">
                     {formatCurrency(s.latest_close)}

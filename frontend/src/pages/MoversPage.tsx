@@ -12,12 +12,12 @@ type MoverType = 'gainer' | 'loser'
 
 const pageMeta: Record<MoverType, { title: string; subtitle: string }> = {
   gainer: {
-    title: 'Gainers',
-    subtitle: 'All NEPSE stocks up today',
+    title: 'Market Gainers',
+    subtitle: 'Full list of stocks up today',
   },
   loser: {
-    title: 'Losers',
-    subtitle: 'All NEPSE stocks down today',
+    title: 'Market Losers',
+    subtitle: 'Full list of stocks down today',
   },
 }
 

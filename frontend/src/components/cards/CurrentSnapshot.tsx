@@ -24,6 +24,9 @@ export function CurrentSnapshot({ summary, loading }: CurrentSnapshotProps) {
       <div className="flex items-start justify-between">
         <div>
           <p className="dt-eyebrow">{summary.ticker}</p>
+          {summary.stock_name ? (
+            <p className="mt-0.5 text-xs text-dt-meta">{summary.stock_name}</p>
+          ) : null}
           <p className="mt-1 font-mono text-2xl font-bold text-dt-text sm:text-3xl">
             {formatCurrency(summary.latest_close)}
           </p>
@@ -35,7 +38,14 @@ export function CurrentSnapshot({ summary, loading }: CurrentSnapshotProps) {
             {formatPercent(summary.change)}
           </p>
         </div>
-        <p className="text-xs text-dt-meta">As of {formatDate(summary.latest_date)}</p>
+        <div className="text-right">
+          {summary.stock_sector ? (
+            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.06em] text-dt-accent">
+              {summary.stock_sector}
+            </p>
+          ) : null}
+          <p className="text-xs text-dt-meta">As of {formatDate(summary.latest_date)}</p>
+        </div>
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-3 border-t border-dt-border pt-4">

@@ -24,6 +24,11 @@ export function PortfolioCard({ holding, onRemove, removing }: PortfolioCardProp
           >
             {holding.ticker}
           </Link>
+          {holding.stock_name ? (
+            <p className="mt-0.5 truncate text-[10px] leading-tight text-dt-meta">
+              {holding.stock_name}
+            </p>
+          ) : null}
           <p className="mt-0.5 text-xs text-dt-meta">
             {holding.quantity} shares @ {formatCurrency(holding.entry_price)}
           </p>

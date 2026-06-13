@@ -35,7 +35,11 @@ export function SectorBreakdown() {
   ]
 
   return (
-    <Card title="Market Sentiment" className="h-fit w-full self-start">
+    <Card
+      title="Market Sentiment"
+      description="Gainers vs losers across the market"
+      className="h-fit w-full self-start"
+    >
       <div className="mb-5 flex h-2 overflow-hidden border border-dt-border bg-dt-bg">
         {segments.map(
           (s) =>

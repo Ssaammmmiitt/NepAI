@@ -71,6 +71,8 @@ export function Login() {
             {mode === 'signup' ? (
               <Input
                 label="Full Name"
+                name="name"
+                autoComplete="name"
                 placeholder="Hari Bahadur"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -80,7 +82,9 @@ export function Login() {
 
             <Input
               label="Email"
+              name="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -88,8 +92,11 @@ export function Login() {
             />
 
             <Input
+              key={`password-${mode}`}
               label="Password"
+              name="password"
               type="password"
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               placeholder="Min 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

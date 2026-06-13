@@ -12,7 +12,10 @@ export function StockSearch() {
   const results = useMemo(() => {
     if (!query.trim()) return []
     const q = query.toUpperCase()
-    return tickers.filter((t) => t.ticker.includes(q)).slice(0, 8)
+    const ql = query.toLowerCase()
+    return tickers
+      .filter((t) => t.ticker.includes(q) || (t.stock_name?.toLowerCase().includes(ql) ?? false))
+      .slice(0, 8)
   }, [tickers, query])
 
   const select = (ticker: string) => {
@@ -34,7 +37,7 @@ export function StockSearch() {
           }}
           onFocus={() => setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
-          placeholder="Search ticker..."
+          placeholder="Search ticker or name..."
           className="w-full border border-dt-border bg-dt-bg py-2 pl-9 pr-4 font-mono text-xs text-dt-text outline-none placeholder:text-dt-meta hover:border-dt-text focus:border-dt-text focus:shadow-[4px_4px_0_0_var(--dt-shadow)]"
         />
       </div>
@@ -47,9 +50,16 @@ export function StockSearch() {
                 className="flex w-full cursor-pointer items-center justify-between gap-6 px-4 py-2.5 text-left hover:bg-dt-bg"
                 onMouseDown={() => select(t.ticker)}
               >
-                <span className="shrink-0 font-mono text-sm font-medium text-dt-text">
-                  {t.ticker}
-                </span>
+                <div className="min-w-0">
+                  <span className="font-mono text-sm font-medium text-dt-text">
+                    {t.ticker}
+                  </span>
+                  {t.stock_name ? (
+                    <p className="truncate text-[10px] leading-tight text-dt-meta">
+                      {t.stock_name}
+                    </p>
+                  ) : null}
+                </div>
                 <span className="ml-auto shrink-0 font-mono text-xs tabular-nums text-dt-meta">
                   Rs {t.latest_close.toFixed(2)}
                 </span>

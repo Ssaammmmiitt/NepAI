@@ -2,15 +2,21 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
+import {
+  StockTickerTooltip,
+  TruncatedSectorTooltip,
+} from '@/components/widgets/StockTickerTooltip'
 import { useStockStore } from '@/store/stockStore'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { formatCurrency, formatPercent } from '@/utils/formatters'
 
 const PAGE_SIZE = 15
 
 export function TickerList() {
   const { tickers } = useStockStore()
+  const isSmUp = useMediaQuery('(min-width: 640px)')
   const [page, setPage] = useState(0)
-  const [sort, setSort] = useState<'ticker' | 'change' | 'volume' | 'price_high' | 'price_low'>('ticker')
+  const [sort, setSort] = useState<'ticker' | 'change' | 'volume' | 'price_high' | 'price_low' | 'sector'>('ticker')
 
   const sorted = useMemo(() => {
     const copy = [...tickers]
@@ -23,6 +29,8 @@ export function TickerList() {
         return copy.sort((a, b) => b.latest_close - a.latest_close)
       case 'price_low':
         return copy.sort((a, b) => a.latest_close - b.latest_close)
+      case 'sector':
+        return copy.sort((a, b) => (a.stock_sector ?? '').localeCompare(b.stock_sector ?? ''))
       default:
         return copy.sort((a, b) => a.ticker.localeCompare(b.ticker))
     }
@@ -33,7 +41,8 @@ export function TickerList() {
 
   return (
     <Card
-      title="All Stocks"
+      title="All Tickers"
+      description={`${tickers.length} NEPSE-listed stocks · hover a ticker for company details`}
       action={
         <select
           value={sort}
@@ -48,6 +57,7 @@ export function TickerList() {
           <option value="price_high">Price (High)</option>
           <option value="price_low">Price (Low)</option>
           <option value="volume">Volume</option>
+          <option value="sector">Sector</option>
         </select>
       }
     >
@@ -56,6 +66,7 @@ export function TickerList() {
           <thead>
             <tr className="border-b border-dt-border text-left">
               <th className="dt-eyebrow pb-3 pr-4">Ticker</th>
+              <th className="dt-eyebrow hidden pb-3 pr-4 sm:table-cell">Sector</th>
               <th className="dt-eyebrow pb-3 pr-4 text-right">Price</th>
               <th className="dt-eyebrow pb-3 pr-4 text-right">Change</th>
               <th className="dt-eyebrow pb-3 text-right">Volume</th>
@@ -67,13 +78,26 @@ export function TickerList() {
                 key={s.ticker}
                 className="border-b border-dt-border last:border-0 hover:bg-dt-bg"
               >
-                <td className="py-2.5 pr-4">
-                  <Link
-                    to={`/stock/${s.ticker}`}
-                    className="cursor-pointer font-mono text-sm font-medium text-dt-text hover:text-dt-accent-bright"
+                <td className="max-w-[8rem] py-2.5 pr-4 sm:max-w-[10rem]">
+                  <StockTickerTooltip
+                    stockName={s.stock_name}
+                    stockSector={s.stock_sector}
+                    showSector={!isSmUp}
                   >
-                    {s.ticker}
-                  </Link>
+                    <Link
+                      to={`/stock/${s.ticker}`}
+                      className="cursor-pointer font-mono text-sm font-medium text-dt-text hover:text-dt-accent-bright"
+                    >
+                      {s.ticker}
+                    </Link>
+                  </StockTickerTooltip>
+                </td>
+                <td className="hidden max-w-[9rem] py-2.5 pr-4 sm:table-cell">
+                  {s.stock_sector ? (
+                    <TruncatedSectorTooltip sector={s.stock_sector} />
+                  ) : (
+                    <span className="text-xs text-dt-meta">—</span>
+                  )}
                 </td>
                 <td className="py-2.5 pr-4 text-right font-mono text-xs">{formatCurrency(s.latest_close)}</td>
                 <td

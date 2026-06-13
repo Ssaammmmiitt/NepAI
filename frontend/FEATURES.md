@@ -38,6 +38,8 @@ NepAI is a React + TypeScript frontend for NEPSE (Nepal Stock Exchange) stock an
 |-------|------|--------|
 | `/login` | Login / Sign up | Public |
 | `/` | Dashboard | Authenticated |
+| `/gainers` | Market gainers (full list + top 5) | Authenticated |
+| `/losers` | Market losers (full list + top 5) | Authenticated |
 | `/stock/:ticker` | Stock detail | Authenticated |
 | `/portfolio` | Portfolio | Authenticated |
 
@@ -50,10 +52,10 @@ Unknown routes redirect to the dashboard.
 Market overview for all listed NEPSE tickers.
 
 - **Market overview** — listed count, gainers, losers, total volume, average change (stat cards with staggered GSAP entrance)
-- **Top movers** — top 5 gainers and top 5 losers with price and change %
-- **Sector breakdown** — market sentiment bar (gainers / losers / unchanged) with counts and percentages
-- **Ticker list** — paginated table (15 per page) with sort by ticker, change %, or volume
-- **Stock search** — typeahead search; navigates to stock detail
+- **Top gainers / top losers** — 5 biggest movers each side with price and change %; hover ticker for company name and sector
+- **Market sentiment** — gainers vs losers vs unchanged bar with counts and percentages (links to `/gainers` and `/losers`)
+- **All tickers** — paginated table (15 per page) with sort by ticker, change %, price, volume, or sector; hover ticker for company name (and sector on mobile)
+- **Stock search** — typeahead by ticker or company name; navigates to stock detail
 - **Live clock** — Nepal Time (NPT) in the header
 
 Data is loaded from `/api/stocks` with a 5-minute client-side cache.
@@ -105,6 +107,16 @@ Deep dive for a single ticker.
 
 ---
 
+## Market Gainers / Losers (`/gainers`, `/losers`)
+
+Dedicated pages for all stocks up or down today.
+
+- **Market overview** — same stat cards as dashboard (gainers/losers link between pages)
+- **All gainers / all losers** — full sortable table with sector column (desktop); hover ticker for company name and sector
+- **Top gainers / top losers sidebar** — compact top-5 panel with metadata tooltips
+
+---
+
 ## Portfolio (`/portfolio`)
 
 User holdings backed by `/api/portfolio`.
@@ -147,7 +159,9 @@ User holdings backed by `/api/portfolio`.
 Reusable primitives under `src/components/ui/`:
 
 - **Button** — primary, secondary, outline, ghost, danger (Dark Terminal: sharp corners, uppercase mono, hard-offset hover)
-- **Card** — bordered surface with optional title and hover shadow
+- **Card** — bordered surface with optional title, description, and hover shadow
+- **Tooltip** — fixed-position hover/focus tooltip (portal, theme-matched); used for stock metadata
+- **StockTickerTooltip** — shows company name and/or sector only when not already visible in the row
 - **Badge** — positive, negative, warning, neutral, info
 - **Input** — labeled fields with focus shadow
 - **Modal** — backdrop + panel, Escape to close

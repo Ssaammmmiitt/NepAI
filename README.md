@@ -111,7 +111,7 @@ npm run test:run    # single run (CI)
 npm test            # watch mode
 ```
 
-See `frontend/FEATURES.md` for a full list of implemented UI features.
+See `frontend/FEATURES.md` for a full list of implemented UI features (including stock metadata tooltips on ticker tables).
 
 ### CLI Commands
 

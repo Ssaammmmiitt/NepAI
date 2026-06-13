@@ -122,7 +122,7 @@ The React dashboard is fully wired to the FastAPI backend. All data flows throug
 | Layout | `Sidebar`, `Header`, `PageWrapper`, `ProtectedRoute`, `PublicHeader`, `BrandMark`, `BrandLogo` |
 | Charts | `CandlestickChart`, `VolumeChart`, `PredictionOverlay`, `IndicatorOverlay` |
 | Cards | `AIPrediction`, `CurrentSnapshot`, `TechnicalIndicators`, `ModelHealthCard`, `PortfolioCard`, `StockSummaryCard` |
-| Widgets | `MarketOverview`, `TopMovers`, `TickerList`, `SectorBreakdown`, `StockSearch`, `PortfolioSummary`, `LiveClock` |
+| Widgets | `MarketOverview`, `TopMovers`, `MoversList`, `TickerList`, `SectorBreakdown`, `StockSearch`, `StockTickerTooltip`, `PortfolioSummary`, `LiveClock` |
 | UI | `Button`, `Badge`, `Spinner`, `Input`, `Card`, `Modal`, `ThemeToggle`, `Toast` |
 
 ### Data flow (current)

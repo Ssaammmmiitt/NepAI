@@ -84,7 +84,11 @@ export function StockDetail() {
     <>
       <Header
         title={upperTicker}
-        subtitle="Stock detail & AI forecast"
+        subtitle={
+          summary?.stock_name
+            ? `${summary.stock_name}${summary.stock_sector ? ` · ${summary.stock_sector}` : ''}`
+            : 'Stock detail & AI forecast'
+        }
         action={
           <Button onClick={() => setShowAddModal(true)}>Add to Portfolio</Button>
         }
