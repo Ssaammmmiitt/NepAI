@@ -39,3 +39,31 @@ export function getApiErrorStatus(err: unknown): number | null {
   }
   return null
 }
+
+/** Short, user-friendly copy for training error banners. */
+export function formatTrainErrorDisplay(
+  message: string,
+  ticker: string,
+  isInsufficientData: boolean,
+): { title: string; detail: string; hint?: string } {
+  if (isInsufficientData) {
+    const rowsMatch = message.match(/(\d+)\s+usable rows/i)
+    const minMatch = message.match(/minimum\s+(\d+)/i)
+    const rows = rowsMatch?.[1]
+    const min = minMatch?.[1] ?? '500'
+    return {
+      title: 'Not Enough Data',
+      detail: rows ? `${rows} rows found · ${min} needed` : 'Insufficient trading history',
+      hint: `${ticker} needs more price data to train`,
+    }
+  }
+
+  const short =
+    message.length > 72 ? `${message.slice(0, 69).trim()}…` : message
+
+  return {
+    title: 'Training Failed',
+    detail: short,
+    hint: 'Try again later or pick another stock',
+  }
+}

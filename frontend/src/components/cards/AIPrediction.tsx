@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
 import { trainAPI } from '@/services/api'
-import { getApiErrorMessage, getApiErrorStatus } from '@/utils/apiError'
+import { getApiErrorMessage, getApiErrorStatus, formatTrainErrorDisplay } from '@/utils/apiError'
 import type { Prediction, PredictionDay } from '@/types'
 import {
   daysSince,
@@ -82,26 +82,24 @@ interface TrainErrorBannerProps {
 }
 
 function TrainErrorBanner({ message, isInsufficientData, ticker }: TrainErrorBannerProps) {
+  const { title, detail, hint } = formatTrainErrorDisplay(message, ticker, isInsufficientData)
+
   return (
-    <div className="flex flex-col gap-3 border border-dt-negative bg-dt-negative/5 p-4">
-      <div className="flex items-start gap-3">
-        <AlertTriangle
-          className="mt-0.5 h-4 w-4 shrink-0 text-dt-negative"
-          strokeWidth={1.5}
-        />
-        <div className="min-w-0">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.06em] text-dt-negative">
-            {isInsufficientData ? 'Insufficient Training Data' : 'Training Failed'}
-          </p>
-          <p className="mt-1 text-xs leading-relaxed text-dt-text">{message}</p>
-          {isInsufficientData ? (
-            <p className="mt-2 text-[10px] leading-relaxed text-dt-meta">
-              At least 500 rows of historical data are required to train a model for{' '}
-              <span className="font-mono font-medium">{ticker}</span>. This stock does not have
-              enough trading history yet.
-            </p>
-          ) : null}
+    <div
+      role="alert"
+      className="mx-auto w-fit max-w-[14rem] sm:max-w-[16rem]"
+    >
+      <div className="flex flex-col items-center gap-2 border border-dt-negative/50 bg-dt-negative/5 px-4 py-3 text-center shadow-[3px_3px_0_0_var(--dt-negative)]">
+        <div className="flex h-8 w-8 items-center justify-center border border-dt-negative/30 bg-dt-surface">
+          <AlertTriangle className="h-4 w-4 text-dt-negative" strokeWidth={1.5} />
         </div>
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-dt-negative">
+          {title}
+        </p>
+        <p className="text-xs font-medium leading-snug text-dt-text">{detail}</p>
+        {hint ? (
+          <p className="text-[10px] leading-snug text-dt-meta">{hint}</p>
+        ) : null}
       </div>
     </div>
   )
@@ -154,13 +152,11 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
             Train Model
           </Button>
           {trainError ? (
-            <div className="w-full">
-              <TrainErrorBanner
-                message={trainError}
-                isInsufficientData={trainErrorStatus === 400}
-                ticker={ticker}
-              />
-            </div>
+            <TrainErrorBanner
+              message={trainError}
+              isInsufficientData={trainErrorStatus === 400}
+              ticker={ticker}
+            />
           ) : null}
         </div>
       </Card>
@@ -195,7 +191,7 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
       ) : null}
 
       {trainError ? (
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center">
           <TrainErrorBanner
             message={trainError}
             isInsufficientData={trainErrorStatus === 400}
