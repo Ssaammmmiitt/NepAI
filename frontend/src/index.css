@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Dark Terminal tokens — light mode defaults */
+:root {
+  --dt-text: #0a0a0a;
+  --dt-meta: #7a7a7a;
+  --dt-accent: #10b981;
+  --dt-accent-bright: #00ff88;
+  --dt-bg: #fafafa;
+  --dt-surface: #ffffff;
+  --dt-border: #e0e0e0;
+  --dt-border-strong: #2a2a2a;
+  --dt-negative: #b91c1c;
+  --dt-btn-primary-bg: #00ff88;
+  --dt-btn-primary-fg: #000000;
+  --dt-btn-secondary-bg: #ffffff;
+  --dt-shadow: #0a0a0a;
+}
+
+html.dark {
+  --dt-text: #e8e8e8;
+  --dt-meta: #7a7a7a;
+  --dt-accent: #10b981;
+  --dt-accent-bright: #00ff88;
+  --dt-bg: #0a0a0a;
+  --dt-surface: #141414;
+  --dt-border: #262626;
+  --dt-border-strong: #2a2a2a;
+  --dt-negative: #b91c1c;
+  --dt-btn-primary-bg: #00ff88;
+  --dt-btn-primary-fg: #000000;
+  --dt-btn-secondary-bg: #0a0a0a;
+  --dt-shadow: #e8e8e8;
+}
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-dt-text: var(--dt-text);
+  --color-dt-meta: var(--dt-meta);
+  --color-dt-accent: var(--dt-accent);
+  --color-dt-accent-bright: var(--dt-accent-bright);
+  --color-dt-bg: var(--dt-bg);
+  --color-dt-surface: var(--dt-surface);
+  --color-dt-border: var(--dt-border);
+  --color-dt-border-strong: var(--dt-border-strong);
+  --color-dt-negative: var(--dt-negative);
+  --color-dt-btn-primary-bg: var(--dt-btn-primary-bg);
+  --color-dt-btn-primary-fg: var(--dt-btn-primary-fg);
+  --color-dt-btn-secondary-bg: var(--dt-btn-secondary-bg);
+  --color-dt-shadow: var(--dt-shadow);
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+
+  --color-chart-bull: #26a69a;
+  --color-chart-bear: #ef5350;
+  --color-chart-prediction: #10b981;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-dt-bg font-sans text-dt-text;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .dt-card {
+    @apply rounded-sm border border-dt-border bg-dt-surface p-5;
+  }
+
+  .dt-card-hover:hover {
+    box-shadow: 4px 4px 0 0 var(--dt-shadow);
+    transform: translate(-2px, -2px);
+  }
+
+  .dt-eyebrow {
+    @apply font-mono text-xs font-medium uppercase tracking-[0.06em] text-dt-meta;
+  }
+}

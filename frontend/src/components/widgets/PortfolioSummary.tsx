@@ -1,0 +1,48 @@
+import { Card } from '@/components/ui/Card'
+import { formatCurrency, formatPercent } from '@/utils/formatters'
+
+interface PortfolioSummaryProps {
+  totalValue: number
+  totalPnl: number
+  totalPnlPercent: number
+  holdingsCount: number
+}
+
+export function PortfolioSummary({
+  totalValue,
+  totalPnl,
+  totalPnlPercent,
+  holdingsCount,
+}: PortfolioSummaryProps) {
+  const isPositive = totalPnl >= 0
+
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <Card className="!p-4">
+        <p className="dt-eyebrow">Portfolio Value</p>
+        <p className="mt-1 font-mono text-xl font-bold text-dt-text">{formatCurrency(totalValue)}</p>
+      </Card>
+      <Card className="!p-4">
+        <p className="dt-eyebrow">Total P&L</p>
+        <p
+          className={`mt-1 font-mono text-xl font-bold ${
+            isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
+          }`}
+        >
+          {formatCurrency(totalPnl)}
+        </p>
+        <p
+          className={`font-mono text-xs font-medium ${
+            isPositive ? 'text-dt-accent-bright' : 'text-dt-negative'
+          }`}
+        >
+          {formatPercent(totalPnlPercent)}
+        </p>
+      </Card>
+      <Card className="!p-4">
+        <p className="dt-eyebrow">Holdings</p>
+        <p className="mt-1 font-mono text-xl font-bold text-dt-text">{holdingsCount}</p>
+      </Card>
+    </div>
+  )
+}
