@@ -7,15 +7,14 @@ from fastapi.responses import JSONResponse
 class StockNotFoundError(Exception):
     def __init__(self, ticker: str):
         self.ticker = ticker
-        self.message = f"Stock '{ticker}' not found in data"
+        self.message = f"Stock '{ticker}' is not found in the database."
 
 
 class InsufficientDataError(Exception):
     def __init__(self, ticker: str, rows: int, min_required: int):
         self.ticker = ticker
         self.message = (
-            f"Stock '{ticker}' has {rows} usable rows after preprocessing "
-            f"(minimum {min_required} required)"
+            f"Unable to train. Stock '{ticker}' doesnot have enough data."
         )
 
 
