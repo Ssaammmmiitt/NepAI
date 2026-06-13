@@ -5,6 +5,19 @@ LSTM-based stock price prediction dashboard for NEPSE (Nepal Stock Exchange).
 Reads daily OHLC data from CSV files, trains per-stock LSTM models with attention,
 and serves recursive multi-day forecasts through a FastAPI backend + React frontend.
 
+> **Full project report:** [report.md](report.md) — architecture, backend, frontend, ML pipeline, model metrics, and screenshots.
+
+## Features
+
+- **585 NEPSE stocks** with daily OHLC data, company names, and sector metadata
+- **9 pre-trained LSTM models** with on-demand training for any stock with sufficient history
+- **Recursive multi-day forecasts** (1–14 days) with NEPSE circuit-breaker constraints
+- **Interactive dashboard** — market overview, gainers/losers pages, sortable ticker table, stock search
+- **Stock detail page** — candlestick + volume charts, prediction/indicator overlays, AI forecast, technical indicators, tabbed history view with line chart and data table
+- **Portfolio tracking** — add/remove holdings, live P&L, weighted-average entry price merge
+- **User authentication** — email/password signup and login via Supabase (proxied through backend)
+- **Automated data pipeline** — GitHub Actions scrapes NEPSE prices Mon–Fri at 18:00 NPT
+
 ## Project Structure
 
 ```
@@ -20,8 +33,8 @@ NepAI/
     scrape_nepse.py    Scrapes ShareSansar daily prices, appends to data/companies/
     scrape_details.py  Fetches company name + sector for new tickers
     requirements.txt   pandas, beautifulsoup4, selenium, lxml
-  models/              Trained model artifacts (6 models; one directory per stock)
-    {TICKER}/
+  models/              Trained model artifacts (9 models; one directory per stock)
+    {TICKER}/          ACLBSL, AKPL, ALICL, HDHPC, NABIL, SBI, SCB, SLICL, UNL
       model.pt           PyTorch state dict
       scaler_feature.pkl RobustScaler for 11 input features
       scaler_target.pkl  RobustScaler for close target
@@ -36,6 +49,7 @@ NepAI/
     api/               FastAPI server (routers, state, error handling)
       metadata.py      Stock metadata lookup (names + sectors from JSONs)
   frontend/            React + Vite dashboard (see frontend/FEATURES.md)
+  report.md            Full project report (architecture, ML, screenshots)
 ```
 
 ## Getting Started
@@ -114,7 +128,7 @@ npm run test:run    # single run (CI)
 npm test            # watch mode
 ```
 
-See `frontend/FEATURES.md` for a full list of implemented UI features (gainers/losers pages, stock metadata tooltips, portfolio toasts, and more).
+See `frontend/FEATURES.md` for a full list of implemented UI features (gainers/losers pages, stock metadata tooltips, chart/history tabs, portfolio management, and more).
 
 ### CLI Commands
 
@@ -143,7 +157,7 @@ GET /api/health
 ```
 
 ```json
-{"status": "ok", "tickers": 585, "models": 6}
+{"status": "ok", "tickers": 585, "models": 9}
 ```
 
 ### GET /stocks
@@ -640,6 +654,24 @@ Example:
 
 ## Model Architecture
 
+### Trained models (9 tickers)
+
+| Ticker | MAE | MAPE (%) | R² |
+|--------|-----|----------|-----|
+| ACLBSL | 16.99 | 1.75 | 0.454 |
+| AKPL | 9.46 | 3.61 | 0.588 |
+| ALICL | 12.55 | 2.70 | -0.385 |
+| HDHPC | 7.15 | 3.25 | 0.840 |
+| NABIL | 12.22 | 2.36 | -0.068 |
+| SBI | 5.08 | 1.26 | 0.539 |
+| SCB | 5.38 | 0.83 | 0.767 |
+| SLICL | 53.51 | 13.27 | -2.860 |
+| UNL | 433.21 | 0.93 | -0.609 |
+
+See [report.md](report.md) for full model metrics, evaluation plots, and architecture details.
+
+### Architecture specification
+
 | Parameter | Value |
 |-----------|-------|
 | Architecture | StackedLSTM + Multi-Head Attention |
@@ -665,4 +697,12 @@ Example:
 | Database | Supabase PostgreSQL (profiles + portfolio tables, RLS) |
 | Storage | Filesystem (CSVs for data, directories for models) |
 | Data Pipeline | GitHub Actions cron (Mon-Fri, 18:00 NPT) + `data_scraper/scrape_nepse.py` |
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [report.md](report.md) | Full project report — architecture, backend, frontend, ML, screenshots |
+| [frontend/FEATURES.md](frontend/FEATURES.md) | Detailed frontend feature inventory |
+| [implementation_plan.md](implementation_plan.md) | Implementation plan with Supabase schema and task tracker |
 
