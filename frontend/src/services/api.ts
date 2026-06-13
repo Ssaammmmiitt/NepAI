@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import { env } from '@/config/env'
 import type {
   AuthResponse,
   Indicators,
@@ -15,7 +16,7 @@ import type {
   User,
 } from '@/types'
 
-const baseURL = import.meta.env.VITE_API_URL || '/api'
+const baseURL = env.apiUrl
 
 export const api = axios.create({
   baseURL,

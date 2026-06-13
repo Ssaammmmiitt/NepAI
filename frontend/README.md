@@ -6,10 +6,32 @@ React + TypeScript dashboard for NEPSE stock data, LSTM predictions, and portfol
 
 ```bash
 npm install
+cp .env.example .env
 npm run dev       # http://localhost:5173
 ```
 
 Requires the backend API at `http://localhost:8000` (Vite proxies `/api` in development).
+
+## Environment variables
+
+Uses [Vite env files](https://vite.dev/guide/env-and-mode.html). Copy the template:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Browser | Default | Purpose |
+|----------|---------|---------|---------|
+| `VITE_API_URL` | Yes | `/api` | Axios API base URL (`src/config/env.ts` → `src/services/api.ts`) |
+| `DEV_API_PROXY` | No | `http://localhost:8000` | Vite dev-server proxy target for `/api` |
+
+**Hosting:** set `VITE_API_URL` to your production API URL before `npm run build`:
+
+```bash
+VITE_API_URL=https://api.yourdomain.com/api npm run build
+```
+
+Serve `dist/` with any static host. Variables prefixed with `VITE_` are baked into the bundle at build time — do not put secrets in them.
 
 ## Scripts
 
@@ -24,9 +46,8 @@ Requires the backend API at `http://localhost:8000` (Vite proxies `/api` in deve
 
 ## Documentation
 
-- **`FEATURES.md`** — implemented pages, components, design system, and API integration
-- **`ui-registry.md`** — Dark Terminal design tokens and component patterns
-- **Root `README.md`** — backend API reference and project setup
+- **`FEATURES.md`** — implemented pages, components, and API integration
+- **Root `README.md`** — backend API reference, env setup, and deployment notes
 
 ## Stack
 
