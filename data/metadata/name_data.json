@@ -319,7 +319,7 @@
     "name": "Everest Insurance Company Limited Promoter Share",
     "sector": 1
   },
-  "GBD80/81": {
+  "GBD80_81": {
     "name": "10.25% Global IME Bank Limited Debenture 2080/81",
     "sector": 6
   },
@@ -347,7 +347,7 @@
     "name": "7.50% Everest Bank Limited Debenture 2091",
     "sector": 6
   },
-  "GBILD86/87": {
+  "GBILD86_87": {
     "name": "8.5% Global IME Bank Ltd. Debenture 2086/87",
     "sector": 6
   },
@@ -527,7 +527,7 @@
     "name": "Himalaya Urja Bikas Company Limited",
     "sector": 2
   },
-  "GBILD84/85": {
+  "GBILD84_85": {
     "name": "11.25% Global IME Bank Debenture 2084/85",
     "sector": 6
   },
@@ -1139,7 +1139,7 @@
     "name": "Multipurpose Finance Company Limited Promoter Share",
     "sector": 1
   },
-  "MND84/85": {
+  "MND84_85": {
     "name": "8.75% Muktinath Debenture/Rinpatra 2084/85",
     "sector": 6
   },
@@ -1159,7 +1159,7 @@
     "name": "NIBL Pragati Fund",
     "sector": 12
   },
-  "NICD83/84": {
+  "NICD83_84": {
     "name": "10.25% NIC ASIA Debenture 2083/84",
     "sector": 6
   },
@@ -1167,7 +1167,7 @@
     "name": "NIC Asia Laghubitta Bittiya Sanstha Limited",
     "sector": 5
   },
-  "NICAD85/86": {
+  "NICAD85_86": {
     "name": "10% NIC Asia Debenture 2085/86",
     "sector": 6
   },
@@ -1223,7 +1223,7 @@
     "name": "National Laghubitta Bittiya Sanstha Limited",
     "sector": 5
   },
-  "NIFRAUR85/86": {
+  "NIFRAUR85_86": {
     "name": "7% NIFRA Urja Rinpatra 2085/86",
     "sector": 6
   },
@@ -1311,7 +1311,7 @@
     "name": "Neco Insurance Limited",
     "sector": 16
   },
-  "NMBD89/90": {
+  "NMBD89_90": {
     "name": "10.75% NMB Debenture 2089/2090",
     "sector": 6
   },
@@ -1579,7 +1579,7 @@
     "name": "River Falls Power Limited",
     "sector": 2
   },
-  "NMBD87/88": {
+  "NMBD87_88": {
     "name": "8.5% NMB Rinpatra 2087/88",
     "sector": 6
   },
