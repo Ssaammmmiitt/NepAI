@@ -4,6 +4,7 @@ import logging
 
 from fastapi import APIRouter
 
+from ..metadata import enrich
 from ..state import app_state
 
 logger = logging.getLogger(__name__)
@@ -39,4 +40,5 @@ async def list_models():
           ...
         ]
     """
-    return app_state.get_all_models()
+    models = app_state.get_all_models()
+    return [enrich(m.get("ticker", ""), m) for m in models]

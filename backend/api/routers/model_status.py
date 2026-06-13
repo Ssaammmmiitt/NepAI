@@ -5,6 +5,7 @@ import logging
 from fastapi import APIRouter
 
 from ..errors import StockNotFoundError
+from ..metadata import enrich
 from ..state import app_state, is_stale
 from ...ml.storage import model_exists, load_metadata
 
@@ -30,6 +31,8 @@ async def get_model_status(ticker: str):
     Response example (trained model):
         {
           "ticker": "NABIL",
+          "stock_name": "Nabil Bank Limited",
+          "stock_sector": "Commercial Bank",
           "model_status": "trained",
           "date_created": "2026-06-11T22:05:40+05:45",
           "stale": false
@@ -38,6 +41,8 @@ async def get_model_status(ticker: str):
     Response example (no model):
         {
           "ticker": "ADBL",
+          "stock_name": "Agricultural Development Bank Limited",
+          "stock_sector": "Commercial Bank",
           "model_status": "not_available",
           "date_created": null,
           "stale": null
@@ -76,4 +81,4 @@ async def get_model_status(ticker: str):
             result["date_created"] = date_created or None
             result["stale"] = is_stale(date_created)
 
-    return result
+    return enrich(ticker, result)

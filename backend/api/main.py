@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .errors import register_error_handlers
+from .metadata import load_metadata_files
 from .state import app_state
 from .routers.stocks import router as stocks_router
 from .routers.predictions import router as predictions_router
@@ -44,6 +45,7 @@ app.include_router(portfolio_router, prefix="/api")
 
 @app.on_event("startup")
 async def startup():
+    load_metadata_files()
     app_state.scan_tickers()
     models = app_state.get_all_models()
     logger.info(f"Available models: {len(models)}")

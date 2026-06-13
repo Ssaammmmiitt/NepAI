@@ -7,6 +7,7 @@ import pandas as pd
 from fastapi import APIRouter, Query
 
 from ..errors import StockNotFoundError
+from ..metadata import enrich
 from ..state import app_state
 
 logger = logging.getLogger(__name__)
@@ -47,6 +48,8 @@ async def list_tickers():
         [
           {
             "ticker": "NABIL",
+            "stock_name": "Nabil Bank Limited",
+            "stock_sector": "Commercial Bank",
             "latest_close": 527.0,
             "change": 1.5,
             "volume": 50000,
@@ -63,21 +66,21 @@ async def list_tickers():
             if df.empty:
                 continue
             latest = df.iloc[-1]
-            result.append({
+            result.append(enrich(ticker, {
                 "ticker": ticker,
                 "latest_close": _safe(float(latest["close"])),
                 "change": _safe(float(latest.get("per_change", 0) or 0)),
                 "volume": int(latest.get("traded_quantity", 0) or 0),
                 "latest_date": str(latest["published_date"].date()),
-            })
+            }))
         except Exception:
-            result.append({
+            result.append(enrich(ticker, {
                 "ticker": ticker,
                 "latest_close": None,
                 "change": None,
                 "volume": None,
                 "latest_date": None,
-            })
+            }))
     return result
 
 
@@ -91,6 +94,8 @@ async def get_stock(ticker: str):
     Response example:
         {
           "ticker": "NABIL",
+          "stock_name": "Nabil Bank Limited",
+          "stock_sector": "Commercial Bank",
           "total_rows": 3427,
           "data": [
             {"date": "2020-01-01", "open": 900.0, "high": 910.0, "low": 895.0,
@@ -104,11 +109,11 @@ async def get_stock(ticker: str):
     """
     ticker = _ensure_stock(ticker)
     df = app_state.get_stock_data(ticker)
-    return {
+    return enrich(ticker, {
         "ticker": ticker,
         "total_rows": len(df),
         "data": _ohlc_records(df),
-    }
+    })
 
 
 @router.get("/{ticker}/ohlc", summary="OHLC data with optional date range")
@@ -159,6 +164,8 @@ async def get_summary(ticker: str):
     Response example:
         {
           "ticker": "NABIL",
+          "stock_name": "Nabil Bank Limited",
+          "stock_sector": "Commercial Bank",
           "latest_close": 527.0,
           "change": 0.0,
           "high_52w": 562.0,
@@ -176,7 +183,7 @@ async def get_summary(ticker: str):
     latest = df.iloc[-1]
     year_data = df.tail(252)
 
-    return {
+    return enrich(ticker, {
         "ticker": ticker,
         "latest_close": _safe(float(latest["close"])),
         "change": _safe(float(latest.get("per_change", 0) or 0)),
@@ -185,7 +192,7 @@ async def get_summary(ticker: str):
         "avg_volume": int(year_data["traded_quantity"].fillna(0).mean()),
         "latest_date": str(latest["published_date"].date()),
         "total_rows": len(df),
-    }
+    })
 
 
 @router.get("/{ticker}/indicators", summary="Technical indicators (latest values)")
@@ -198,6 +205,8 @@ async def get_indicators(ticker: str):
     Response example:
         {
           "ticker": "NABIL",
+          "stock_name": "Nabil Bank Limited",
+          "stock_sector": "Commercial Bank",
           "rsi": 69.4,
           "macd": {"macd": 0.7, "signal": 0.41, "histogram": 0.29},
           "bollinger": {"upper": 531.27, "middle": 524.58, "lower": 517.88},
@@ -231,7 +240,7 @@ async def get_indicators(ticker: str):
     ema20 = close.ewm(span=20).mean()
     ema50 = close.ewm(span=50).mean()
 
-    return {
+    return enrich(ticker, {
         "ticker": ticker,
         "rsi": _safe(float(rsi.iloc[-1])),
         "macd": {
@@ -248,4 +257,4 @@ async def get_indicators(ticker: str):
             "ema20": _safe(float(ema20.iloc[-1])),
             "ema50": _safe(float(ema50.iloc[-1])),
         },
-    }
+    })

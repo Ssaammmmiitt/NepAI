@@ -1,0 +1,2342 @@
+{
+  "BANDIPUR": {
+    "name": "Bandipur Cable Car and Tourism Limited",
+    "sector": 0
+  },
+  "BFCPO": {
+    "name": "Best Finance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "AHL": {
+    "name": "Asian Hydropower Limited",
+    "sector": 2
+  },
+  "AIL": {
+    "name": "Ajod Insurance Limited",
+    "sector": 3
+  },
+  "ADBL": {
+    "name": "Agricultural Development Bank Limited",
+    "sector": 4
+  },
+  "ANLB": {
+    "name": "Aatmanirbhar Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "AVYAN": {
+    "name": "Aviyan Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "BNHC": {
+    "name": "Buddha Bhumi Nepal Hydropower Company Limited",
+    "sector": 2
+  },
+  "AKPL": {
+    "name": "Arun Kabeli Power Limited",
+    "sector": 2
+  },
+  "BEDC": {
+    "name": "Bhugol Energy Development Company Limited",
+    "sector": 2
+  },
+  "BOKD86KA": {
+    "name": "10.5% BOK Debenture 2086",
+    "sector": 6
+  },
+  "ADLB": {
+    "name": "Adarsha Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "ALICL": {
+    "name": "Asian Life Insurance Company Limited",
+    "sector": 7
+  },
+  "API": {
+    "name": "Api Power Company Limited",
+    "sector": 2
+  },
+  "CBBLPO": {
+    "name": "Chhimek Laghubitta Bikas Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "BHDC": {
+    "name": "Bindhyabasini Hydropower Development Company Limited",
+    "sector": 2
+  },
+  "BNL": {
+    "name": "Bottlers Nepal Limited (Balaju)",
+    "sector": 8
+  },
+  "BGWT": {
+    "name": "Bhagawati Hydropower Development Company Limited",
+    "sector": 2
+  },
+  "APHL": {
+    "name": "Appolo Hydropower Limited",
+    "sector": 2
+  },
+  "BHCL": {
+    "name": "Bikash Hydropower Company Limited",
+    "sector": 2
+  },
+  "CGH": {
+    "name": "Chandragiri Hills Limited",
+    "sector": 0
+  },
+  "ACLBSL": {
+    "name": "Aarambha Chautari Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "BOKLPO": {
+    "name": "Bank of Kathmandu Limited Promoter Share",
+    "sector": 1
+  },
+  "BHPL": {
+    "name": "Barahi Hydropower Public Limited",
+    "sector": 2
+  },
+  "CFCL": {
+    "name": "Central Finance Limited",
+    "sector": 9
+  },
+  "AKJCL": {
+    "name": "Ankhukhola Hydropower Company Limited",
+    "sector": 2
+  },
+  "CIT": {
+    "name": "Citizen Investment Trust",
+    "sector": 10
+  },
+  "BOKL": {
+    "name": "Bank of Kathmandu Limited",
+    "sector": 3
+  },
+  "CBLD88": {
+    "name": "10.25% Civil Bank Debenture 2088",
+    "sector": 6
+  },
+  "CBLPO": {
+    "name": "Civil Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "DLBS": {
+    "name": "Dhaulagiri Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "BARUN": {
+    "name": "Barun Hydropower Company Limited",
+    "sector": 2
+  },
+  "AKBSL": {
+    "name": "Adhikhola Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "BNT": {
+    "name": "Bottlers Nepal (Terai) Limited",
+    "sector": 8
+  },
+  "CBBL": {
+    "name": "Chhimek Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "CCBLPO": {
+    "name": "Century Commercial Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "CITY": {
+    "name": "City Hotel Limited",
+    "sector": 0
+  },
+  "CHL": {
+    "name": "Chhyangdi Hydropower Company Limited",
+    "sector": 2
+  },
+  "DORDI": {
+    "name": "Dordi Khola Hydropower Company Limited",
+    "sector": 2
+  },
+  "EBL": {
+    "name": "Everest Bank Limited",
+    "sector": 4
+  },
+  "CKHL": {
+    "name": "Chirkhwa Hydro Power Limited",
+    "sector": 2
+  },
+  "BBC": {
+    "name": "Bishal Bazar Company Limited",
+    "sector": 11
+  },
+  "CCBL": {
+    "name": "Century Commercial Bank Limited",
+    "sector": 3
+  },
+  "FOWADP": {
+    "name": "Forward Microfinance Laghubitta Bittya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "CHCL": {
+    "name": "Chilime Hydro power Company Limited",
+    "sector": 2
+  },
+  "CIZBD90": {
+    "name": "10% Citizens Bank Debenture 2090",
+    "sector": 6
+  },
+  "ADBLD83": {
+    "name": "10.35% Agricultural Bank Debenture 2083",
+    "sector": 6
+  },
+  "ADBLB86": {
+    "name": "4% Agricultural Bond 2086",
+    "sector": 6
+  },
+  "CSY": {
+    "name": "Citizens Santulit Yojana",
+    "sector": 12
+  },
+  "CFCLPO": {
+    "name": "Central Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "CYCLP": {
+    "name": "CYC Nepal Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "ALBSLP": {
+    "name": "Asha Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "DHPL": {
+    "name": "Dibyashwari Hydropower Company Limited",
+    "sector": 2
+  },
+  "EBLD86": {
+    "name": "8.5% Everest Bank Debenture",
+    "sector": 6
+  },
+  "CHDC": {
+    "name": "CEDB Holdings Limited",
+    "sector": 10
+  },
+  "EBLCP": {
+    "name": "Everest Bank Limited Convertible Preference",
+    "sector": 13
+  },
+  "BUNGAL": {
+    "name": "Bungal Hydro Limited",
+    "sector": 2
+  },
+  "BHL": {
+    "name": "Balephi Hydropower Limited",
+    "sector": 2
+  },
+  "CIZBD86": {
+    "name": "10.25% Citizens Bank Debenture 2086",
+    "sector": 6
+  },
+  "CLI": {
+    "name": "Citizen Life Insurance Company Limited",
+    "sector": 7
+  },
+  "ACLBSLP": {
+    "name": "Aarambha Chautari Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "CORBL": {
+    "name": "Corporate Development Bank Limited",
+    "sector": 14
+  },
+  "ALBSL": {
+    "name": "Asha Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "CYCL": {
+    "name": "CYC Nepal Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "EDBL": {
+    "name": "Excel Development Bank Limited",
+    "sector": 14
+  },
+  "BOKD86": {
+    "name": "8.5% BOK Debenture 2086",
+    "sector": 6
+  },
+  "EBLEB89": {
+    "name": "7.5% Everest Bank Limited Urja Rinpatra (Energy Bond) 2089",
+    "sector": 6
+  },
+  "BFC": {
+    "name": "Best Finance Company Limited",
+    "sector": 9
+  },
+  "EHPL": {
+    "name": "Eastern Hydropower Limited",
+    "sector": 2
+  },
+  "BPW": {
+    "name": "BPW Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "FMDBLP": {
+    "name": "First Microfinance Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "GBBD85": {
+    "name": "8.75% Garima Debenture 2085",
+    "sector": 6
+  },
+  "CMF2": {
+    "name": "Citizens Mutual Fund - 2",
+    "sector": 12
+  },
+  "DDBL": {
+    "name": "Deprosc Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "CZBILP": {
+    "name": "Citizens Bank International Limited Promoter Share",
+    "sector": 1
+  },
+  "EIC": {
+    "name": "Everest Insurance Company Limited",
+    "sector": 3
+  },
+  "GBIMESY2": {
+    "name": "Global IME Samunnat Yojana -II",
+    "sector": 12
+  },
+  "CZBIL": {
+    "name": "Citizens Bank International Limited",
+    "sector": 4
+  },
+  "ALICLP": {
+    "name": "Asian Life Insurance company Limited Promoter Share",
+    "sector": 1
+  },
+  "EICPO": {
+    "name": "Everest Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "GBD80/81": {
+    "name": "10.25% Global IME Bank Limited Debenture 2080/81",
+    "sector": 6
+  },
+  "GBIMEP": {
+    "name": "Global IME Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "FOWAD": {
+    "name": "Forward Microfinance Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "DDBLPO": {
+    "name": "Deprosc Laghubitta Bittiya Sanstha Limited Promoter share",
+    "sector": 1
+  },
+  "CCBD88": {
+    "name": "10.50% Century Debenture 2088",
+    "sector": 6
+  },
+  "EDBLPO": {
+    "name": "Excel Development Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "EBLD91": {
+    "name": "7.50% Everest Bank Limited Debenture 2091",
+    "sector": 6
+  },
+  "GBILD86/87": {
+    "name": "8.5% Global IME Bank Ltd. Debenture 2086/87",
+    "sector": 6
+  },
+  "GFCL": {
+    "name": "Goodwill Finance Company Limited",
+    "sector": 9
+  },
+  "GBLBSP": {
+    "name": "Grameen Bikas Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "GHL": {
+    "name": "Ghalemdi Hydro Limited",
+    "sector": 2
+  },
+  "CREST": {
+    "name": "Crest Micro Life Insurance Limited",
+    "sector": 7
+  },
+  "GILBPO": {
+    "name": "Global IME Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "GBIME": {
+    "name": "Global IME Bank Limited",
+    "sector": 4
+  },
+  "DOLTI": {
+    "name": "Dolti Power Company Ltd",
+    "sector": 2
+  },
+  "CBL": {
+    "name": "Civil Bank Limited",
+    "sector": 3
+  },
+  "BJHL": {
+    "name": "Bhujung Hydropower Limited",
+    "sector": 2
+  },
+  "GUFLPO": {
+    "name": "Gurkhas Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "GUFL": {
+    "name": "Gurkhas Finance Limited",
+    "sector": 9
+  },
+  "EBLD85": {
+    "name": "10.5% Everest Bank Ltd Rinpatra 2085",
+    "sector": 6
+  },
+  "GIMES1": {
+    "name": "Global IME Samunnat Scheme 1",
+    "sector": 12
+  },
+  "GLICL": {
+    "name": "Gurans Life Insurance Company Limited",
+    "sector": 3
+  },
+  "GRDBLP": {
+    "name": "Green Development Bank Ltd. Promoter Share",
+    "sector": 1
+  },
+  "GLH": {
+    "name": "Greenlife Hydropower Limited",
+    "sector": 2
+  },
+  "GLBSL": {
+    "name": "Gurans Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "GRDBL": {
+    "name": "Green Development Bank Limited",
+    "sector": 14
+  },
+  "GSY": {
+    "name": "Garima Samriddhi Yojana",
+    "sector": 12
+  },
+  "GBBL": {
+    "name": "Garima Bikas Bank Limited",
+    "sector": 14
+  },
+  "AHPC": {
+    "name": "Arun Valley Hydropower Development Company Limited",
+    "sector": 2
+  },
+  "CMF1": {
+    "name": "Citizens Mutual Fund-1",
+    "sector": 12
+  },
+  "C30MF": {
+    "name": "Citizens Super 30 Mutual Fund",
+    "sector": 12
+  },
+  "DHEL": {
+    "name": "Daramkhola Hydro Energy Limited",
+    "sector": 2
+  },
+  "GIC": {
+    "name": "General Insurance Company Nepal Limited",
+    "sector": 3
+  },
+  "H8020": {
+    "name": "Himalayan 80-20",
+    "sector": 12
+  },
+  "HATHY": {
+    "name": "Hathway Investment Nepal Limited",
+    "sector": 10
+  },
+  "HBLD83": {
+    "name": "10% Himalayan Bank Ltd. Debenture 2083",
+    "sector": 6
+  },
+  "GMFIL": {
+    "name": "Guheswori Merchant Banking &amp; Finance Limited",
+    "sector": 9
+  },
+  "ENL": {
+    "name": "Emerging Nepal Limited",
+    "sector": 10
+  },
+  "HBLD86": {
+    "name": "Himalayan Bank Limited Bond 2086",
+    "sector": 15
+  },
+  "GBBLPO": {
+    "name": "Garima Bikash Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "CITPO": {
+    "name": "Citizen Investment Trust Promoter Share",
+    "sector": 1
+  },
+  "HDHPC": {
+    "name": "Himal Dolakha Hydropower Company Limited",
+    "sector": 2
+  },
+  "HEI": {
+    "name": "Himalayan Everest Insurance Limited",
+    "sector": 16
+  },
+  "HDL": {
+    "name": "Himalayan Distillery Limited",
+    "sector": 8
+  },
+  "HFIN": {
+    "name": "Hotel Forest Inn Limited",
+    "sector": 0
+  },
+  "BPCL": {
+    "name": "Butwal Power Company Limited",
+    "sector": 2
+  },
+  "FMDBL": {
+    "name": "First Microfinance Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "HHL": {
+    "name": "Himalayan Hydropower Limited",
+    "sector": 2
+  },
+  "HEIP": {
+    "name": "Himalayan Everest Insurance Limited Promoter",
+    "sector": 1
+  },
+  "HLI": {
+    "name": "Himalayan Life Insurance Limited",
+    "sector": 7
+  },
+  "ICFC": {
+    "name": "ICFC Finance Limited",
+    "sector": 9
+  },
+  "HURJA": {
+    "name": "Himalaya Urja Bikas Company Limited",
+    "sector": 2
+  },
+  "GBILD84/85": {
+    "name": "11.25% Global IME Bank Debenture 2084/85",
+    "sector": 6
+  },
+  "ICFCD83": {
+    "name": "12% ICFC Finance Limited Debenture 2083",
+    "sector": 6
+  },
+  "GVL": {
+    "name": "Green Ventures Limited",
+    "sector": 2
+  },
+  "HIDCL": {
+    "name": "Hydroelectricity Investment and Development Company Limited",
+    "sector": 10
+  },
+  "ICFCPO": {
+    "name": "ICFC Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "HBL": {
+    "name": "Himalayan Bank Limited",
+    "sector": 4
+  },
+  "HLICF": {
+    "name": "HLI Large Cap Fund",
+    "sector": 12
+  },
+  "IGI": {
+    "name": "IGI Prudential Insurance Limited",
+    "sector": 16
+  },
+  "GLICLP": {
+    "name": "Gurans Life Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "HLIPO": {
+    "name": "Himalayan Life Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "IHL": {
+    "name": "Ingwa Hydropower Ltd",
+    "sector": 2
+  },
+  "HRL": {
+    "name": "Himalayan Reinsurance Limited",
+    "sector": 17
+  },
+  "HPPL": {
+    "name": "Himalayan Power Partner Limited",
+    "sector": 2
+  },
+  "HLBSL": {
+    "name": "Himalayan Laghubitta Bittiya Sanstha Limited (Former Civil Laghubitta)",
+    "sector": 5
+  },
+  "HIMSTAR": {
+    "name": "Him Star Urja Company Limited",
+    "sector": 2
+  },
+  "JALPA": {
+    "name": "Jalpa Samudayik Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "GIBF1": {
+    "name": "Global IME Balanced Fund-I",
+    "sector": 12
+  },
+  "JBBLPO": {
+    "name": "Jyoti Bikas Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "JBLB": {
+    "name": "Jeevan Bikas Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "JLI": {
+    "name": "Jyoti Life Insurance Company Limited",
+    "sector": 3
+  },
+  "HIDCLP": {
+    "name": "Hydroelectricity Investment and Development Company Limited Promoter Share",
+    "sector": 1
+  },
+  "GMLI": {
+    "name": "Guardian Micro Life Insurance Limited",
+    "sector": 7
+  },
+  "JBLBP": {
+    "name": "Jeevan Bikas Laghubitta Bittya Sanstha Ltd Promoter",
+    "sector": 1
+  },
+  "GCIL": {
+    "name": "Ghorahi Cement Industry Limited",
+    "sector": 8
+  },
+  "ICFCD88": {
+    "name": "9% ICFC Finance Limited Debenture 2088",
+    "sector": 6
+  },
+  "JBBD87": {
+    "name": "Jyoti Bikash Bank Bond 2087",
+    "sector": 15
+  },
+  "JFL": {
+    "name": "Janaki Finance Company Limited",
+    "sector": 9
+  },
+  "GWFD83": {
+    "name": "12% Goodwill Finance Limited Debenture 2083",
+    "sector": 6
+  },
+  "ILBSP": {
+    "name": "Infinity Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "JFLPO": {
+    "name": "Janaki Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "KLBSLP": {
+    "name": "Kisan Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "KBLD90": {
+    "name": "10% KBL Debenture 2090",
+    "sector": 6
+  },
+  "LBBLD89": {
+    "name": "11% LBBL Debenture 2089",
+    "sector": 6
+  },
+  "KPCL": {
+    "name": "Kalika Power Company Limited",
+    "sector": 2
+  },
+  "HGI": {
+    "name": "Himalayan General Insurance Company Limited",
+    "sector": 3
+  },
+  "KHPL": {
+    "name": "Kalinchowk Hydropower Limited",
+    "sector": 2
+  },
+  "GMFBS": {
+    "name": "Ganapati Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "KBLD86": {
+    "name": "10.25% Kumari Bank Debenture 2086",
+    "sector": 6
+  },
+  "HBLPO": {
+    "name": "Himalayan Bank Limited Promoter",
+    "sector": 1
+  },
+  "ICFCD89": {
+    "name": "8% ICFC Finance Limited Debenture 2089",
+    "sector": 6
+  },
+  "JHAPA": {
+    "name": "Jhapa Energy Limited",
+    "sector": 17
+  },
+  "KSBBLP": {
+    "name": "Kamana Sewa Bikas Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "GILB": {
+    "name": "Global IME Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "KMCDB": {
+    "name": "Kalika Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "LVF2": {
+    "name": "Laxmi Value Fund-II",
+    "sector": 12
+  },
+  "KSBBL": {
+    "name": "Kamana Sewa Bikas Bank Limited",
+    "sector": 14
+  },
+  "KSBBLD87": {
+    "name": "9% Kamana Sewa Bikas Bank Limited Debenture 2087",
+    "sector": 6
+  },
+  "MAKAR": {
+    "name": "Makar Jitumaya Suri Hydropower Company Limited",
+    "sector": 2
+  },
+  "LBLD86": {
+    "name": "10% Laxmi Bank Debenture 2086",
+    "sector": 6
+  },
+  "LBL": {
+    "name": "Laxmi Bank Limited",
+    "sector": 3
+  },
+  "JSLBB": {
+    "name": "Janautthan Samudayic Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "KBLD89": {
+    "name": "11% KBL Debenture 2089",
+    "sector": 6
+  },
+  "KRBLPO": {
+    "name": "Karnali Development Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "GMFILP": {
+    "name": "Guheswori Merchant Banking &amp; Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "LGIL": {
+    "name": "Lumbini General Insurance Limited",
+    "sector": 3
+  },
+  "MANDU": {
+    "name": "Mandu Hydropower Limited",
+    "sector": 2
+  },
+  "JOSHI": {
+    "name": "Joshi Hydropower Development Company Limited",
+    "sector": 2
+  },
+  "KBSH": {
+    "name": "Kutheli Bukhari Small Hydropower Limited",
+    "sector": 2
+  },
+  "KLBS": {
+    "name": "Khaptad Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "MBLEF": {
+    "name": "MBL Equity Fund",
+    "sector": 12
+  },
+  "JSLBBP": {
+    "name": "Janautthan Samudayic Laghubitta Bikas Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "IGIPO": {
+    "name": "IME General Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "KLBSL": {
+    "name": "Kisan Laghubitta Bittiya Sanstha Limited(Former NRN Laghubitta Bittiya Sanstha Limited)",
+    "sector": 3
+  },
+  "LSL": {
+    "name": "Laxmi Sunrise Bank Limited",
+    "sector": 4
+  },
+  "GBLBS": {
+    "name": "Grameen Bikas Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "KEF": {
+    "name": "Kumari Equity Fund",
+    "sector": 12
+  },
+  "MBLD87": {
+    "name": "8.5% Machhapuchchhre Debenture 2087",
+    "sector": 6
+  },
+  "LICN": {
+    "name": "Life Insurance Corporation Nepal Limited",
+    "sector": 7
+  },
+  "ILI": {
+    "name": "IME Life Insurance Company Limited",
+    "sector": 7
+  },
+  "KBL": {
+    "name": "Kumari Bank Limited",
+    "sector": 4
+  },
+  "LBBL": {
+    "name": "Lumbini Bikas Bank Limited",
+    "sector": 14
+  },
+  "MBJC": {
+    "name": "Madhya Bhotekoshi Jalavidyut Company Limited",
+    "sector": 2
+  },
+  "JBBL": {
+    "name": "Jyoti Bikash Bank Limited",
+    "sector": 14
+  },
+  "KMCDBP": {
+    "name": "Kalika Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "KDBY": {
+    "name": "Kumari Dhanabriddhi Yojana",
+    "sector": 12
+  },
+  "LUK": {
+    "name": "Laxmi Unnati Kosh",
+    "sector": 12
+  },
+  "MATRIP": {
+    "name": "Matribhumi Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "MDB": {
+    "name": "Miteri Development Bank Limited",
+    "sector": 14
+  },
+  "KDL": {
+    "name": "Kalinchowk Darshan Limited",
+    "sector": 0
+  },
+  "MBLPO": {
+    "name": "Machhapuchchhre Bank Limited Promotor Share",
+    "sector": 1
+  },
+  "MEN": {
+    "name": "Mountain Energy Nepal Limited",
+    "sector": 2
+  },
+  "MFLD85": {
+    "name": "9.5% Manjushree Finance Ltd. Debenture 2085",
+    "sector": 6
+  },
+  "MEGA": {
+    "name": "Mega Bank Nepal Limited",
+    "sector": 3
+  },
+  "KSY": {
+    "name": "Kumari Sabal Yojana",
+    "sector": 12
+  },
+  "KBLPO": {
+    "name": "Kumari Bank Limited Promotor Share",
+    "sector": 1
+  },
+  "MFILPO": {
+    "name": "Manjushree Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "LBLPO": {
+    "name": "Laxmi Bank Limited Promotor Share",
+    "sector": 1
+  },
+  "MEGAPO": {
+    "name": "Mega Bank Nepal Limited Promoter Share",
+    "sector": 1
+  },
+  "KRBL": {
+    "name": "Karnali Development Bank Limited",
+    "sector": 14
+  },
+  "MERO": {
+    "name": "Mero Microfinance Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "MHCL": {
+    "name": "Molung Hydropower Company Limited",
+    "sector": 2
+  },
+  "LSLPO": {
+    "name": "Laxmi Sunrise Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "KKHC": {
+    "name": "Khani Khola Hydropower Company Limited",
+    "sector": 2
+  },
+  "MEHL": {
+    "name": "Manakamana Engineering Hydropower Limited",
+    "sector": 2
+  },
+  "MLBL": {
+    "name": "Mahalaxmi Bikas Bank Limited",
+    "sector": 14
+  },
+  "MFIL": {
+    "name": "Manjushree Finance Limited",
+    "sector": 9
+  },
+  "MKHC": {
+    "name": "Maya Khola Hydropower Company Limited",
+    "sector": 2
+  },
+  "MMFDBP": {
+    "name": "Mirmire Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "LEMF": {
+    "name": "Laxmi Equity Fund",
+    "sector": 12
+  },
+  "LEC": {
+    "name": "Liberty Energy Company Limited",
+    "sector": 2
+  },
+  "MLBBLP": {
+    "name": "Mithila Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "MBL": {
+    "name": "Machhapuchchhre Bank Limited",
+    "sector": 4
+  },
+  "MLBSL": {
+    "name": "Mahila Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "MKLB": {
+    "name": "Manakamana Smart Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "LBLD88": {
+    "name": "8.5% Laxmi Bank Debenture",
+    "sector": 6
+  },
+  "MMFDB": {
+    "name": "Mirmire Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "MABEL": {
+    "name": "Mabilung Energy Limited",
+    "sector": 2
+  },
+  "MCHL": {
+    "name": "Menchhiyam Hydropower Limited",
+    "sector": 2
+  },
+  "MBLD2085": {
+    "name": "10.25% Machhapuchchhre Debenture 2085",
+    "sector": 6
+  },
+  "NABILD87": {
+    "name": "9% Nabil Debenture 2087",
+    "sector": 6
+  },
+  "MLBBL": {
+    "name": "Mithila Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "LBBLPO": {
+    "name": "Lumbini Bikas Bank Ltd. Promoter Share",
+    "sector": 1
+  },
+  "MLBSP": {
+    "name": "Manushi Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "MDBPO": {
+    "name": "Miteri Development Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "MKJC": {
+    "name": "Mailung Khola Jal Vidhyut Company Limited",
+    "sector": 2
+  },
+  "MMF1": {
+    "name": "Mega Mutual Fund - 1",
+    "sector": 12
+  },
+  "MEL": {
+    "name": "Modi Energy Limited",
+    "sector": 2
+  },
+  "MNBBL": {
+    "name": "Muktinath Bikas Bank Limited",
+    "sector": 14
+  },
+  "MEROPO": {
+    "name": "Mero Microfinance Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "MSLBP": {
+    "name": "Mahuli Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "NEF": {
+    "name": "Nabil Equity Fund",
+    "sector": 12
+  },
+  "NABILP": {
+    "name": "NABIL Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "MLBS": {
+    "name": "Manushi Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "MATRI": {
+    "name": "Matribhumi Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "LLBS": {
+    "name": "Laxmi Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NBB": {
+    "name": "Nepal Bangladesh Bank Limited",
+    "sector": 3
+  },
+  "ILBS": {
+    "name": "Infinity Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NBBD2085": {
+    "name": "10.25% NBBL Debenture 2085",
+    "sector": 6
+  },
+  "MNBBLP": {
+    "name": "Muktinath Bikas Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "MHNL": {
+    "name": "Mountain Hydro Nepal Limited",
+    "sector": 2
+  },
+  "NBLD87": {
+    "name": "8.5% Nepal Bank Debenture 2087",
+    "sector": 6
+  },
+  "MNMF1": {
+    "name": "Muktinath Mutual Fund 1",
+    "sector": 12
+  },
+  "MKHL": {
+    "name": "Mai Khola Hydropower Limited",
+    "sector": 2
+  },
+  "NABILD2089": {
+    "name": "7% Nabil Debenture 2089",
+    "sector": 6
+  },
+  "NCCBPO": {
+    "name": "Nepal Credit and Commerce Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "MLBLD89": {
+    "name": "11% Mahalaxmi Debenture 2089",
+    "sector": 6
+  },
+  "MMKJL": {
+    "name": "Mathillo Mailun Khola Jalvidhyut Limited",
+    "sector": 2
+  },
+  "NHDL": {
+    "name": "Nepal Hydro Developer Limited",
+    "sector": 2
+  },
+  "NICAD2091": {
+    "name": "7% NIC Asia Debenture 2091",
+    "sector": 6
+  },
+  "NIBPO": {
+    "name": "Nepal Investment Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "MLBLPO": {
+    "name": "Mahalaxmi Bikas Bank Ltd. Promotor Share",
+    "sector": 1
+  },
+  "MKCL": {
+    "name": "Muktinath Krishi Company Limited",
+    "sector": 17
+  },
+  "MSHL": {
+    "name": "Mid Solu Hydropower Company Limited",
+    "sector": 2
+  },
+  "NHPC": {
+    "name": "National Hydro Power Company Limited",
+    "sector": 2
+  },
+  "NBLD85": {
+    "name": "8% Nabil Debenture 2085",
+    "sector": 6
+  },
+  "NIBSF1": {
+    "name": "NIBL Samriddhi Fund 1",
+    "sector": 12
+  },
+  "MHL": {
+    "name": "Mandakini Hydropower Limited",
+    "sector": 2
+  },
+  "NBLD82": {
+    "name": "10% Nabil Bank Debenture 2082",
+    "sector": 6
+  },
+  "NGPL": {
+    "name": "Ngadi Group Power Limited",
+    "sector": 2
+  },
+  "NBF3": {
+    "name": "Nabil Balanced Fund III",
+    "sector": 12
+  },
+  "NCCD86": {
+    "name": "9.5% NCC Rinpatra 2086",
+    "sector": 6
+  },
+  "NBF2": {
+    "name": "Nabil Balanced Fund - 2",
+    "sector": 12
+  },
+  "MPFLPO": {
+    "name": "Multipurpose Finance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "MND84/85": {
+    "name": "8.75% Muktinath Debenture/Rinpatra 2084/85",
+    "sector": 6
+  },
+  "NICAP": {
+    "name": "NICA Bank Limited Promoter share",
+    "sector": 1
+  },
+  "NICD88": {
+    "name": "8.5% NIC Asia Debenture 2088",
+    "sector": 6
+  },
+  "NABBCP": {
+    "name": "Narayani Development Bank Limited Promoter",
+    "sector": 1
+  },
+  "NIBLPF": {
+    "name": "NIBL Pragati Fund",
+    "sector": 12
+  },
+  "NICD83/84": {
+    "name": "10.25% NIC ASIA Debenture 2083/84",
+    "sector": 6
+  },
+  "NICLBSL": {
+    "name": "NIC Asia Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NICAD85/86": {
+    "name": "10% NIC Asia Debenture 2085/86",
+    "sector": 6
+  },
+  "MSLB": {
+    "name": "Mahuli Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NIB": {
+    "name": "Nepal Investment Bank Limited",
+    "sector": 3
+  },
+  "NICBF": {
+    "name": "NIC ASIA Balanced Fund",
+    "sector": 12
+  },
+  "NICGF": {
+    "name": "NIC Asia Growth Fund",
+    "sector": 12
+  },
+  "NESDO": {
+    "name": "Nesdo Sambridha Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NADEPP": {
+    "name": "NADEP Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "NIFRAP": {
+    "name": "Nepal Infrastructure Bank Limited Promoter",
+    "sector": 1
+  },
+  "NIBLSTF": {
+    "name": "NIBL Stable Fund",
+    "sector": 12
+  },
+  "NABIL": {
+    "name": "Nabil Bank Limited",
+    "sector": 4
+  },
+  "NIBSF2": {
+    "name": "NIBL Samriddhi Fund - 2",
+    "sector": 12
+  },
+  "NABBC": {
+    "name": "Narayani Development Bank Limited",
+    "sector": 14
+  },
+  "NBL": {
+    "name": "Nepal Bank Limited",
+    "sector": 4
+  },
+  "NMFBS": {
+    "name": "National Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NIFRAUR85/86": {
+    "name": "7% NIFRA Urja Rinpatra 2085/86",
+    "sector": 6
+  },
+  "NIMB": {
+    "name": "Nepal Investment Mega Bank Limited",
+    "sector": 4
+  },
+  "NMBPO": {
+    "name": "NMB Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "NIBD84": {
+    "name": "8.5% Nepal Investment Bank Bond 2084",
+    "sector": 6
+  },
+  "NSY": {
+    "name": "Nepal Life Samriddhi Lagani Yojana",
+    "sector": 12
+  },
+  "NIMBD90": {
+    "name": "10% NIMB Debenture 2090",
+    "sector": 6
+  },
+  "NICL": {
+    "name": "Nepal Insurance Company Limited",
+    "sector": 16
+  },
+  "NICA": {
+    "name": "NIC Asia Bank Limited",
+    "sector": 4
+  },
+  "NICAD8182": {
+    "name": "9% NIC Asia Debenture 2081/82",
+    "sector": 6
+  },
+  "NICLPO": {
+    "name": "Nepal Insurance Company Ltd Promoter Share",
+    "sector": 1
+  },
+  "NMIC": {
+    "name": "Nepal Micro Insurance Company Limited",
+    "sector": 16
+  },
+  "NICAD8283": {
+    "name": "11% NIC Asia Debenture 2082/83",
+    "sector": 6
+  },
+  "NFSPO": {
+    "name": "Nepal Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "NLO": {
+    "name": "Nepal Lube Oil Limited",
+    "sector": 8
+  },
+  "NLBBLP": {
+    "name": "Nerude Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "NWCL": {
+    "name": "Nepal Warehousing Company Limited",
+    "sector": 17
+  },
+  "NICSF": {
+    "name": "NIC Asia Select-30",
+    "sector": 12
+  },
+  "NLBBL": {
+    "name": "Nerude Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "NLICP": {
+    "name": "Nepal Life Insurance Company Limited Promoter",
+    "sector": 1
+  },
+  "MPFL": {
+    "name": "Multipurpose Finance Company Limited",
+    "sector": 9
+  },
+  "NADEP": {
+    "name": "NADEP Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NIL": {
+    "name": "Neco Insurance Limited",
+    "sector": 16
+  },
+  "NMBD89/90": {
+    "name": "10.75% NMB Debenture 2089/2090",
+    "sector": 6
+  },
+  "NMBHF2": {
+    "name": "NMB Hybrid Fund L-II",
+    "sector": 12
+  },
+  "PCIL": {
+    "name": "Palpa Cements Industries Limited",
+    "sector": 8
+  },
+  "NLIC": {
+    "name": "Nepal Life Insurance Company Limited",
+    "sector": 7
+  },
+  "NIFRA": {
+    "name": "Nepal Infrastructure Bank Limited",
+    "sector": 10
+  },
+  "NSLB": {
+    "name": "Naya Sarathi Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "NIMBPO": {
+    "name": "Nepal Investment Mega Bank Ltd. Promoter Share",
+    "sector": 1
+  },
+  "NMBMF": {
+    "name": "NMB Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "PICL": {
+    "name": "Prudential Insurance Company Limited",
+    "sector": 3
+  },
+  "NTC": {
+    "name": "Nepal Doorsanchar Company Limited",
+    "sector": 17
+  },
+  "PCBLP": {
+    "name": "Prime Commercial Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "NMFBSP": {
+    "name": "National Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "NFS": {
+    "name": "Nepal Finance Limited",
+    "sector": 9
+  },
+  "NRICP": {
+    "name": "Nepal Reinsurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "NICFC": {
+    "name": "NIC Asia Flexi Cap Fund",
+    "sector": 12
+  },
+  "NIFRAGED": {
+    "name": "6% Nifra Harit Urja Debenture 2088/89",
+    "sector": 6
+  },
+  "NMLBBLP": {
+    "name": "Nerude Mirmire Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "NMLBBL": {
+    "name": "Nerude Mirmire Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "NLG": {
+    "name": "NLG Insurance Company Limited",
+    "sector": 16
+  },
+  "NMB50": {
+    "name": "NMB 50",
+    "sector": 12
+  },
+  "NSLBP": {
+    "name": "Naya Sarathi Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "PCBL": {
+    "name": "Prime Commercial Bank Limited",
+    "sector": 4
+  },
+  "NICLBSLP": {
+    "name": "NIC Asia Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "NICGF2": {
+    "name": "NIC Asia Growth Fund 2",
+    "sector": 12
+  },
+  "NLICLP": {
+    "name": "National Life Insurance Company Limited Promoter share",
+    "sector": 1
+  },
+  "NRN": {
+    "name": "NRN Infrastructure and Development Limited",
+    "sector": 10
+  },
+  "PBD85": {
+    "name": "8.75% Prime Debenture 2085",
+    "sector": 6
+  },
+  "PPCL": {
+    "name": "Panchthar Power Company Limited",
+    "sector": 2
+  },
+  "NIBD2082": {
+    "name": "10.5% Nepal Investment Bank Debenture 2082",
+    "sector": 6
+  },
+  "RAWA": {
+    "name": "Rawa Energy Development Ltd.",
+    "sector": 2
+  },
+  "NIBLGF": {
+    "name": "NIBL Growth Fund",
+    "sector": 12
+  },
+  "PSF": {
+    "name": "Prabhu Select Fund",
+    "sector": 12
+  },
+  "NYADI": {
+    "name": "Nyadi Hydropower Limited",
+    "sector": 2
+  },
+  "NCCB": {
+    "name": "Nepal Credit and Commerce Bank Limited",
+    "sector": 3
+  },
+  "NMBHF1": {
+    "name": "NMB Hybrid Fund L- 1",
+    "sector": 12
+  },
+  "PMLIP": {
+    "name": "Prabhu Mahalaxmi Life Insurance Limited promotor",
+    "sector": 1
+  },
+  "RBBD2088": {
+    "name": "7% RBBL Debenture 2088",
+    "sector": 6
+  },
+  "RADHI": {
+    "name": "Radhi Bidyut Company Limited",
+    "sector": 2
+  },
+  "PBD88": {
+    "name": "10% Prime Debenture 2088",
+    "sector": 6
+  },
+  "RBBD83": {
+    "name": "8.5% RBBL Debenture 2083",
+    "sector": 6
+  },
+  "PBLD84": {
+    "name": "10% Prabhu Bank Debenture 2084 (PBLD84)",
+    "sector": 6
+  },
+  "RBCL": {
+    "name": "Rastriya Beema Company Limited",
+    "sector": 16
+  },
+  "RLEL": {
+    "name": "Ridge Line Energy Limited",
+    "sector": 2
+  },
+  "PHCL": {
+    "name": "Peoples Hydropower Company Limited",
+    "sector": 2
+  },
+  "RBCLPO": {
+    "name": "Rastriya Beema Company Limited Promoter Share",
+    "sector": 1
+  },
+  "PBD84": {
+    "name": "10.15% Prime Debenture 2084",
+    "sector": 6
+  },
+  "PURE": {
+    "name": "Pure Energy Limited",
+    "sector": 17
+  },
+  "NLICL": {
+    "name": "National Life Insurance Company Limited",
+    "sector": 7
+  },
+  "RHGCL": {
+    "name": "Rapti Hydro &amp; General Construction Limited",
+    "sector": 2
+  },
+  "MLBSLP": {
+    "name": "Mahila Lagubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "PRSF": {
+    "name": "Prabhu Smart Fund",
+    "sector": 12
+  },
+  "RBBF40": {
+    "name": "RBB Focus 40",
+    "sector": 12
+  },
+  "PLI": {
+    "name": "Prabhu Life Insurance Limited",
+    "sector": 3
+  },
+  "PROFLP": {
+    "name": "Progressive Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "RMDC": {
+    "name": "RMDC Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "NMBD2085": {
+    "name": "10% NMB Debenture 2085",
+    "sector": 6
+  },
+  "NSIF2": {
+    "name": "NMB Sulav Investment Fund - II",
+    "sector": 12
+  },
+  "PFLPO": {
+    "name": "Pokhara Finance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "PLIC": {
+    "name": "Prime Life Insurance Company Limited",
+    "sector": 3
+  },
+  "RRHP": {
+    "name": "Rairang Hydropower Development Company Limited.",
+    "sector": 3
+  },
+  "OMPL": {
+    "name": "Om Megashree Pharmaceuticals Limited",
+    "sector": 8
+  },
+  "NILPO": {
+    "name": "Neco Insurance Company Limited Promoter",
+    "sector": 1
+  },
+  "RSDC": {
+    "name": "RSDC Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "RHPC": {
+    "name": "Ridi Hydropower Development Company Limited",
+    "sector": 3
+  },
+  "RSDCP": {
+    "name": "RSDC Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "PBLD87": {
+    "name": "8.5% Prabhu Bank Debenture 2087",
+    "sector": 6
+  },
+  "RFPL": {
+    "name": "River Falls Power Limited",
+    "sector": 2
+  },
+  "NMBD87/88": {
+    "name": "8.5% NMB Rinpatra 2087/88",
+    "sector": 6
+  },
+  "PMHPL": {
+    "name": "Panchakanya Mai Hydropower Limited",
+    "sector": 2
+  },
+  "SABBL": {
+    "name": "Salapa Bikas Bank Limited",
+    "sector": 14
+  },
+  "PRVU": {
+    "name": "Prabhu Bank Limited",
+    "sector": 4
+  },
+  "RSY": {
+    "name": "Reliable Samriddhi Yojana",
+    "sector": 12
+  },
+  "RULB": {
+    "name": "Rastra Utthan Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "NUBL": {
+    "name": "Nirdhan Utthan Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "PROFL": {
+    "name": "Progressive Finance Limited",
+    "sector": 9
+  },
+  "RMF2": {
+    "name": "RBB Mutual Fund 2",
+    "sector": 12
+  },
+  "RLI": {
+    "name": "Reliance Life Insurance Limited",
+    "sector": 3
+  },
+  "RHPL": {
+    "name": "Rasuwagadhi Hydropower Company Limited",
+    "sector": 2
+  },
+  "PICPO": {
+    "name": "Premier Insurance Company (Nepal) Limited Promoter Share",
+    "sector": 1
+  },
+  "SAIL": {
+    "name": "Shreenagar Agritech Industries Limited",
+    "sector": 8
+  },
+  "PMLI": {
+    "name": "Prabhu Mahalaxmi Life Insurance Company Limited",
+    "sector": 7
+  },
+  "SALICO": {
+    "name": "Sagarmatha Lumbini Insurance Company Limited",
+    "sector": 16
+  },
+  "RNLI": {
+    "name": "Reliable Nepal Life Insurance Limited",
+    "sector": 7
+  },
+  "PRIN": {
+    "name": "Prabhu Insurance Company Limited",
+    "sector": 16
+  },
+  "NRIC": {
+    "name": "Nepal Reinsurance Company Limited",
+    "sector": 17
+  },
+  "PLICPO": {
+    "name": "Prime Life Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "NMB": {
+    "name": "NMB Bank Limited",
+    "sector": 4
+  },
+  "RMDCPO": {
+    "name": "RMDC Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SAPDBLP": {
+    "name": "Saptakoshi Development Bank Ltd Promoter Share",
+    "sector": 1
+  },
+  "OHL": {
+    "name": "Oriental Hotel Limited",
+    "sector": 0
+  },
+  "SAGAR": {
+    "name": "Sagar Distillery Limited",
+    "sector": 8
+  },
+  "SBD89": {
+    "name": "10.25% Sanima Debenture 2089",
+    "sector": 6
+  },
+  "PICLPO": {
+    "name": "Prudential Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "PFL": {
+    "name": "Pokhara Finance Limited",
+    "sector": 9
+  },
+  "PIC": {
+    "name": "Premier Insurance Company (Nepal) Limited",
+    "sector": 3
+  },
+  "SBID2090": {
+    "name": "7% Nepal SBI Bank Debenture 2090",
+    "sector": 6
+  },
+  "PRVUPO": {
+    "name": "Prabhu Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "RMF1": {
+    "name": "RBB Mutual Fund 1",
+    "sector": 12
+  },
+  "PPL": {
+    "name": "People&#039;s Power Limited",
+    "sector": 2
+  },
+  "SANIMA": {
+    "name": "Sanima Bank Limited",
+    "sector": 4
+  },
+  "RIDI": {
+    "name": "Ridi Power Company Limited",
+    "sector": 2
+  },
+  "SANVI": {
+    "name": "Sanvi Energy Limited",
+    "sector": 2
+  },
+  "SBL": {
+    "name": "Siddhartha Bank Limited",
+    "sector": 4
+  },
+  "SBLD89": {
+    "name": "10.75 % SBL Debenture 2089",
+    "sector": 6
+  },
+  "SBLD2082": {
+    "name": "10.5% SBL Debenture 2082",
+    "sector": 6
+  },
+  "SAGF": {
+    "name": "Sanima Growth Fund",
+    "sector": 12
+  },
+  "RLFLPO": {
+    "name": "Reliance Lotus Finance Limited Promoter Share",
+    "sector": 1
+  },
+  "PBLD86": {
+    "name": "10.25% Prabhu Bank Debenture 2086",
+    "sector": 6
+  },
+  "SBLD83": {
+    "name": "10.25% SBL Debenture 2083",
+    "sector": 6
+  },
+  "SCBD": {
+    "name": "10.30% Standard Chartered Bank Nepal Limited Debenture",
+    "sector": 6
+  },
+  "SDLBSL": {
+    "name": "Sadhana Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "SABSL": {
+    "name": "Sabaiko Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "SARBTM": {
+    "name": "Sarbottam Cement Limited",
+    "sector": 8
+  },
+  "SABSLP": {
+    "name": "Sabaiko Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 3
+  },
+  "SDBD87": {
+    "name": "9% Shangrila Development Bank Debenture, 2087",
+    "sector": 6
+  },
+  "NRM": {
+    "name": "Nepal Republic Media Limited",
+    "sector": 17
+  },
+  "RSML": {
+    "name": "Reliance Spinning Mills Limited",
+    "sector": 8
+  },
+  "SEF": {
+    "name": "Siddhartha Equity Fund",
+    "sector": 12
+  },
+  "SAHAS": {
+    "name": "Sahas Urja Limited",
+    "sector": 2
+  },
+  "SADBL": {
+    "name": "Shangrila Development Bank Limited",
+    "sector": 14
+  },
+  "PRINPO": {
+    "name": "Prabhu Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "SBCF": {
+    "name": "Sunrise Bluechip Fund",
+    "sector": 12
+  },
+  "SGICP": {
+    "name": "Sanima GIC Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "SFCL": {
+    "name": "Samriddhi Finance Company Limited (former World Merchant Banking)",
+    "sector": 9
+  },
+  "SGHC": {
+    "name": "Swet-Ganga Hydropower &amp; Construction Limited",
+    "sector": 2
+  },
+  "RURU": {
+    "name": "Ru Ru Jalbidhyut Pariyojana Limited",
+    "sector": 2
+  },
+  "SHIVM": {
+    "name": "Shivam Cements Limited",
+    "sector": 8
+  },
+  "SGIC": {
+    "name": "Sanima GIC Insurance Limited",
+    "sector": 16
+  },
+  "SHLB": {
+    "name": "Shrijanshil Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SIC": {
+    "name": "Sagarmatha Insurance Company Limited",
+    "sector": 3
+  },
+  "SFMF": {
+    "name": "Sunrise First Mutual Fund",
+    "sector": 12
+  },
+  "SAND2085": {
+    "name": "10% Sanima Debenture 2085",
+    "sector": 6
+  },
+  "SBLPO": {
+    "name": "Siddhartha Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "SBD87": {
+    "name": "8.5% Sanima Debenture 2087",
+    "sector": 6
+  },
+  "SAMAJ": {
+    "name": "Samaj Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "SIPD": {
+    "name": "Shikhar Power Development Limited",
+    "sector": 2
+  },
+  "SICLPO": {
+    "name": "Shikhar Insurance Company Limited Promoter share",
+    "sector": 1
+  },
+  "SBID89": {
+    "name": "9% Nepal SBI Bank Debenture 2089",
+    "sector": 6
+  },
+  "SIFCPO": {
+    "name": "Shree Investment &amp; Finance Company Limited Promoter share",
+    "sector": 1
+  },
+  "RLFL": {
+    "name": "Reliance Finance Limited",
+    "sector": 9
+  },
+  "SIGS2": {
+    "name": "Siddhartha Investment Growth Scheme-2",
+    "sector": 12
+  },
+  "SHBL": {
+    "name": "Sahara Bikas Bank Limited",
+    "sector": 3
+  },
+  "SINDUP": {
+    "name": "Sindhu Bikas Bank Limited Promoter share",
+    "sector": 1
+  },
+  "SAPDBL": {
+    "name": "Saptakoshi Development Bank Limited",
+    "sector": 14
+  },
+  "SKBBLP": {
+    "name": "Sana Kisan Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SIL": {
+    "name": "Siddhartha Insurance Limited",
+    "sector": 3
+  },
+  "SHINE": {
+    "name": "Shine Resunga Development Bank Limited",
+    "sector": 14
+  },
+  "SBID83": {
+    "name": "10.25% Nepal SBI Bank Debenture 2083",
+    "sector": 6
+  },
+  "SJCL": {
+    "name": "Sanjen Jalavidhyut Company Limited",
+    "sector": 2
+  },
+  "SHL": {
+    "name": "Soaltee Hotel Limited",
+    "sector": 0
+  },
+  "SAEF": {
+    "name": "Sanima Equity Fund",
+    "sector": 12
+  },
+  "SFCLP": {
+    "name": "Samriddhi Finance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "SKHEL": {
+    "name": "Suryakunda Hydro Electric Limited",
+    "sector": 2
+  },
+  "SDLBSLP": {
+    "name": "Sadhana Laghubitta Bittiya Sanstha Limited Promoter Shares",
+    "sector": 3
+  },
+  "SGI": {
+    "name": "Sanima General Insurance Limited",
+    "sector": 3
+  },
+  "SALICOPO": {
+    "name": "Sagarmatha Lumbini Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "SLCF": {
+    "name": "Sanima Large Cap Fund",
+    "sector": 12
+  },
+  "SLICL": {
+    "name": "Surya Life Insurance Company Limited",
+    "sector": 3
+  },
+  "SIGS3": {
+    "name": "Siddhartha Investment Growth Scheme 3",
+    "sector": 12
+  },
+  "SHINEP": {
+    "name": "Shine Resunga Development Bank Ltd. Promoter Share",
+    "sector": 1
+  },
+  "SIFC": {
+    "name": "Shree Investment Finance Company Limited",
+    "sector": 9
+  },
+  "SHEL": {
+    "name": "Singati Hydro Energy Limited",
+    "sector": 2
+  },
+  "SMATAP": {
+    "name": "Samata Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SLICLP": {
+    "name": "Surya Life Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "SBI": {
+    "name": "Nepal SBI Bank Limited",
+    "sector": 4
+  },
+  "SICL": {
+    "name": "Shikhar Insurance Company Limited",
+    "sector": 16
+  },
+  "SICPO": {
+    "name": "Sagarmatha Insurance Company Limited Promoter Share",
+    "sector": 1
+  },
+  "SHINED": {
+    "name": "Shine Resunga Debenture",
+    "sector": 6
+  },
+  "SMFBS": {
+    "name": "Swabhimaan Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SBLD84": {
+    "name": "8.5% SBL Debenture 2084",
+    "sector": 6
+  },
+  "SMFDB": {
+    "name": "Summit Laghubitta Bittiya Sanstha Limited",
+    "sector": 3
+  },
+  "SKBBL": {
+    "name": "Sana Kisan Bikas Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SCB": {
+    "name": "Standard Chartered Bank Nepal Limited",
+    "sector": 4
+  },
+  "SMHL": {
+    "name": "Super Madi Hydropower Limited",
+    "sector": 2
+  },
+  "SPHL": {
+    "name": "Sayapatri Hydropower Limited",
+    "sector": 2
+  },
+  "SHPC": {
+    "name": "Sanima Mai Hydropower Limited",
+    "sector": 2
+  },
+  "SMFBSP": {
+    "name": "Swabhimaan Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SFEF": {
+    "name": "Sunrise Focused Equity Fund",
+    "sector": 12
+  },
+  "SJLICP": {
+    "name": "SuryaJyoti Life Insurance Company Limited Promoter",
+    "sector": 1
+  },
+  "SMH": {
+    "name": "Supermai Hydropower Limited",
+    "sector": 2
+  },
+  "SMPDAP": {
+    "name": "Sampada Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SMJC": {
+    "name": "Sagarmatha Jalbidhyut Company Limited",
+    "sector": 2
+  },
+  "SADBLP": {
+    "name": "Shangrila Development Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "SLI": {
+    "name": "Sanima Life Insurance Company Limited",
+    "sector": 3
+  },
+  "SNMAPO": {
+    "name": "Sanima Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "SNLI": {
+    "name": "Sun Nepal Life Insurance Company Limited",
+    "sector": 7
+  },
+  "SOPL": {
+    "name": "Sopan Pharmaceuticals Limited",
+    "sector": 8
+  },
+  "SOHL": {
+    "name": "Solu Hydropower Limited",
+    "sector": 2
+  },
+  "SIKLES": {
+    "name": "Sikles Hydropower Limited",
+    "sector": 2
+  },
+  "SBIBD86": {
+    "name": "10% Nepal SBI Bank Debenture 2086",
+    "sector": 6
+  },
+  "SPC": {
+    "name": "Samling Power Company Limited",
+    "sector": 2
+  },
+  "SBLD2091": {
+    "name": "7.25% SBL Debenture 2091",
+    "sector": 6
+  },
+  "SPL": {
+    "name": "Shuvam Power Limited",
+    "sector": 2
+  },
+  "SMPDA": {
+    "name": "Sampada Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SMBPO": {
+    "name": "Support Microfinance Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SWBBL": {
+    "name": "Swabalamban Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SRBL": {
+    "name": "Sunrise Bank Limited",
+    "sector": 3
+  },
+  "SONA": {
+    "name": "Sonapur Minerals and Oil Limited",
+    "sector": 8
+  },
+  "SMATA": {
+    "name": "Samata Gharelu Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "TAMOR": {
+    "name": "Sanima Middle Tamor Hydropower Limited",
+    "sector": 2
+  },
+  "SMFDBP": {
+    "name": "Summit Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "STC": {
+    "name": "Salt Trading Corporation Limited",
+    "sector": 11
+  },
+  "SRD80": {
+    "name": "10% Sunrise Debenture 2080",
+    "sector": 6
+  },
+  "SPILPO": {
+    "name": "Siddhartha Premier Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "SJLIC": {
+    "name": "SuryaJyoti Life Insurance Company Limited",
+    "sector": 7
+  },
+  "SRLIP": {
+    "name": "Sanima Reliance Life Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "TPC": {
+    "name": "Terhathum Power Company Limited",
+    "sector": 2
+  },
+  "SRBLD83": {
+    "name": "10.25% SRBL Debenture 2083",
+    "sector": 6
+  },
+  "SINDU": {
+    "name": "Sindhu Bikas Bank Limited",
+    "sector": 14
+  },
+  "SSHL": {
+    "name": "Shiva Shree Hydropower Limited",
+    "sector": 2
+  },
+  "TVCL": {
+    "name": "Trishuli Jal Vidhyut Company Limited",
+    "sector": 2
+  },
+  "SKHL": {
+    "name": "Super Khudi Hydropower Limited",
+    "sector": 2
+  },
+  "SRBLPO": {
+    "name": "Sunrise Bank Limited Promoter Share",
+    "sector": 1
+  },
+  "SLBBLP": {
+    "name": "Swarojgar Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "SLBBL": {
+    "name": "Swarojgar Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SWASTIK": {
+    "name": "Swastik Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "TTL": {
+    "name": "Trade Tower Limited",
+    "sector": 17
+  },
+  "UHEWA": {
+    "name": "Upper Hewakhola Hydropower Company Limited",
+    "sector": 2
+  },
+  "SRLI": {
+    "name": "Sanima Reliance Life Insurance Limited",
+    "sector": 7
+  },
+  "ULBSL": {
+    "name": "Upakar Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SWBBLP": {
+    "name": "Swabalamban Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "VLBSPO": {
+    "name": "Vijaya Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "UNLB": {
+    "name": "Unique Nepal Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "UPCL": {
+    "name": "Universal Power Company Limited",
+    "sector": 2
+  },
+  "UAILPO": {
+    "name": "United Ajod Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "SWMF": {
+    "name": "Suryodaya Womi Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "SLBSL": {
+    "name": "Samudayik Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "UAIL": {
+    "name": "United Ajod Insurance Limited",
+    "sector": 16
+  },
+  "UIC": {
+    "name": "United Insurance Company (Nepal) Limited",
+    "sector": 3
+  },
+  "UNL": {
+    "name": "Unilever Nepal Limited",
+    "sector": 8
+  },
+  "TRH": {
+    "name": "Taragaon Regency Hotel Limited",
+    "sector": 0
+  },
+  "USLBP": {
+    "name": "Unnati Sahakarya Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "UMRH": {
+    "name": "United Idi-Mardi and R.B. Hydropower Limited",
+    "sector": 2
+  },
+  "SWMFPO": {
+    "name": "Suryodaya Womi Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "UICPO": {
+    "name": "United Insurance Co. (Nepal) Ltd. Promoter Share",
+    "sector": 1
+  },
+  "ULHC": {
+    "name": "Upper Lohore Khola Hydropower Company Limited",
+    "sector": 2
+  },
+  "SYPNL": {
+    "name": "SY Panel Nepal Limited",
+    "sector": 8
+  },
+  "SPDL": {
+    "name": "Synergy Power Development Limited",
+    "sector": 2
+  },
+  "UNHPL": {
+    "name": "Union Hydro Holdings Company Limited",
+    "sector": 2
+  },
+  "USHEC": {
+    "name": "Upper Solu Hydro Electric Company Limited",
+    "sector": 2
+  },
+  "TSHL": {
+    "name": "Three Star Hydropower Limited",
+    "sector": 2
+  },
+  "SMB": {
+    "name": "Support Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "ULI": {
+    "name": "Union Life Insurance Company Limited",
+    "sector": 3
+  },
+  "UMHL": {
+    "name": "United Modi Hydropower Limited",
+    "sector": 2
+  },
+  "WNLBP": {
+    "name": "Wean Nepal Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "UNLBP": {
+    "name": "Unique Nepal Laghubitta Bittiya Sanstha Limited Promoter",
+    "sector": 1
+  },
+  "VLUCL": {
+    "name": "Vision Lumbini Urja Company Limited",
+    "sector": 2
+  },
+  "SPIL": {
+    "name": "Siddhartha Premier Insurance Limited",
+    "sector": 16
+  },
+  "WNLB": {
+    "name": "Wean Nepal Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "VLBS": {
+    "name": "Vijaya Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "UPPER": {
+    "name": "Upper Tamakoshi Hydropower Limited",
+    "sector": 2
+  },
+  "USHL": {
+    "name": "Upper Syange Hydropower Limited",
+    "sector": 2
+  },
+  "USLB": {
+    "name": "Unnati Sahakarya Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "CLBSL": {
+    "name": "Civil Laghubitta Bittiya Sanstha Limited",
+    "sector": 5
+  },
+  "CLBSLP": {
+    "name": "Civil Laghubitta Bittiya Sanstha Limited Promoter Share",
+    "sector": 1
+  },
+  "HEIPO": {
+    "name": "Himalayan Everest Insurance Limited Promoter Share",
+    "sector": 1
+  },
+  "SBBLPO": {
+    "name": "Sanima Bank Ltd. Promoter Share",
+    "sector": 1
+  }
+}

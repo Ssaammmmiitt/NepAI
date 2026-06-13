@@ -157,10 +157,14 @@ NepAI/
 │   └── workflows/
 │       └── scrape-data.yml              # Daily cron workflow
 │
-├── data/                                # 124 CSVs (source of truth, updated by GH Actions)
-│   ├── NABIL.csv
-│   ├── NMB.csv
-│   └── ...
+├── data/                                # Stock data + metadata
+│   ├── companies/                       # 124 CSVs (source of truth, updated by GH Actions)
+│   │   ├── NABIL.csv
+│   │   ├── NMB.csv
+│   │   └── ...
+│   └── metadata/                        # Stock name/sector lookup tables
+│       ├── name_data.json               # Ticker → {name, sector_id}
+│       └── sector_mappings.json         # Sector ID → human-readable label
 │
 ├── backend/                             # Python package: run via `python -m backend`
 │   ├── __init__.py
@@ -186,6 +190,7 @@ NepAI/
 │       ├── main.py                      # FastAPI entry, CORS, startup, health (MODIFIED)
 │       ├── errors.py                    # Custom exceptions + HTTP error handlers
 │       ├── state.py                     # App state: data cache, ticker registry, training tracker
+│       ├── metadata.py                  # [NEW] Stock metadata lookup (names + sectors from JSONs)
 │       ├── supabase_client.py           # [NEW] Supabase Python client singleton
 │       ├── auth.py                      # [NEW] get_current_user FastAPI dependency
 │       └── routers/
@@ -307,6 +312,8 @@ NEPSE enforces a +/-15% daily price movement limit. This is applied as a post-pr
 
 All timestamps use Nepal Standard Time (UTC+5:45).
 
+All endpoints that return a `ticker` also include `stock_name` (full company name) and `stock_sector` (human-readable sector label), resolved at startup from `data/metadata/name_data.json` and `data/metadata/sector_mappings.json` via `backend/api/metadata.py`.
+
 #### Health
 
 | Method | Endpoint | Description |
@@ -394,6 +401,8 @@ Validation order:
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "model_available": true,
   "trained_on": "2026-06-11T22:05:40+05:45",
   "stale": false,
@@ -424,6 +433,8 @@ All portfolio endpoints require the `Authorization: Bearer <access_token>` heade
   "holdings": [
     {
       "ticker": "NABIL",
+      "stock_name": "Nabil Bank Limited",
+      "stock_sector": "Commercial Bank",
       "quantity": 15,
       "entry_price": 533.33,
       "current_price": 540.00,
@@ -433,6 +444,8 @@ All portfolio endpoints require the `Authorization: Bearer <access_token>` heade
     },
     {
       "ticker": "NMB",
+      "stock_name": "NMB Bank Limited",
+      "stock_sector": "Commercial Bank",
       "quantity": 20,
       "entry_price": 310.00,
       "current_price": 305.50,
@@ -492,6 +505,8 @@ Training runs in a background thread via `asyncio.to_thread` so the server stays
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "status": "completed",
   "metrics": {"MAE": 15.39, "RMSE": 18.33, "MAPE": 3.0, "R2": -0.57, "Direction_Accuracy": 47.74},
   "training_time_sec": 42.5,
@@ -521,7 +536,8 @@ All errors return JSON with `error` and `ticker` fields (where applicable):
 App Startup
     -> Load .env (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     -> Initialize Supabase Python client
-    -> Scan data/ for available CSV files -> build ticker list
+    -> Load stock metadata (name_data.json + sector_mappings.json) into memory
+    -> Scan data/companies/ for available CSV files -> build ticker list
     -> Scan models/ for directories with metadata.json -> build available models dict
     -> Load available models into memory: {ticker: (model, scaler, metadata)}
     -> Detect device (CUDA if available, else CPU)
@@ -751,9 +767,22 @@ Important: All three endpoints use `user_id: str = Depends(get_current_user)`. T
 Changes:
 1. Import the two new routers: `from .routers.auth import router as auth_router` and `from .routers.portfolio import router as portfolio_router`.
 2. Register them: `app.include_router(auth_router, prefix="/api")` and `app.include_router(portfolio_router, prefix="/api")`.
-3. No other changes needed.
+3. Import and call `load_metadata_files()` at startup to load stock name/sector data.
+4. No other changes needed.
 
-### 6.6 Modify: `backend/requirements.txt` `(DONE)`
+### 6.6 New File: `backend/api/metadata.py` `(DONE)`
+
+Purpose: Centralized stock metadata lookup — maps tickers to human-readable company names and sector labels.
+
+Responsibilities:
+- `load_metadata_files()`: Called once at startup. Loads `data/metadata/name_data.json` (ticker → `{name, sector_id}`) and `data/metadata/sector_mappings.json` (sector_id → label) into module-level dicts. Tolerant of missing files — lookups return `None` if data is unavailable.
+- `get_stock_name(ticker)`: Returns the full company name (e.g. `"Nabil Bank Limited"`) or `None`.
+- `get_stock_sector(ticker)`: Resolves the sector integer to a label (e.g. `"Commercial Bank"`) or `None`.
+- `enrich(ticker, data)`: Adds `stock_name` and `stock_sector` keys to any response dict. Used by all routers to enrich API responses.
+
+Performance: Two in-memory dict lookups per call (nanoseconds). No I/O after startup.
+
+### 6.7 Modify: `backend/requirements.txt` `(DONE)`
 
 Add two new lines:
 ```
@@ -822,6 +851,8 @@ Vite proxy already configured (`/api → localhost:8000`).
 ```typescript
 interface Prediction {
   ticker: string;
+  stock_name: string | null;     // Full company name from metadata
+  stock_sector: string | null;   // Human-readable sector label
   model_available: boolean;
   trained_on: string | null;     // ISO timestamp from metadata.json
   stale: boolean;                // true if trained_on > 7 days ago
@@ -940,6 +971,7 @@ Each item below is one discrete task. Implement in this exact order:
 | 12 | **Backend: Auth endpoints** -- `backend/api/routers/auth.py`, signup/login/refresh/me | DONE |
 | 13 | **Backend: Portfolio endpoints** -- `backend/api/routers/portfolio.py`, CRUD with weighted-average upsert | DONE |
 | 14 | **Backend: Register routers** -- add auth + portfolio routers to `main.py` | DONE |
+| 14b | **Backend: Stock metadata** -- `data/metadata/` JSONs + `metadata.py` lookup + enrich all endpoints with `stock_name`/`stock_sector` | DONE |
 | 15 | **Frontend: Auth store** -- `authStore.ts` with signIn/signUp/signOut/initialize/refresh | TODO |
 | 16 | **Frontend: API interceptor** -- attach Bearer token, auto-refresh on 401 | TODO |
 | 17 | **Frontend: Login page** -- `Login.tsx` with login/signup tabs | TODO |

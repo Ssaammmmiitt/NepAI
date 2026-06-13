@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from ..auth import get_current_user
+from ..metadata import enrich
 from ..state import app_state
 from ..supabase_client import supabase_client
 
@@ -54,7 +55,7 @@ async def get_portfolio(user_id: str = Depends(get_current_user)):
                 else 0.0
             )
 
-            holdings.append(
+            holdings.append(enrich(ticker,
                 {
                     "ticker": ticker,
                     "quantity": quantity,
@@ -64,7 +65,7 @@ async def get_portfolio(user_id: str = Depends(get_current_user)):
                     "pnl_percent": round(pnl_percent, 2),
                     "added_at": row.get("added_at"),
                 }
-            )
+            ))
 
         return {"holdings": holdings}
 
@@ -139,13 +140,13 @@ async def add_stock(body: AddStockRequest, user_id: str = Depends(get_current_us
             )
 
             updated = result.data[0] if result.data else {}
-            return {
+            return enrich(ticker, {
                 "ticker": ticker,
                 "quantity": new_qty,
                 "entry_price": round(new_price, 2),
                 "action": "merged",
                 "message": f"Merged with existing holding — now {new_qty} shares @ Rs {new_price:.2f}",
-            }
+            })
         else:
             # New holding
             result = (
@@ -161,13 +162,13 @@ async def add_stock(body: AddStockRequest, user_id: str = Depends(get_current_us
                 .execute()
             )
 
-            return {
+            return enrich(ticker, {
                 "ticker": ticker,
                 "quantity": body.quantity,
                 "entry_price": round(body.entry_price, 2),
                 "action": "created",
                 "message": f"Added {body.quantity} shares of {ticker} @ Rs {body.entry_price:.2f}",
-            }
+            })
 
     except HTTPException:
         raise
@@ -208,7 +209,7 @@ async def remove_stock(ticker: str, user_id: str = Depends(get_current_user)):
             "user_id", user_id
         ).eq("ticker", ticker).execute()
 
-        return {"message": f"Removed {ticker} from portfolio", "ticker": ticker}
+        return enrich(ticker, {"message": f"Removed {ticker} from portfolio", "ticker": ticker})
 
     except HTTPException:
         raise

@@ -4,7 +4,8 @@ from pathlib import Path
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
+DATA_DIR = PROJECT_ROOT / "data" / "companies"
+METADATA_DIR = PROJECT_ROOT / "data" / "metadata"
 MODELS_DIR = PROJECT_ROOT / "models"
 
 # NEPSE Market Rule 

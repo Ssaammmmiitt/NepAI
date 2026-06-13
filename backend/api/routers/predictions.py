@@ -5,6 +5,7 @@ import logging
 from fastapi import APIRouter, Query
 
 from ..errors import StockNotFoundError, ModelNotFoundError
+from ..metadata import enrich
 from ..state import app_state, is_stale
 from ...ml.storage import model_exists, load_metadata
 from ...ml.inference import predict
@@ -26,6 +27,8 @@ async def get_prediction(ticker: str, days: int = Query(5, ge=1, le=14)):
     Response example (GET /api/predictions/NABIL?days=3):
         {
           "ticker": "NABIL",
+          "stock_name": "Nabil Bank Limited",
+          "stock_sector": "Commercial Bank",
           "model_available": true,
           "trained_on": "2026-06-11T21:50:40+05:45",
           "stale": false,
@@ -64,4 +67,4 @@ async def get_prediction(ticker: str, days: int = Query(5, ge=1, le=14)):
         result["stale"] = is_stale(date_created)
         result["trained_on"] = date_created
 
-    return result
+    return enrich(ticker, result)

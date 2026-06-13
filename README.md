@@ -11,7 +11,11 @@ and serves recursive multi-day forecasts through a FastAPI backend + React front
 NepAI/
   .github/workflows/
     data_scraper.yml   GitHub Actions cron (Mon-Fri, scrapes NEPSE prices)
-  data/                124 stock CSVs (updated daily by GitHub Actions)
+  data/
+    companies/         124 stock CSVs (updated daily by GitHub Actions)
+    metadata/
+      name_data.json       Ticker → full company name + sector ID
+      sector_mappings.json Sector ID → human-readable sector label
   data_scraper/
     dailyscraper.py    Scrapes sharesansar.com, appends to data/ CSVs
     requirements.txt   pandas, requests, lxml, beautifulsoup4
@@ -27,6 +31,7 @@ NepAI/
     config.py          Paths, hyperparameters, feature lists
     ml/                ML pipeline (model, training, inference, evaluation)
     api/               FastAPI server (routers, state, error handling)
+      metadata.py      Stock metadata lookup (names + sectors from JSONs)
   frontend/            React + Vite dashboard
 ```
 
@@ -114,6 +119,8 @@ Base URL: `http://localhost:8000/api`
 
 All timestamps use Nepal Standard Time (UTC+5:45).
 
+All endpoints that return a `ticker` also include `stock_name` (full company name) and `stock_sector` (human-readable sector label), resolved from `data/metadata/name_data.json` and `data/metadata/sector_mappings.json`.
+
 ### GET /health
 
 Server status check. No parameters.
@@ -138,6 +145,8 @@ GET /api/stocks
 [
   {
     "ticker": "NABIL",
+    "stock_name": "Nabil Bank Limited",
+    "stock_sector": "Commercial Bank",
     "latest_close": 527.0,
     "change": 1.5,
     "volume": 50000,
@@ -145,6 +154,8 @@ GET /api/stocks
   },
   {
     "ticker": "ADBL",
+    "stock_name": "Agricultural Development Bank Limited",
+    "stock_sector": "Commercial Bank",
     "latest_close": 310.2,
     "change": 0.39,
     "volume": 27571,
@@ -168,6 +179,8 @@ GET /api/stocks/NABIL
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "total_rows": 3427,
   "data": [
     {"date": "2020-01-01", "open": 900.0, "high": 910.0, "low": 895.0,
@@ -222,6 +235,8 @@ GET /api/stocks/NABIL/summary
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "latest_close": 527.0,
   "change": 0.0,
   "high_52w": 562.0,
@@ -247,6 +262,8 @@ GET /api/stocks/NABIL/indicators
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "rsi": 69.4,
   "macd": {"macd": 0.7, "signal": 0.41, "histogram": 0.29},
   "bollinger": {"upper": 531.27, "middle": 524.58, "lower": 517.88},
@@ -272,6 +289,8 @@ GET /api/predictions/BPCL?days=10
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "model_available": true,
   "trained_on": "2026-06-11T22:05:40+05:45",
   "stale": false,
@@ -297,6 +316,8 @@ GET /api/models
 [
   {
     "ticker": "NABIL",
+    "stock_name": "Nabil Bank Limited",
+    "stock_sector": "Commercial Bank",
     "date_created": "2026-06-11T22:05:40+05:45",
     "accuracy": {
       "mae": 15.39, "mape": 3.0, "r2": -0.57,
@@ -307,6 +328,8 @@ GET /api/models
   },
   {
     "ticker": "BPCL",
+    "stock_name": "Butwal Power Company Limited",
+    "stock_sector": "Hydropower",
     "date_created": "2026-06-11T21:27:11+05:45",
     "accuracy": {
       "mae": 106.96, "mape": 14.59, "r2": -5.42,
@@ -335,6 +358,8 @@ GET /api/model_status/NABIL
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "model_status": "trained",
   "date_created": "2026-06-11T22:05:40+05:45",
   "stale": false
@@ -346,6 +371,8 @@ GET /api/model_status/NABIL
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "model_status": "training",
   "date_created": null,
   "stale": null
@@ -357,6 +384,8 @@ GET /api/model_status/NABIL
 ```json
 {
   "ticker": "ADBL",
+  "stock_name": "Agricultural Development Bank Limited",
+  "stock_sector": "Commercial Bank",
   "model_status": "not_available",
   "date_created": null,
   "stale": null
@@ -392,6 +421,8 @@ Content-Type: application/json
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "status": "completed",
   "metrics": {
     "MAE": 15.39, "RMSE": 18.33, "MAPE": 3.0,
@@ -492,6 +523,8 @@ Authorization: Bearer <access_token>
   "holdings": [
     {
       "ticker": "NABIL",
+      "stock_name": "Nabil Bank Limited",
+      "stock_sector": "Commercial Bank",
       "quantity": 15,
       "entry_price": 533.33,
       "current_price": 540.00,
@@ -522,6 +555,8 @@ Content-Type: application/json
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "quantity": 5,
   "entry_price": 600.00,
   "action": "created",
@@ -534,6 +569,8 @@ Content-Type: application/json
 ```json
 {
   "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
   "quantity": 15,
   "entry_price": 533.33,
   "action": "merged",
@@ -557,7 +594,12 @@ Authorization: Bearer <access_token>
 ```
 
 ```json
-{"message": "Removed NABIL from portfolio", "ticker": "NABIL"}
+{
+  "ticker": "NABIL",
+  "stock_name": "Nabil Bank Limited",
+  "stock_sector": "Commercial Bank",
+  "message": "Removed NABIL from portfolio"
+}
 ```
 
 Returns 404 if the ticker is not in the user's portfolio.
