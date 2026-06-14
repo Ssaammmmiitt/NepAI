@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/authStore'
 import { Spinner } from '@/components/ui/Spinner'
 
 export function ProtectedRoute() {
-  const { user, initialized, initialize, loading } = useAuthStore()
+  const { user, initialized, initialize, loading, sessionExpired } = useAuthStore()
 
   useEffect(() => {
     if (!initialized) void initialize()
@@ -19,6 +19,11 @@ export function ProtectedRoute() {
         </div>
       </div>
     )
+  }
+
+  // SessionExpiredHandler shows modal and redirects — avoid instant silent redirect
+  if (sessionExpired) {
+    return null
   }
 
   if (!user) {

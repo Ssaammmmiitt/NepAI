@@ -9,9 +9,12 @@ interface AuthState {
   refreshToken: string | null
   loading: boolean
   initialized: boolean
+  sessionExpired: boolean
   signUp: (fullName: string, email: string, password: string) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => void
+  handleSessionExpired: () => void
+  clearSessionExpired: () => void
   initialize: () => Promise<void>
   refreshSession: () => Promise<boolean>
   setTokens: (access: string, refresh: string) => void
@@ -29,6 +32,9 @@ export const useAuthStore = create<AuthState>()(
         onAuthFailure: () => {
           get().signOut()
         },
+        onSessionExpired: () => {
+          get().handleSessionExpired()
+        },
       })
 
       return {
@@ -37,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: null,
         loading: false,
         initialized: false,
+        sessionExpired: false,
 
         setTokens: (access, refresh) => {
           set({ accessToken: access, refreshToken: refresh })
@@ -54,6 +61,7 @@ export const useAuthStore = create<AuthState>()(
               user: data.user,
               accessToken: data.access_token,
               refreshToken: data.refresh_token,
+              sessionExpired: false,
             })
           } finally {
             set({ loading: false })
@@ -68,6 +76,7 @@ export const useAuthStore = create<AuthState>()(
               user: data.user,
               accessToken: data.access_token,
               refreshToken: data.refresh_token,
+              sessionExpired: false,
             })
           } finally {
             set({ loading: false })
@@ -79,7 +88,21 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             accessToken: null,
             refreshToken: null,
+            sessionExpired: false,
           })
+        },
+
+        handleSessionExpired: () => {
+          set({
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            sessionExpired: true,
+          })
+        },
+
+        clearSessionExpired: () => {
+          set({ sessionExpired: false })
         },
 
         refreshSession: async () => {
@@ -93,7 +116,7 @@ export const useAuthStore = create<AuthState>()(
             })
             return true
           } catch {
-            get().signOut()
+            get().handleSessionExpired()
             return false
           }
         },
@@ -115,10 +138,8 @@ export const useAuthStore = create<AuthState>()(
                 const { data } = await authAPI.me()
                 set({ user: data })
               } catch {
-                get().signOut()
+                get().handleSessionExpired()
               }
-            } else {
-              get().signOut()
             }
           } finally {
             set({ loading: false, initialized: true })

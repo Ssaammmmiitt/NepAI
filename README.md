@@ -72,9 +72,12 @@ pip install -r backend/requirements.txt
 # Frontend
 cd frontend
 npm install
+cp .env.example .env
 ```
 
 ### Environment Variables
+
+#### Backend
 
 The backend requires a `.env` file for Supabase credentials (used by auth and portfolio features). A template is provided at `backend/.env.example`:
 
@@ -95,6 +98,47 @@ cp backend/.env.example backend/.env
 | `SUPABASE_SERVICE_ROLE_KEY` | Service-role secret key (full admin access, **never expose publicly**) | Supabase Dashboard → Project Settings → API → `service_role` key |
 
 > **Note:** The `backend/.env` file is git-ignored. Never commit real credentials. Stock data, ML training, and prediction endpoints work without these variables — only auth (`/auth/*`) and portfolio (`/portfolio`) endpoints require them.
+
+#### Frontend
+
+The frontend uses [Vite environment variables](https://vite.dev/guide/env-and-mode.html). Copy the template and adjust for your environment:
+
+```bash
+cd frontend
+cp .env.example .env
+```
+
+| Variable | Exposed to browser | Description |
+|----------|-------------------|-------------|
+| `VITE_API_URL` | Yes | Axios API base URL. Default `/api` for local dev (Vite proxies to the backend). |
+| `DEV_API_PROXY` | No (dev server only) | Backend URL for Vite's `/api` proxy. Default `http://localhost:8000`. |
+
+**Local development** (defaults in `.env.example`):
+
+```env
+VITE_API_URL=/api
+DEV_API_PROXY=http://localhost:8000
+```
+
+**Production / hosting** — set `VITE_API_URL` to your deployed API before building:
+
+```bash
+# Option A: same-origin reverse proxy (nginx routes /api → FastAPI)
+VITE_API_URL=/api npm run build
+
+# Option B: separate API host
+VITE_API_URL=https://api.yourdomain.com/api npm run build
+```
+
+Or create a `.env.production` file in `frontend/` (also git-ignored if named `.env.production.local`):
+
+```env
+VITE_API_URL=https://api.yourdomain.com/api
+```
+
+Then run `npm run build` — Vite inlines `VITE_*` values at build time. Serve the `frontend/dist/` folder with any static host (Vercel, Netlify, nginx, etc.).
+
+> **Note:** `frontend/.env` is git-ignored. Only commit `frontend/.env.example`. Never put secrets in `VITE_` variables — they are embedded in the client bundle.
 
 ### Running
 
@@ -118,7 +162,16 @@ cd frontend
 npm run dev
 ```
 
-Opens at `http://localhost:5173`. The Vite proxy forwards `/api` requests to the backend.
+Opens at `http://localhost:5173`. The Vite proxy forwards `/api` requests to the backend (configurable via `DEV_API_PROXY` in `frontend/.env`).
+
+**Frontend production build:**
+
+```bash
+cd frontend
+cp .env.example .env          # or set VITE_API_URL for your hosted API
+npm run build                 # output in frontend/dist/
+npm run preview               # local preview of production build
+```
 
 **Frontend tests:**
 

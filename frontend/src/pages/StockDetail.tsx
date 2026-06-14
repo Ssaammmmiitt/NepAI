@@ -103,6 +103,7 @@ export function StockDetail() {
               <StockChartTabs
                 ticker={upperTicker}
                 ohlc={allOhlc}
+                loading={stockLoading}
                 prediction={prediction}
                 indicators={indicators}
                 chartHeights={chartHeights}

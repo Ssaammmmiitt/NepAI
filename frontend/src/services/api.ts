@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import { env } from '@/config/env'
 import type {
   AuthResponse,
   Indicators,
@@ -15,7 +16,7 @@ import type {
   User,
 } from '@/types'
 
-const baseURL = import.meta.env.VITE_API_URL || '/api'
+const baseURL = env.apiUrl
 
 export const api = axios.create({
   baseURL,
@@ -26,17 +27,29 @@ let getAccessToken: () => string | null = () => null
 let getRefreshToken: () => string | null = () => null
 let onTokensRefreshed: (access: string, refresh: string) => void = () => {}
 let onAuthFailure: () => void = () => {}
+let onSessionExpired: () => void = () => {}
+
+function isAuthRoute(url: string | undefined): boolean {
+  if (!url) return false
+  return (
+    url.includes('/auth/login') ||
+    url.includes('/auth/signup') ||
+    url.includes('/auth/refresh')
+  )
+}
 
 export function configureAuthHandlers(handlers: {
   getAccessToken: () => string | null
   getRefreshToken: () => string | null
   onTokensRefreshed: (access: string, refresh: string) => void
   onAuthFailure: () => void
+  onSessionExpired: () => void
 }) {
   getAccessToken = handlers.getAccessToken
   getRefreshToken = handlers.getRefreshToken
   onTokensRefreshed = handlers.onTokensRefreshed
   onAuthFailure = handlers.onAuthFailure
+  onSessionExpired = handlers.onSessionExpired
 }
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -57,9 +70,20 @@ api.interceptors.response.use(
       return Promise.reject(error)
     }
 
+    // Login/signup/refresh errors are handled by their callers — not session expiry
+    if (isAuthRoute(original.url)) {
+      return Promise.reject(error)
+    }
+
     const refreshToken = getRefreshToken()
+    const hadAccessToken = Boolean(getAccessToken())
+
     if (!refreshToken) {
-      onAuthFailure()
+      if (hadAccessToken) {
+        onSessionExpired()
+      } else {
+        onAuthFailure()
+      }
       return Promise.reject(error)
     }
 
@@ -71,7 +95,7 @@ api.interceptors.response.use(
           return res.data.access_token
         })
         .catch(() => {
-          onAuthFailure()
+          onSessionExpired()
           return null
         })
         .finally(() => {

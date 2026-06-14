@@ -11,6 +11,7 @@ import { Spinner } from '@/components/ui/Spinner'
 import { stockAPI } from '@/services/api'
 import type { Indicators, OHLCRow, Prediction } from '@/types'
 import type { ChartHeights } from '@/hooks/useChartHeight'
+import { filterOhlcByPeriod, getLatestOhlcDate, yearsBackFromAnchor } from '@/utils/chartData'
 import { formatCurrency } from '@/utils/formatters'
 
 type ActiveTab = 'chart' | 'history'
@@ -19,17 +20,11 @@ type Period = '1M' | '3M' | '6M' | '1Y' | 'All'
 interface StockChartTabsProps {
   ticker: string
   ohlc: OHLCRow[]
+  loading?: boolean
   prediction: Prediction | null
   indicators: Indicators | null
   chartHeights: ChartHeights
   onChartReady: (chart: IChartApi | null) => void
-}
-
-function periodToDate(period: Exclude<Period, 'All'>): string {
-  const d = new Date()
-  const months: Record<Exclude<Period, 'All'>, number> = { '1M': 1, '3M': 3, '6M': 6, '1Y': 12 }
-  d.setMonth(d.getMonth() - months[period])
-  return d.toISOString().split('T')[0]
 }
 
 function TabButton({
@@ -83,6 +78,7 @@ function PeriodButton({
 export function StockChartTabs({
   ticker,
   ohlc,
+  loading = false,
   prediction,
   indicators,
   chartHeights,
@@ -123,12 +119,13 @@ export function StockChartTabs({
       .finally(() => setHistoryLoading(false))
   }, [activeTab, ticker, historyLoaded])
 
-  // Chart tab: filter ohlc by selected period
-  const chartData = useMemo(() => {
-    if (period === 'All') return ohlc
-    const cutoff = periodToDate(period)
-    return ohlc.filter((r) => r.date >= cutoff)
-  }, [ohlc, period])
+  // Chart tab: filter ohlc by period (anchored to latest data date, not today)
+  const chartData = useMemo(() => filterOhlcByPeriod(ohlc, period), [ohlc, period])
+
+  const dataAnchor = useMemo(
+    () => getLatestOhlcDate(historyRows.length > 0 ? historyRows : ohlc),
+    [historyRows, ohlc],
+  )
 
   const lastRow = chartData[chartData.length - 1]
 
@@ -183,13 +180,9 @@ export function StockChartTabs({
           <div className="flex items-center gap-2 py-2">
             {(['1Y', '2Y', '5Y', 'All'] as const).map((label) => {
               const fromYear =
-                label === 'All'
+                label === 'All' || !dataAnchor
                   ? ''
-                  : (() => {
-                      const d = new Date()
-                      d.setFullYear(d.getFullYear() - parseInt(label))
-                      return d.toISOString().split('T')[0]
-                    })()
+                  : yearsBackFromAnchor(dataAnchor, parseInt(label))
               const active = fromDate === fromYear && toDate === ''
               return (
                 <PeriodButton
@@ -211,7 +204,11 @@ export function StockChartTabs({
       {/* Chart tab content */}
       {activeTab === 'chart' && (
         <div className="flex flex-col p-2 sm:p-4">
-          {chartData.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center py-16">
+              <Spinner />
+            </div>
+          ) : chartData.length > 0 ? (
             <>
               <CandlestickChart
                 data={chartData}
@@ -236,9 +233,7 @@ export function StockChartTabs({
               </p>
             </>
           ) : (
-            <div className="flex justify-center py-16">
-              <Spinner />
-            </div>
+            <p className="py-16 text-center text-sm text-dt-meta">No price data available</p>
           )}
         </div>
       )}
