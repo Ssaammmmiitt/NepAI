@@ -26,13 +26,15 @@ Stock data, predictions, and training work without Supabase. Signup, login, and 
 
 ## What it does
 
-| Area | Highlights |
-|------|------------|
-| **Data** | 585 tickers, daily OHLC from ShareSansar (GitHub Actions Mon–Fri 18:00 NPT) |
-| **ML** | Stacked LSTM + attention; recursive 1–14 day forecasts; ±15% NEPSE circuit cap |
-| **Dashboard** | Market overview, gainers/losers, search, candlestick charts, history tab |
-| **Portfolio** | Holdings with live P&amp;L (JWT-protected) |
-| **Training** | On-demand from UI or CLI (≥500 rows after preprocessing) |
+
+| Area          | Highlights                                                                     |
+| ------------- | ------------------------------------------------------------------------------ |
+| **Data**      | 585 tickers, daily OHLC from ShareSansar (GitHub Actions Mon–Fri 18:00 NPT)    |
+| **ML**        | Stacked LSTM + attention; recursive 1–14 day forecasts; ±15% NEPSE circuit cap |
+| **Dashboard** | Market overview, gainers/losers, search, candlestick charts, history tab       |
+| **Portfolio** | Holdings with live P&L (JWT-protected)                                         |
+| **Training**  | On-demand from UI or CLI (≥500 rows after preprocessing)                       |
+
 
 ## Repository layout
 
@@ -49,12 +51,14 @@ NepAI/
 
 ## Documentation
 
-| Doc | Contents |
-|-----|----------|
-| [backend/README.md](backend/README.md) | API routes, CLI, ML pipeline, env vars |
-| [frontend/README.md](frontend/README.md) | Pages, stack, env, scripts, auth flow |
-| [report.md](report.md) | Project report, model metrics, screenshots |
-| [frontend/FEATURES.md](frontend/FEATURES.md) | Detailed UI feature list |
+
+| Doc                                          | Contents                                   |
+| -------------------------------------------- | ------------------------------------------ |
+| [backend/README.md](backend/README.md)       | API routes, CLI, ML pipeline, env vars     |
+| [frontend/README.md](frontend/README.md)     | Pages, stack, env, scripts, auth flow      |
+| [report.md](report.md)                       | Project report, model metrics, screenshots |
+| [frontend/FEATURES.md](frontend/FEATURES.md) | Detailed UI feature list                   |
+
 
 ## Tech stack
 
@@ -70,6 +74,3 @@ python -m backend evaluate --stock NABIL
 python -m backend serve    --reload
 ```
 
-## License
-
-See repository license file if present.
