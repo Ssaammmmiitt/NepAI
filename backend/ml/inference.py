@@ -125,7 +125,6 @@ def predict(
             window_df["close"].rolling(7, min_periods=1).std().fillna(0)
         )
         window_df["price_range"] = window_df["high"] - window_df["low"]
-        window_df["day_of_week"] = window_df["published_date"].dt.dayofweek
 
         prev_close = capped_close
 

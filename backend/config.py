@@ -32,6 +32,6 @@ MIN_YEAR = 2020
 
 # Features
 BASE_FEATURES = ["open", "high", "low", "close", "per_change", "traded_quantity"]
-ENGINEERED_FEATURES = ["ma_7", "ma_21", "volatility", "price_range", "day_of_week"]
+ENGINEERED_FEATURES = ["ma_7", "ma_21", "volatility", "price_range"]
 ALL_FEATURES = BASE_FEATURES + ENGINEERED_FEATURES
 TARGET = "close"

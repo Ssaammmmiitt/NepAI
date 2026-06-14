@@ -30,7 +30,7 @@ async def list_models():
               "rmse": 18.33,
               "direction_accuracy": 47.74
             },
-            "n_features": 11,
+            "n_features": 10,
             "training_rows": 1435,
             "seq_len": 60,
             "training_time_sec": 42.5,

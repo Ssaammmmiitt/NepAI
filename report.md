@@ -212,7 +212,7 @@ backend/
 | Train/val/test split | 70% / 15% / 15% |
 | Min training rows | 500 (after preprocessing) |
 | Min data year | 2020 |
-| Input features | 11 (6 base + 5 engineered) |
+| Input features | 10 (6 base + 4 engineered) |
 | Target | Next-day `close` |
 | Circuit breaker | ±15% of previous close |
 
@@ -423,8 +423,8 @@ npm run preview    # Preview production build
 ### Model architecture: StackedLSTMAttention
 
 ```
-Input (60 × 11 features)
-  → Linear projection (11 → 64)
+Input (60 × 10 features)
+  → Linear projection (10 → 64)
   → 2-layer LSTM (hidden=64)
   → Multi-Head Attention (4 heads) + LayerNorm
   → Dropout
@@ -446,7 +446,6 @@ Input (60 × 11 features)
 | `ma_21` | 21-day moving average of close |
 | `volatility` | Rolling standard deviation of close |
 | `price_range` | high − low |
-| `day_of_week` | Day of week (0–6) |
 
 ### Training pipeline
 
@@ -465,7 +464,7 @@ Input (60 × 11 features)
 | File | Contents |
 |------|----------|
 | `model.pt` | PyTorch state dict |
-| `scaler_feature.pkl` | RobustScaler for 11 input features |
+| `scaler_feature.pkl` | RobustScaler for 10 input features |
 | `scaler_target.pkl` | RobustScaler for close target |
 | `metadata.json` | Training metrics, date range, split sizes, epochs |
 | `predictions.png` | 2×2 matplotlib predicted-vs-actual plot |
@@ -768,7 +767,7 @@ Each trained ticker directory contains the following files (9 tickers currently:
 - **`metadata.json`** — Training metadata: accuracy metrics, feature list, date range, split sizes, epochs trained.
 - **`model.pt`** — Saved PyTorch state dict for the trained LSTM+Attention network.
 - **`predictions.png`** — 2×2 matplotlib plot comparing predicted vs actual close prices on the test set.
-- **`scaler_feature.pkl`** — Fitted RobustScaler for the 11 input features (saved at training time).
+- **`scaler_feature.pkl`** — Fitted RobustScaler for the 10 input features (saved at training time).
 - **`scaler_target.pkl`** — Fitted RobustScaler for the close-price target (saved at training time).
 
 ### ML Research & Experiment Results

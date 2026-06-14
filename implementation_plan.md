@@ -28,8 +28,8 @@ NepAI is a **multi-user** stock prediction dashboard that:
 | Attention heads | 4 |
 | Sequence length | 60 (last 60 trading days as input window) |
 | Base features | open, high, low, close, per_change, traded_quantity |
-| Engineered features | ma_7, ma_21, volatility, price_range, day_of_week |
-| Total features | 11 |
+| Engineered features | ma_7, ma_21, volatility, price_range|
+| Total features | 10 |
 | Target | next-day `close` price |
 | Scaler | RobustScaler (separate feature + target scalers, fitted per-stock) |
 | Forecast method | **Recursive** — for N-day forecast, run N sequential inferences, each time appending the predicted day to the input window |
@@ -227,7 +227,7 @@ NepAI/
 ├── models/                              # One directory per trained stock
 │   ├── NABIL/
 │   │   ├── model.pt                     # Trained weights (state dict)
-│   │   ├── scaler_feature.pkl           # Fitted RobustScaler for 11 input features
+│   │   ├── scaler_feature.pkl           # Fitted RobustScaler for 10 input features
 │   │   ├── scaler_target.pkl            # Fitted RobustScaler for close target
 │   │   ├── metadata.json                # Training metadata + accuracy metrics
 │   │   └── predictions.png              # Predicted-vs-actual 2x2 plot
@@ -270,7 +270,7 @@ Each trained model has a directory under `models/{TICKER}/` containing:
 ```
 models/NABIL/
 ├── model.pt              # PyTorch state dict
-├── scaler_feature.pkl    # RobustScaler for 11 input features
+├── scaler_feature.pkl    # RobustScaler for 10 input features
 ├── scaler_target.pkl     # RobustScaler for close target
 ├── metadata.json         # Training metadata
 └── predictions.png       # Generated on train & evaluate
@@ -289,13 +289,13 @@ models/NABIL/
     "rmse": 18.33,
     "direction_accuracy": 47.7
   },
-  "n_features": 11,
+  "n_features": 10,
   "feature_cols": ["open","high","low","close","per_change","traded_quantity",
-                    "ma_7","ma_21","volatility","price_range","day_of_week"],
+                    "ma_7","ma_21","volatility","price_range"],
   "training_rows": 1435,
   "seq_len": 60,
   "features": ["open","high","low","close","per_change","traded_quantity"],
-  "engineered_features": ["ma_7","ma_21","volatility","price_range","day_of_week"],
+  "engineered_features": ["ma_7","ma_21","volatility","price_range"],
   "date_range": { "start": "2020-01-02", "end": "2026-05-15" },
   "split_sizes": { "train": 1004, "val": 215, "test": 216 },
   "training_time_sec": 42.5,
@@ -571,10 +571,10 @@ App Startup
 predict(ticker, days=5):                    # backend/ml/inference.py
     1. Read last (60 + 21) rows from data/{ticker}.csv
     2. Apply preprocessing (feature engineering: MAs, volatility, etc.)
-    3. window = preprocessed_data[-60:]     # shape: (60, 11)
+    3. window = preprocessed_data[-60:]     # shape: (60, 10)
     4. results = []
     5. for i in 1..days:
-         input_tensor = window.unsqueeze(0) # (1, 60, 11)
+         input_tensor = window.unsqueeze(0) # (1, 60, 10)
          predicted_close = model(input_tensor)
          inverse-scale to get real price
          apply circuit breaker cap (+/-15% of prev_close)

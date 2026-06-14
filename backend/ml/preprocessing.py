@@ -38,7 +38,6 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     df["ma_21"] = df["close"].rolling(21, min_periods=1).mean()
     df["volatility"] = df["close"].rolling(7, min_periods=1).std().fillna(0)
     df["price_range"] = df["high"] - df["low"]
-    df["day_of_week"] = df["published_date"].dt.dayofweek
 
     df.dropna(subset=ALL_FEATURES + [TARGET], inplace=True)
     df.reset_index(drop=True, inplace=True)
