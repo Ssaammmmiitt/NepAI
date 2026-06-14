@@ -35,7 +35,7 @@ NepAI is a **multi-user** stock prediction dashboard that:
 | Forecast method | **Recursive** — for N-day forecast, run N sequential inferences, each time appending the predicted day to the input window |
 | Circuit breaker | Predictions clamped to +/-15% of previous close (NEPSE daily limit) |
 
-> **Hardware note**: ~100K parameters per model (<1MB). Loading all 124 simultaneously uses ~124MB. RTX 4050 (6GB) is overkill for inference — CPU is fine too.
+> **Hardware note**: ~100K parameters per model (<1MB). Loading all 585 simultaneously uses ~585MB. RTX 4050 (6GB) is overkill for inference — CPU is fine too.
 
 ---
 
@@ -179,7 +179,7 @@ NepAI/
 │       └── scrape-data.yml              # Daily cron workflow
 │
 ├── data/                                # Stock data + metadata
-│   ├── companies/                       # 124 CSVs (source of truth, updated by GH Actions)
+│   ├── companies/                       # 585 CSVs (source of truth, updated by GH Actions)
 │   │   ├── NABIL.csv
 │   │   ├── NMB.csv
 │   │   └── ...

@@ -59,7 +59,7 @@ async def health():
     """Return server status, ticker count, and loaded model count.
 
     Response example:
-        {"status": "ok", "tickers": 124, "models": 2}
+        {"status": "ok", "tickers": 585, "models": 2}
     """
     return {
         "status": "ok",
