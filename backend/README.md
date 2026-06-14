@@ -20,10 +20,10 @@ Create `backend/.env` from `.env.example`:
 
 | Variable | Required for |
 |----------|----------------|
-| `SUPABASE_URL` | Auth + portfolio |
-| `SUPABASE_SERVICE_ROLE_KEY` | Auth + portfolio |
+| `SUPABASE_URL` | Server startup, auth, portfolio |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server startup, auth, portfolio |
 
-Stock endpoints, predictions, and training do not need Supabase. The server expects these variables when auth/portfolio routes are used.
+Both variables are required to start the server — auth and portfolio routers import the Supabase client at load time.
 
 ## CLI
 
@@ -92,7 +92,7 @@ Example: `{"error": "Stock 'HEIPO' has 3 usable rows after preprocessing (minimu
 | Setting | Value |
 |---------|-------|
 | Sequence length | 60 trading days |
-| Features | 11 (OHLC, volume, change + engineered) |
+| Features | 10 (OHLC, volume, change + MA/volatility/range) |
 | Target | Next-day close |
 | Scaler | RobustScaler (per stock) |
 | Forecast | Recursive; ±15% circuit breaker per day |
@@ -144,4 +144,3 @@ backend/
 
 - [../README.md](../README.md) — monorepo quick start
 - [../frontend/README.md](../frontend/README.md) — dashboard client
-- [../report.md](../report.md) — full architecture & model metrics

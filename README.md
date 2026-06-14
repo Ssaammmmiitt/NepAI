@@ -12,7 +12,7 @@ cd NepAI
 
 # Backend
 pip install -r backend/requirements.txt
-cp backend/.env.example backend/.env   # Supabase — required for auth/portfolio
+cp backend/.env.example backend/.env   # Supabase — required to start server
 python -m backend serve                  # http://localhost:8000
 
 # Frontend (new terminal)
@@ -22,10 +22,9 @@ cp .env.example .env
 npm run dev                                # http://localhost:5173
 ```
 
-Stock data, predictions, and training work without Supabase. Signup, login, and portfolio need valid `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env`.
+Fill `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env` before running the server (required at startup for auth/portfolio routes).
 
 ## What it does
-
 
 | Area          | Highlights                                                                     |
 | ------------- | ------------------------------------------------------------------------------ |
@@ -34,7 +33,6 @@ Stock data, predictions, and training work without Supabase. Signup, login, and 
 | **Dashboard** | Market overview, gainers/losers, search, candlestick charts, history tab       |
 | **Portfolio** | Holdings with live P&L (JWT-protected)                                         |
 | **Training**  | On-demand from UI or CLI (≥500 rows after preprocessing)                       |
-
 
 ## Repository layout
 
@@ -45,20 +43,15 @@ NepAI/
 ├── data/companies/   Per-ticker OHLC CSVs
 ├── data/metadata/    Company names & sectors
 ├── models/           Trained artifacts ({TICKER}/model.pt, …)
-├── data_scraper/     NEPSE price scraper (CI)
-└── report.md         Full architecture & file reference
+└── data_scraper/     NEPSE price scraper (CI)
 ```
 
 ## Documentation
 
-
-| Doc                                          | Contents                                   |
-| -------------------------------------------- | ------------------------------------------ |
-| [backend/README.md](backend/README.md)       | API routes, CLI, ML pipeline, env vars     |
-| [frontend/README.md](frontend/README.md)     | Pages, stack, env, scripts, auth flow      |
-| [report.md](report.md)                       | Project report, model metrics, screenshots |
-| [frontend/FEATURES.md](frontend/FEATURES.md) | Detailed UI feature list                   |
-
+| Doc                                      | Contents                               |
+| ---------------------------------------- | -------------------------------------- |
+| [backend/README.md](backend/README.md)   | API routes, CLI, ML pipeline, env vars |
+| [frontend/README.md](frontend/README.md) | Pages, UI features, env, auth flow     |
 
 ## Tech stack
 
@@ -73,4 +66,3 @@ python -m backend predict  --stock NABIL --days 5
 python -m backend evaluate --stock NABIL
 python -m backend serve    --reload
 ```
-
