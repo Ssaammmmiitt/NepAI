@@ -1,12 +1,12 @@
 {
-  "ticker": "NABIL",
-  "date_created": "2026-06-14T11:12:17.958498+05:45",
+  "ticker": "SANIMA",
+  "date_created": "2026-06-14T11:14:04.911825+05:45",
   "accuracy": {
-    "mae": 6.731,
-    "mape": 1.3014,
-    "r2": 0.6637,
-    "rmse": 8.983,
-    "direction_accuracy": 38.6364
+    "mae": 4.1822,
+    "mape": 1.26,
+    "r2": 0.9296,
+    "rmse": 5.5586,
+    "direction_accuracy": 42.6136
   },
   "n_features": 10,
   "feature_cols": [
@@ -21,7 +21,7 @@
     "volatility",
     "price_range"
   ],
-  "training_rows": 1579,
+  "training_rows": 1578,
   "seq_len": 60,
   "features": [
     "open",
@@ -42,11 +42,11 @@
     "end": "2026-06-12"
   },
   "split_sizes": {
-    "train": 1105,
+    "train": 1104,
     "val": 237,
     "test": 237
   },
-  "training_time_sec": 3.1,
-  "epochs_trained": 32,
-  "best_val_loss": 0.000169
+  "training_time_sec": 3.4,
+  "epochs_trained": 33,
+  "best_val_loss": 0.000929
 }

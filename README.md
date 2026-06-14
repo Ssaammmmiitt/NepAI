@@ -36,7 +36,7 @@ NepAI/
   models/              Trained model artifacts (9 models; one directory per stock)
     {TICKER}/          ACLBSL, AKPL, ALICL, HDHPC, NABIL, SBI, SCB, SLICL, UNL
       model.pt           PyTorch state dict
-      scaler_feature.pkl RobustScaler for 11 input features
+      scaler_feature.pkl RobustScaler for 10 input features
       scaler_target.pkl  RobustScaler for close target
       metadata.json      Training metadata + accuracy metrics
       predictions.png    Predicted-vs-actual plot
@@ -733,7 +733,7 @@ See [report.md](report.md) for full model metrics, evaluation plots, and archite
 | Attention heads | 4 |
 | Dropout | 0.2 |
 | Sequence length | 60 trading days |
-| Input features | 11 (6 base + 5 engineered) |
+| Input features | 10 (6 base + 4 engineered) |
 | Target | Next-day close price |
 | Scaler | RobustScaler (separate feature + target) |
 | Circuit breaker | Predictions clamped to +/-15% of previous close (NEPSE daily limit) |

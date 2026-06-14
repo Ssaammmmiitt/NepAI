@@ -1,12 +1,12 @@
 {
-  "ticker": "NABIL",
-  "date_created": "2026-06-14T11:12:17.958498+05:45",
+  "ticker": "GBIME",
+  "date_created": "2026-06-14T11:12:41.976195+05:45",
   "accuracy": {
-    "mae": 6.731,
-    "mape": 1.3014,
-    "r2": 0.6637,
-    "rmse": 8.983,
-    "direction_accuracy": 38.6364
+    "mae": 2.2257,
+    "mape": 0.948,
+    "r2": 0.8357,
+    "rmse": 3.138,
+    "direction_accuracy": 47.3333
   },
   "n_features": 10,
   "feature_cols": [
@@ -21,7 +21,7 @@
     "volatility",
     "price_range"
   ],
-  "training_rows": 1579,
+  "training_rows": 1405,
   "seq_len": 60,
   "features": [
     "open",
@@ -38,15 +38,15 @@
     "price_range"
   ],
   "date_range": {
-    "start": "2020-01-01",
+    "start": "2020-01-20",
     "end": "2026-06-12"
   },
   "split_sizes": {
-    "train": 1105,
-    "val": 237,
-    "test": 237
+    "train": 983,
+    "val": 211,
+    "test": 211
   },
-  "training_time_sec": 3.1,
-  "epochs_trained": 32,
-  "best_val_loss": 0.000169
+  "training_time_sec": 2.2,
+  "epochs_trained": 24,
+  "best_val_loss": 0.000402
 }
