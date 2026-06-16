@@ -162,7 +162,7 @@ Legacy files may remain on disk but are unused by the app:
 | `frontend/src/components/charts/PredictionLine.tsx` | Replaced by `PredictionOverlay` |
 | `frontend/src/components/cards/PredictionCard.tsx` | Replaced by `AIPrediction` |
 
-See `frontend/FEATURES.md` for the full feature list.
+See `frontend/README.md` for the full feature list.
 
 ---
 
@@ -832,7 +832,7 @@ The scraper uses `pathlib.Path.stem` for cross-platform symbol extraction, and w
 
 ## 8. Frontend Implementation (Complete)
 
-All items below were implemented. See `frontend/FEATURES.md` for details.
+All items below were implemented. See `frontend/README.md` for details.
 
 ### 8.1 Hook rewiring `(DONE)`
 
