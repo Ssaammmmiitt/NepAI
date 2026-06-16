@@ -294,34 +294,13 @@ def search(driver, date):
         EC.presence_of_element_located((By.XPATH, "//input[@id='fromdate']"))
     )
     date_input = driver.find_element(By.XPATH, "//input[@id='fromdate']")
-    driver.execute_script(
-        """
-        const input = arguments[0];
-        const value = arguments[1];
-        input.value = value;
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-        input.blur();
-
-        if (window.jQuery && window.jQuery.fn.datepicker) {
-            window.jQuery(input).datepicker("hide");
-        }
-
-        const picker = document.querySelector(".datepicker");
-        if (picker) {
-            picker.style.display = "none";
-        }
-        """,
-        date_input,
-        date,
-    )
-    time.sleep(1)
-
+    time.sleep(2)
     search_btn = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@id='btn_todayshareprice_submit']"))
+        EC.element_to_be_clickable((By.XPATH, "//input[@id='fromdate']"))
     )
-    driver.execute_script("arguments[0].scrollIntoView({ block: 'center' });", search_btn)
-    driver.execute_script("arguments[0].click();", search_btn)
+    date_input.send_keys(date)
+    search_btn.click()
+    time.sleep(2)
 
     if driver.find_elements(
         By.XPATH,
@@ -333,14 +312,28 @@ def search(driver, date):
         sys.exit(1)
 
 
-def get_page_table(driver, table_class):
+def get_page_table(driver, table_class, max_retries=3):
+    from selenium.common.exceptions import TimeoutException
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support import expected_conditions as EC
     from selenium.webdriver.support.ui import WebDriverWait
 
-    WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@class='floatThead-wrapper']"))
-    )
+    for attempt in range(1, max_retries + 1):
+        try:
+            WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//div[@class='floatThead-wrapper']")
+                )
+            )
+            break
+        except TimeoutException:
+            if attempt == max_retries:
+                raise
+            print(f"Table not found (attempt {attempt}/{max_retries}), retrying...")
+            time.sleep(3)
+            driver.refresh()
+            time.sleep(2)
+
     soup = BeautifulSoup(driver.page_source, "lxml")
     table = soup.find("table", {"class": table_class})
     tab_data = [
@@ -368,6 +361,7 @@ def scrape_data(driver, date):
         try:
             next_btn = driver.find_element(By.LINK_TEXT, "Next")
             driver.execute_script("arguments[0].click();", next_btn)
+            time.sleep(2)
         except NoSuchElementException:
             break
     driver.close()
@@ -392,6 +386,10 @@ def scrape_daily_share_price(date):
 
     options = Options()
     options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
     options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
