@@ -2338,5 +2338,13 @@
   "SBBLPO": {
     "name": "Sanima Bank Ltd. Promoter Share",
     "sector": 1
+  },
+  "TPKHL": {
+    "name": "Taksar Pikhuwa Khola Hydropower Limited",
+    "sector": 2
+  },
+  "YMHL": {
+    "name": "Yambaling Hydropower Limited",
+    "sector": 2
   }
 }
