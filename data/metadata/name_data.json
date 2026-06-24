@@ -2346,5 +2346,9 @@
   "YMHL": {
     "name": "Yambaling Hydropower Limited",
     "sector": 2
+  },
+  "CORBLP": {
+    "name": "Corporate Development Bank Limited Promoter Share",
+    "sector": 1
   }
 }
