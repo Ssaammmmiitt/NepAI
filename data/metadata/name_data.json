@@ -2350,5 +2350,9 @@
   "CORBLP": {
     "name": "Corporate Development Bank Limited Promoter Share",
     "sector": 1
+  },
+  "SNORL": {
+    "name": "Snow Rivers Limited",
+    "sector": 2
   }
 }
