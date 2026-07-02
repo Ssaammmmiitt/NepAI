@@ -2354,5 +2354,13 @@
   "SNORL": {
     "name": "Snow Rivers Limited",
     "sector": 2
+  },
+  "KAHL": {
+    "name": "Kalanga Hydro Limited",
+    "sector": 2
+  },
+  "SGHL": {
+    "name": "Sanigad Hydro Limited",
+    "sector": 2
   }
 }
