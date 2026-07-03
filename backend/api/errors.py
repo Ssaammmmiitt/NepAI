@@ -30,6 +30,12 @@ class TrainingInProgressError(Exception):
         self.message = f"Training already in progress for '{ticker}'"
 
 
+class StockTrainRequestAccept(Exception):
+    def __init__(self, ticker: str):
+        self.ticker = ticker
+        self.message = f"We are unable to train at this time due to resource constraints. Training request for {ticker} has been accepted. The model will be trained on the next available cycle."
+
+
 def register_error_handlers(app):
     @app.exception_handler(StockNotFoundError)
     async def handle_stock_not_found(request: Request, exc: StockNotFoundError):
@@ -57,4 +63,11 @@ def register_error_handlers(app):
         return JSONResponse(
             status_code=409,
             content={"error": exc.message, "ticker": exc.ticker},
+        )
+
+    @app.exception_handler(StockTrainRequestAccept)
+    async def handle_train_request_accept(request: Request, exc: StockTrainRequestAccept):
+        return JSONResponse(
+            status_code=202,
+            content={"message": exc.message, "ticker": exc.ticker},
         )

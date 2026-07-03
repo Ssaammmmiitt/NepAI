@@ -11,7 +11,7 @@ from ...config import MIN_ROWS
 from ...ml.preprocessing import load_stock_data, preprocess
 from ...ml.storage import delete_model, load_metadata
 from ...ml.training import train_stock
-from ..errors import StockNotFoundError, InsufficientDataError, TrainingInProgressError
+from ..errors import StockNotFoundError, InsufficientDataError, TrainingInProgressError, StockTrainRequestAccept
 from ..metadata import enrich
 from ..state import app_state
 
@@ -77,28 +77,30 @@ async def train_model(body: TrainRequest):
 
     if len(df) < MIN_ROWS:
         raise InsufficientDataError(ticker, len(df), MIN_ROWS)
+    
+    raise StockTrainRequestAccept(ticker)
 
-    app_state.invalidate_cache(ticker)
-    app_state.set_training_status(ticker, "training")
+    # app_state.invalidate_cache(ticker)
+    # app_state.set_training_status(ticker, "training")
 
-    try:
-        delete_model(ticker)
-        result = await asyncio.to_thread(train_stock, filepath=str(csv_path))
-    except Exception as e:
-        app_state.set_training_status(ticker, "failed")
-        logger.error(f"Training failed for {ticker}: {e}")
-        raise
-    finally:
-        app_state.clear_training_status(ticker)
+    # try:
+    #     delete_model(ticker)
+    #     result = await asyncio.to_thread(train_stock, filepath=str(csv_path))
+    # except Exception as e:
+    #     app_state.set_training_status(ticker, "failed")
+    #     logger.error(f"Training failed for {ticker}: {e}")
+    #     raise
+    # finally:
+    #     app_state.clear_training_status(ticker)
 
-    metadata = load_metadata(ticker) or {}
-    metrics = result.get("metrics_capped", {})
+    # metadata = load_metadata(ticker) or {}
+    # metrics = result.get("metrics_capped", {})
 
-    return enrich(ticker, {
-        "ticker": ticker,
-        "status": "completed",
-        "metrics": {k: round(float(v), 4) for k, v in metrics.items()},
-        "training_time_sec": result.get("training_time_sec"),
-        "epochs_trained": result.get("epochs_trained"),
-        "date_created": metadata.get("date_created"),
-    })
+    # return enrich(ticker, {
+    #     "ticker": ticker,
+    #     "status": "completed",
+    #     "metrics": {k: round(float(v), 4) for k, v in metrics.items()},
+    #     "training_time_sec": result.get("training_time_sec"),
+    #     "epochs_trained": result.get("epochs_trained"),
+    #     "date_created": metadata.get("date_created"),
+    # })
