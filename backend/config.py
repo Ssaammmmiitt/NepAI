@@ -10,6 +10,7 @@ MODELS_DIR = PROJECT_ROOT / "models"
 MODEL_CACHE_DIR = Path(__file__).resolve().parent / ".model_cache"
 MODEL_BUCKET_NAME = "model-artifacts"
 MODEL_TABLE_NAME = "models"
+TRAIN_REQUESTS_TABLE_NAME = "train_requests"
 
 # NEPSE Market Rule 
 CIRCUIT_CAP = 0.15  # daily price movement cannot exceed +/-15%

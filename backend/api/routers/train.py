@@ -2,15 +2,18 @@
 
 import asyncio
 import logging
+from datetime import datetime, timezone
 
 import numpy as np
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from ...config import MIN_ROWS
+from ...config import MIN_ROWS, TRAIN_REQUESTS_TABLE_NAME
+from ...supabase_client import supabase_client
 from ...ml.preprocessing import load_stock_data, preprocess
 from ...ml.storage import delete_model, load_metadata
 from ...ml.training import train_stock
+from ..auth import get_current_user
 from ..errors import StockNotFoundError, InsufficientDataError, TrainingInProgressError, StockTrainRequestAccept
 from ..metadata import enrich
 from ..state import app_state
@@ -24,7 +27,7 @@ class TrainRequest(BaseModel):
 
 
 @router.post("", summary="Train or retrain a stock model")
-async def train_model(body: TrainRequest):
+async def train_model(body: TrainRequest, user_id: str = Depends(get_current_user)):
     """Train an LSTM model for the given stock ticker.
 
     Validation order:
@@ -77,7 +80,31 @@ async def train_model(body: TrainRequest):
 
     if len(df) < MIN_ROWS:
         raise InsufficientDataError(ticker, len(df), MIN_ROWS)
-    
+
+    # Log the train request to the database
+    try:
+        # Fetch user full name from profiles table
+        profile_result = (
+            supabase_client.table("profiles")
+            .select("full_name")
+            .eq("id", user_id)
+            .execute()
+        )
+        full_name = ""
+        if profile_result.data and len(profile_result.data) > 0:
+            full_name = profile_result.data[0].get("full_name", "")
+
+        supabase_client.table(TRAIN_REQUESTS_TABLE_NAME).insert(
+            {
+                "user_id": user_id,
+                "user_full_name": full_name,
+                "ticker": ticker,
+                "requested_at": datetime.now(timezone.utc).isoformat(),
+            }
+        ).execute()
+    except Exception as exc:
+        logger.warning("Failed to log train request for %s: %s", ticker, exc)
+
     raise StockTrainRequestAccept(ticker)
 
     # app_state.invalidate_cache(ticker)
