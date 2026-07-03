@@ -31,5 +31,5 @@ jobs:
         run: |
           cp -r ../data /tmp/fresh_data
           git checkout hosting
-          rm -rf data && cp -r /tmp/fresh_data data
-          git add data && git diff --cached --quiet || (git commit -m "Update data" && git push origin hosting)
+          rm -rf ../data && cp -r /tmp/fresh_data ../data
+          git add ../data && git diff --cached --quiet || (git commit -m "Update data" && git push origin hosting)
