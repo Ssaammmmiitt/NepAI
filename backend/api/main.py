@@ -64,5 +64,5 @@ async def health():
     return {
         "status": "ok",
         "tickers": len(app_state.available_tickers),
-        "models": len(app_state.get_all_models()),
+        "models": app_state.get_model_count(),
     }

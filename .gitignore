@@ -29,3 +29,6 @@ Thumbs.db
 
 # Misc
 *.log
+
+implementation_plan.md
+backend/.model_cache/

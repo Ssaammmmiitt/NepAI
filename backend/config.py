@@ -7,6 +7,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data" / "companies"
 METADATA_DIR = PROJECT_ROOT / "data" / "metadata"
 MODELS_DIR = PROJECT_ROOT / "models"
+MODEL_CACHE_DIR = Path(__file__).resolve().parent / ".model_cache"
+MODEL_BUCKET_NAME = "model-artifacts"
+MODEL_TABLE_NAME = "models"
 
 # NEPSE Market Rule 
 CIRCUIT_CAP = 0.15  # daily price movement cannot exceed +/-15%

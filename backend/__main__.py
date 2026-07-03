@@ -58,7 +58,6 @@ def cmd_train(args):
     logger.info(f"  Time:    {result['training_time_sec']}s")
     logger.info(f"  Epochs:  {result['epochs_trained']}")
     logger.info(f"  Saved:   {result['model_dir']}")
-    logger.info(f"  Plot:    {result.get('plot_path', 'N/A')}")
     _print_metrics("Circuit-Capped", result["metrics_capped"])
     _print_metrics("Raw (no cap)", result["metrics_raw"])
 
@@ -111,7 +110,6 @@ def cmd_evaluate(args):
     logger.info(f"  Model trained: {metadata.get('date_created', 'N/A')}")
     logger.info(f"  Test samples:  {result['n_samples']}")
     logger.info(f"  Capped:        {result['n_capped']} / {result['n_samples']}")
-    logger.info(f"  Plot saved:    {result['plot_path']}")
     _print_metrics("Circuit-Capped", result["metrics_capped"])
     _print_metrics("Raw (no cap)", result["metrics_raw"])
 

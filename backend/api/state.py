@@ -6,9 +6,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..config import DATA_DIR, MODELS_DIR
+from ..config import DATA_DIR, MODEL_TABLE_NAME
+from ..supabase_client import supabase_client
 from ..ml.preprocessing import load_stock_data
-from ..ml.storage import load_metadata
+from ..ml.storage import _row_to_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -42,21 +43,29 @@ class AppState:
         self.data_cache.pop(ticker, None)
 
     def get_all_models(self) -> list[dict]:
+        result = (
+            supabase_client.table(MODEL_TABLE_NAME)
+            .select("*")
+            .order("ticker")
+            .execute()
+        )
         models = []
-        if not MODELS_DIR.exists():
-            return models
-        for model_dir in sorted(MODELS_DIR.iterdir()):
-            if not model_dir.is_dir():
-                continue
-            meta = load_metadata(model_dir.name)
-            if meta is None:
-                continue
+        for row in result.data or []:
+            meta = _row_to_metadata(row)
             meta["stale"] = is_stale(meta.get("date_created", ""))
-            status = self.training_status.get(model_dir.name)
+            status = self.training_status.get(meta["ticker"])
             if status:
                 meta["training_status"] = status
             models.append(meta)
         return models
+
+    def get_model_count(self) -> int:
+        result = (
+            supabase_client.table(MODEL_TABLE_NAME)
+            .select("ticker", count="exact")
+            .execute()
+        )
+        return result.count or 0
 
     def set_training_status(self, ticker: str, status: str):
         self.training_status[ticker] = status

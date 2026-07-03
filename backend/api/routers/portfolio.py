@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from ..auth import get_current_user
 from ..metadata import enrich
 from ..state import app_state
-from ..supabase_client import supabase_client
+from ...supabase_client import supabase_client
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/portfolio", tags=["portfolio"])

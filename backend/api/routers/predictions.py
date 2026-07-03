@@ -1,5 +1,6 @@
 """Prediction endpoint: recursive N-day forecast with model-exists validation."""
 
+import asyncio
 import logging
 
 from fastapi import APIRouter, Query
@@ -49,10 +50,11 @@ async def get_prediction(ticker: str, days: int = Query(5, ge=1, le=14)):
     if not app_state.stock_csv_exists(ticker):
         raise StockNotFoundError(ticker)
 
-    if not model_exists(ticker):
+    exists = await asyncio.to_thread(model_exists, ticker)
+    if not exists:
         raise ModelNotFoundError(ticker)
 
-    result = predict(ticker=ticker, days=days)
+    result = await asyncio.to_thread(predict, ticker=ticker, days=days)
 
     if not result.get("model_available"):
         raise ModelNotFoundError(ticker)
@@ -61,7 +63,7 @@ async def get_prediction(ticker: str, days: int = Query(5, ge=1, le=14)):
         p.pop("raw_price", None)
         p.pop("was_capped", None)
 
-    metadata = load_metadata(ticker)
+    metadata = await asyncio.to_thread(load_metadata, ticker)
     if metadata:
         date_created = metadata.get("date_created", "")
         result["stale"] = is_stale(date_created)
