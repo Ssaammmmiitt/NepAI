@@ -13,8 +13,7 @@ from supabase import create_client, Client
 
 logger = logging.getLogger(__name__)
 
-# Load .env from the backend directory (backend/.env)
-_env_path = Path(__file__).resolve().parent.parent / ".env"
+_env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(_env_path)
 
 SUPABASE_URL: str | None = os.getenv("SUPABASE_URL")
@@ -26,7 +25,6 @@ if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
         "Create backend/.env with:\n"
         "  SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co\n"
         "  SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...\n"
-        "See implementation_plan.md section 5.2 for details."
     )
 
 supabase_client: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)

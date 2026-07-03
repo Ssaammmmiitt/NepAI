@@ -9,7 +9,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr
 
-from ..supabase_client import supabase_client
+from ...supabase_client import supabase_client
 from ..auth import get_current_user
 
 logger = logging.getLogger(__name__)

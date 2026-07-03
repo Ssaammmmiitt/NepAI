@@ -1,4 +1,4 @@
-"""Model evaluation: forward pass on test set, metric computation, plotting."""
+"""Model evaluation: forward pass on test set, metric computation."""
 
 import logging
 from pathlib import Path
@@ -13,11 +13,10 @@ from sklearn.metrics import (
     mean_absolute_percentage_error,
 )
 
-from ..config import MODELS_DIR, DATA_DIR
+from ..config import DATA_DIR
 from .circuit_breaker import apply_cap_batch
 from .dataset import build_dataloaders
 from .storage import load_model
-from .plotting import plot_predictions
 
 logger = logging.getLogger(__name__)
 
@@ -114,12 +113,6 @@ def evaluate_stock(ticker: str, device: torch.device | None = None) -> dict:
         info["target_scaler"].inverse_transform(prev_s.reshape(-1, 1)).flatten(),
     )
 
-    model_dir = MODELS_DIR / ticker
-    model_dir.mkdir(parents=True, exist_ok=True)
-    plot_path = plot_predictions(
-        preds_inv, actuals_inv, ticker, metrics_capped, model_dir
-    )
-
     logger.info(
         f"[{ticker}] Test (circuit-capped):  "
         f"MAE={metrics_capped['MAE']:.2f}  RMSE={metrics_capped['RMSE']:.2f}  "
@@ -140,5 +133,4 @@ def evaluate_stock(ticker: str, device: torch.device | None = None) -> dict:
         "metrics_raw": metrics_raw,
         "n_capped": int(cap_mask.sum()),
         "n_samples": len(preds_inv),
-        "plot_path": str(plot_path),
     }

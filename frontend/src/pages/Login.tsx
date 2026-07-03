@@ -36,7 +36,7 @@ export function Login() {
       if (mode === 'login') {
         await signIn(email, password)
       } else {
-        await signUp(email, password, name)
+        await signUp(name, email, password)
       }
       navigate('/', { replace: true })
     } catch (err) {

@@ -12,7 +12,6 @@ from ..config import LEARNING_RATE, EPOCHS, PATIENCE
 from .model import build_model
 from .dataset import build_dataloaders
 from .evaluation import run_evaluation, compute_metrics
-from .plotting import plot_predictions
 from .storage import save_model
 
 logger = logging.getLogger(__name__)
@@ -154,11 +153,6 @@ def train_stock(
         best_val_loss=best_val,
     )
 
-    # Generate predictions plot
-    plot_path = plot_predictions(
-        preds_inv, actuals_inv, stock_name, metrics_capped, model_dir
-    )
-
     return {
         "ticker": stock_name,
         "model_dir": str(model_dir),
@@ -167,5 +161,4 @@ def train_stock(
         "training_time_sec": round(elapsed, 1),
         "epochs_trained": epochs_trained,
         "best_val_loss": round(best_val, 6),
-        "plot_path": str(plot_path),
     }
