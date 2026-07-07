@@ -145,6 +145,10 @@ export const modelAPI = {
   list: () => api.get<ModelMetadata[]>('/models'),
 }
 
+export const healthAPI = {
+  check: () => api.get<{ status: string; tickers: number; models: number; data_updated_to: string | null }>('/health'),
+}
+
 export const portfolioAPI = {
   getPortfolio: () => api.get<PortfolioResponse>('/portfolio'),
   addStock: (data: { ticker: string; quantity: number; entry_price: number }) =>

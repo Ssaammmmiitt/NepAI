@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { stockAPI } from '@/services/api'
+import { stockAPI, healthAPI } from '@/services/api'
 import type { StockTicker } from '@/types'
 
 interface StockState {
@@ -7,6 +7,7 @@ interface StockState {
   loading: boolean
   error: string | null
   lastFetched: number | null
+  dataUpdatedTo: string | null
   loadTickers: (force?: boolean) => Promise<void>
 }
 
@@ -17,6 +18,7 @@ export const useStockStore = create<StockState>((set, get) => ({
   loading: false,
   error: null,
   lastFetched: null,
+  dataUpdatedTo: null,
 
   loadTickers: async (force = false) => {
     const { lastFetched, loading } = get()
@@ -25,8 +27,15 @@ export const useStockStore = create<StockState>((set, get) => ({
 
     set({ loading: true, error: null })
     try {
-      const { data } = await stockAPI.listTickers()
-      set({ tickers: data, lastFetched: Date.now() })
+      const [tickersRes, healthRes] = await Promise.all([
+        stockAPI.listTickers(),
+        get().dataUpdatedTo ? Promise.resolve(null) : healthAPI.check().catch(() => null),
+      ])
+      set({
+        tickers: tickersRes.data,
+        lastFetched: Date.now(),
+        ...(healthRes ? { dataUpdatedTo: healthRes.data.data_updated_to } : {}),
+      })
     } catch {
       set({ error: 'Failed to load market data' })
     } finally {

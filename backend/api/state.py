@@ -22,6 +22,7 @@ class AppState:
         self.data_cache: dict[str, pd.DataFrame] = {}
         self.available_tickers: list[str] = []
         self.training_status: dict[str, str] = {}
+        self._latest_data_date: str | None = None
 
     def scan_tickers(self):
         self.available_tickers = sorted(f.stem for f in DATA_DIR.glob("*.csv"))
@@ -41,6 +42,25 @@ class AppState:
 
     def invalidate_cache(self, ticker: str):
         self.data_cache.pop(ticker, None)
+        self._latest_data_date = None
+
+    def get_latest_data_date(self) -> str | None:
+        if self._latest_data_date is not None:
+            return self._latest_data_date
+        latest: pd.Timestamp | None = None
+        sample = self.available_tickers[:50]
+        for ticker in sample:
+            try:
+                df = self.get_stock_data(ticker)
+                if df.empty:
+                    continue
+                last = df["published_date"].iloc[-1]
+                if latest is None or last > latest:
+                    latest = last
+            except Exception:
+                continue
+        self._latest_data_date = str(latest.date()) if latest is not None else None
+        return self._latest_data_date
 
     def get_all_models(self) -> list[dict]:
         result = (

@@ -128,7 +128,10 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
   if (loading) {
     return (
       <Card className="flex min-h-[8rem] flex-1 items-center justify-center">
-        <Spinner />
+        <div className="flex flex-col items-center gap-2">
+          <Spinner />
+          <p className="font-mono text-xs text-dt-meta">Performing AI prediction…</p>
+        </div>
       </Card>
     )
   }
@@ -183,12 +186,10 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
 
       <PredictionColumns items={prediction.predictions} />
 
-      {prediction.stale ? (
-        <Button variant="secondary" className="mt-4 w-full sm:w-auto" onClick={handleTrain} loading={training}>
-          <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
-          {training ? 'Training...' : 'Retrain Model'}
-        </Button>
-      ) : null}
+      <Button variant="secondary" className="mt-4 w-full sm:w-auto" onClick={handleTrain} loading={training}>
+        <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
+        {training ? 'Training...' : 'Retrain Model'}
+      </Button>
 
       {trainError ? (
         <div className="mt-4 flex justify-center">
