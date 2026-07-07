@@ -56,13 +56,14 @@ async def startup():
 
 @app.get("/api/health", summary="Health check")
 async def health():
-    """Return server status, ticker count, and loaded model count.
+    """Return server status, ticker count, loaded model count, and latest data date.
 
     Response example:
-        {"status": "ok", "tickers": 585, "models": 2}
+        {"status": "ok", "tickers": 585, "models": 2, "data_updated_to": "2026-07-07"}
     """
     return {
         "status": "ok",
         "tickers": len(app_state.available_tickers),
         "models": app_state.get_model_count(),
+        "data_updated_to": app_state.get_latest_data_date(),
     }

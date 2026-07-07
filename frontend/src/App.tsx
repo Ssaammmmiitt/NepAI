@@ -11,8 +11,15 @@ import { StockDetail } from '@/pages/StockDetail'
 import { Portfolio } from '@/pages/Portfolio'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
+import { useStockStore } from '@/store/stockStore'
 
 function AppLayout() {
+  const loadTickers = useStockStore((s) => s.loadTickers)
+
+  useEffect(() => {
+    void loadTickers()
+  }, [loadTickers])
+
   return (
     <div className="min-h-screen bg-dt-bg">
       <Sidebar />

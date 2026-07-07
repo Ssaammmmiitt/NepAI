@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Brain, RefreshCw, AlertTriangle } from 'lucide-react'
+import { Brain, RefreshCw, AlertTriangle, Clock } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -105,18 +105,45 @@ function TrainErrorBanner({ message, isInsufficientData, ticker }: TrainErrorBan
   )
 }
 
+function TrainAcceptedBanner({ ticker }: { ticker: string }) {
+  return (
+    <div className="mx-auto w-fit max-w-[18rem] sm:max-w-[20rem]">
+      <div className="flex flex-col items-center gap-2 border border-dt-accent/50 bg-dt-accent/5 px-4 py-3 text-center shadow-[3px_3px_0_0_var(--dt-accent)]">
+        <div className="flex h-8 w-8 items-center justify-center border border-dt-accent/30 bg-dt-surface">
+          <Clock className="h-4 w-4 text-dt-accent" strokeWidth={1.5} />
+        </div>
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-dt-accent">
+          Request Accepted
+        </p>
+        <p className="text-xs font-medium leading-snug text-dt-text">
+          Training request for {ticker} has been queued
+        </p>
+        <p className="text-[10px] leading-snug text-dt-meta">
+          The model will be trained on the next available cycle due to resource constraints
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }: AIPredictionProps) {
   const [training, setTraining] = useState(false)
   const [trainError, setTrainError] = useState('')
   const [trainErrorStatus, setTrainErrorStatus] = useState<number | null>(null)
+  const [trainAccepted, setTrainAccepted] = useState(false)
 
   const handleTrain = async () => {
     setTraining(true)
     setTrainError('')
     setTrainErrorStatus(null)
+    setTrainAccepted(false)
     try {
-      await trainAPI.train(ticker)
-      onRetrainComplete?.()
+      const res = await trainAPI.train(ticker)
+      if (res.status === 202) {
+        setTrainAccepted(true)
+      } else {
+        onRetrainComplete?.()
+      }
     } catch (err) {
       setTrainError(getApiErrorMessage(err, 'Training failed. Please try again.'))
       setTrainErrorStatus(getApiErrorStatus(err))
@@ -128,7 +155,10 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
   if (loading) {
     return (
       <Card className="flex min-h-[8rem] flex-1 items-center justify-center">
-        <Spinner />
+        <div className="flex flex-col items-center gap-2">
+          <Spinner />
+          <p className="font-mono text-xs text-dt-meta">Performing AI prediction</p>
+        </div>
       </Card>
     )
   }
@@ -147,10 +177,11 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
           <Button
             onClick={handleTrain}
             loading={training}
-            disabled={trainErrorStatus === 400}
+            disabled={trainErrorStatus === 400 || trainAccepted}
           >
             Train Model
           </Button>
+          {trainAccepted ? <TrainAcceptedBanner ticker={ticker} /> : null}
           {trainError ? (
             <TrainErrorBanner
               message={trainError}
@@ -183,11 +214,21 @@ export function AIPrediction({ ticker, prediction, loading, onRetrainComplete }:
 
       <PredictionColumns items={prediction.predictions} />
 
-      {prediction.stale ? (
-        <Button variant="secondary" className="mt-4 w-full sm:w-auto" onClick={handleTrain} loading={training}>
-          <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
-          {training ? 'Training...' : 'Retrain Model'}
-        </Button>
+      <Button
+        variant="secondary"
+        className="mt-4 w-full sm:w-auto"
+        onClick={handleTrain}
+        loading={training}
+        disabled={trainAccepted}
+      >
+        <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
+        {training ? 'Training...' : 'Retrain Model'}
+      </Button>
+
+      {trainAccepted ? (
+        <div className="mt-4 flex justify-center">
+          <TrainAcceptedBanner ticker={ticker} />
+        </div>
       ) : null}
 
       {trainError ? (

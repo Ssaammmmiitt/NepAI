@@ -1,10 +1,26 @@
 import type { ReactNode } from 'react'
+import { Database } from 'lucide-react'
 import { LiveClock } from '@/components/widgets/LiveClock'
+import { useStockStore } from '@/store/stockStore'
 
 interface HeaderProps {
   title: string
   subtitle?: string
   action?: ReactNode
+}
+
+function DataDateBadge() {
+  const dataUpdatedTo = useStockStore((s) => s.dataUpdatedTo)
+  if (!dataUpdatedTo) return null
+
+  return (
+    <div className="flex items-center gap-1.5 border border-dt-border bg-dt-bg px-2.5 py-1.5 font-mono text-xs text-dt-meta">
+      <Database className="h-3 w-3 shrink-0" strokeWidth={1.5} />
+      <span>
+        Data to <span className="text-dt-text">{dataUpdatedTo}</span>
+      </span>
+    </div>
+  )
 }
 
 export function Header({ title, subtitle, action }: HeaderProps) {
@@ -25,6 +41,7 @@ export function Header({ title, subtitle, action }: HeaderProps) {
               {action}
             </div>
           ) : null}
+          <DataDateBadge />
           <LiveClock />
         </div>
       </div>
