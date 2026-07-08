@@ -1,1 +1,1 @@
-# NepAI Branch for hosting on [render](https://render.com)
+# NepAI Branch for hosting on [render](https://nepai-site.onrender.com)
