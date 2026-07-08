@@ -13,7 +13,7 @@ from ..ml.storage import _row_to_metadata
 
 logger = logging.getLogger(__name__)
 
-STALE_DAYS = 7
+STALE_DAYS = 30
 NPT = timezone(timedelta(hours=5, minutes=45))
 
 
