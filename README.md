@@ -1,6 +1,6 @@
 # NepAI
 
-AI-powered stock prediction and analytics platform for **NEPSE** (Nepal Stock Exchange) with individual LSTM models are trained per stock to forecast next-day prices up to 14 days ahead.
+AI-powered stock prediction and analytics platform for **NEPSE** (Nepal Stock Exchange) with individual LSTM models trained per stock to forecast next-day prices up to 14 days ahead.
 
 ## Features
 
