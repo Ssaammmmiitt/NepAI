@@ -2366,5 +2366,9 @@
   "ADBLB": {
     "name": "4% Agricultural Bond",
     "sector": 6
+  },
+  "ECL": {
+    "name": "Everest Colour Limited",
+    "sector": 8
   }
 }
