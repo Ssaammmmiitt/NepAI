@@ -2370,5 +2370,9 @@
   "ECL": {
     "name": "Everest Colour Limited",
     "sector": 8
+  },
+  "SEF2": {
+    "name": "Siddhartha Equity Fund 2",
+    "sector": 12
   }
 }
