@@ -2382,5 +2382,9 @@
   "SAEF2": {
     "name": "Sanima Equity Fund II",
     "sector": 12
+  },
+  "RSY2": {
+    "name": "Reliable Samriddhi Yojana-2",
+    "sector": 12
   }
 }
