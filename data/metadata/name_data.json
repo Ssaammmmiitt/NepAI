@@ -2386,5 +2386,9 @@
   "RSY2": {
     "name": "Reliable Samriddhi Yojana-2",
     "sector": 12
+  },
+  "MEPDL": {
+    "name": "Mount Everest Power Development Limited",
+    "sector": 2
   }
 }
