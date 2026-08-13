@@ -2390,5 +2390,9 @@
   "MEPDL": {
     "name": "Mount Everest Power Development Limited",
     "sector": 2
+  },
+  "SAPIL": {
+    "name": "Sarvottam Paints Industries Limited",
+    "sector": 8
   }
 }
