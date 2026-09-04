@@ -23,6 +23,9 @@ STOCKWISE_COLUMNS = [
     "traded_amount",
     "status",
 ]
+STALE_SAMPLE_SIZE = 5
+OHLC_CSV_FIELDS = ("open", "high", "low", "close")
+OHLC_SCRAPE_FIELDS = ("Open", "High", "Low", "Close")
 
 DATA_DIR = "../data"
 STOCKWISE_DIR = "../data/companies"
@@ -131,6 +134,53 @@ def existing_published_dates(stock_file):
             for row in reader
             if row.get("published_date", "").strip()
         }
+
+
+def _ohlc_values(row, fields):
+    return tuple(numeric_decimal(row.get(field, "")) for field in fields)
+
+
+def last_ohlc_and_dates(stock_file):
+    if not stock_file.exists():
+        return None, set()
+
+    dates = set()
+    last = None
+    with stock_file.open("r", newline="", encoding="utf-8-sig") as csv_file:
+        reader = csv.DictReader(csv_file)
+        if "published_date" not in (reader.fieldnames or []):
+            return None, dates
+        for row in reader:
+            date = (row.get("published_date") or "").strip()
+            if date:
+                dates.add(date)
+            last = row
+
+    if last is None:
+        return None, dates
+    return _ohlc_values(last, OHLC_CSV_FIELDS), dates
+
+
+def is_stale_scrape(df, published_date, stockwise_dir, sample_size=STALE_SAMPLE_SIZE):
+    stockwise_path = Path(stockwise_dir)
+    matched = []
+    for _, row in df.iterrows():
+        symbol = sanitize_symbol(row.get("Symbol", ""))
+        if not symbol:
+            continue
+
+        last_ohlc, dates = last_ohlc_and_dates(stockwise_path / f"{symbol}.csv")
+        if last_ohlc is None or published_date in dates:
+            continue
+
+        if _ohlc_values(row, OHLC_SCRAPE_FIELDS) != last_ohlc:
+            return False
+
+        matched.append(symbol)
+        if len(matched) >= sample_size:
+            print(f"Stale scrape: {', '.join(matched)} match previous OHLC")
+            return True
+    return False
 
 
 def append_stockwise_rows(df, published_date, stockwise_dir="stockwise_data"):
@@ -472,6 +522,9 @@ def main():
     scrape_date = parse_date_string(args.date)
     scrape_input_date = datetime.strptime(scrape_date, "%Y-%m-%d").strftime("%m/%d/%Y")
     final_df = scrape_daily_share_price(scrape_input_date)
+    if is_stale_scrape(final_df, scrape_date, args.stockwise_dir):
+        print(f"Skipping update for {scrape_date}: sampled stocks match previous session OHLC")
+        return
     result = append_stockwise_rows(final_df, scrape_date, args.stockwise_dir)
     if not args.skip_metadata:
         metadata_result = update_metadata_for_new_symbols(
