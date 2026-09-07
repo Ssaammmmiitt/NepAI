@@ -62,7 +62,7 @@ export function Login() {
               <BrandLogo size="lg" />
             </div>
             <h2 className="font-mono text-xl font-bold uppercase tracking-[0.06em] text-dt-text">
-              {mode === 'login' ? 'Welcome back' : 'Create account'}
+              {mode === 'login' ? 'Welcome' : 'Create account'}
             </h2>
             <p className="mt-2 text-sm text-dt-meta">
               {mode === 'login'
