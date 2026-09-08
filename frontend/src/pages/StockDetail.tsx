@@ -7,6 +7,7 @@ import { CurrentSnapshot } from '@/components/cards/CurrentSnapshot'
 import { AIPrediction } from '@/components/cards/AIPrediction'
 import { TechnicalIndicators } from '@/components/cards/TechnicalIndicators'
 import { ModelHealthCard } from '@/components/cards/ModelHealthCard'
+import { ExportModal } from '@/components/cards/ExportModal'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
@@ -17,6 +18,7 @@ import { useIndicators } from '@/hooks/useIndicators'
 import { useChartHeight } from '@/hooks/useChartHeight'
 import { usePortfolioStore } from '@/store/portfolioStore'
 import { useToastStore } from '@/store/toastStore'
+import { useWatchlistStore } from '@/store/watchlistStore'
 import { usePageEntrance, useRowEntrance } from '@/hooks/useAnimations'
 
 export function StockDetail() {
@@ -25,9 +27,13 @@ export function StockDetail() {
   const chartHeights = useChartHeight()
 
   const [showAddModal, setShowAddModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [quantity, setQuantity] = useState('')
   const [entryPrice, setEntryPrice] = useState('')
   const [addError, setAddError] = useState('')
+
+  const { hasTicker, addTicker, removeTicker, tickers } = useWatchlistStore()
+  const isWatched = hasTicker(upperTicker)
 
   const { ohlc, summary, loading: stockLoading } = useStockData(upperTicker)
   const { prediction, loading: predLoading, refetch: refetchPrediction } = usePrediction(upperTicker)
@@ -80,8 +86,33 @@ export function StockDetail() {
             : 'Stock detail & AI forecast'
         }
         action={
-          <Button onClick={() => setShowAddModal(true)}>Add to Portfolio</Button>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+            <Button
+              variant="ghost"
+              className="w-full sm:w-auto"
+              onClick={() => {
+                if (isWatched) {
+                  removeTicker(upperTicker)
+                  showToast(`Removed ${upperTicker} from watchlist`, 'success')
+                } else {
+                  if (tickers.length >= 20) {
+                    showToast('Watchlist limit reached (20 maximum)', 'error')
+                  } else {
+                    addTicker(upperTicker)
+                    showToast(`Added ${upperTicker} to watchlist`, 'success')
+                  }
+                }
+              }}
+            >
+              {isWatched ? 'Unwatch' : 'Watch'}
+            </Button>
+            <Button variant="secondary" className="w-full sm:w-auto" onClick={() => setShowExportModal(true)}>
+              Export CSV
+            </Button>
+            <Button className="w-full sm:w-auto" onClick={() => setShowAddModal(true)}>Add to Portfolio</Button>
+          </div>
         }
+        dataDate={summary?.latest_date || (ohlc.length > 0 ? ohlc[ohlc.length - 1].date : undefined)}
       />
       <PageWrapper>
         <div
@@ -169,6 +200,12 @@ export function StockDetail() {
           </Button>
         </form>
       </Modal>
+
+      <ExportModal
+        ticker={upperTicker}
+        open={showExportModal}
+        onClose={() => setShowExportModal(false)}
+      />
     </>
   )
 }

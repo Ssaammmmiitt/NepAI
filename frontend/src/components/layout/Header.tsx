@@ -7,23 +7,24 @@ interface HeaderProps {
   title: string
   subtitle?: string
   action?: ReactNode
+  dataDate?: string
 }
 
-function DataDateBadge() {
-  const dataUpdatedTo = useStockStore((s) => s.dataUpdatedTo)
-  if (!dataUpdatedTo) return null
-
+function DataDateBadge({ dataDate }: { dataDate?: string }) {
+  const storeDate = useStockStore((s) => s.dataUpdatedTo)
+  const displayDate = dataDate || storeDate
+  if (!displayDate) return null
   return (
     <div className="flex items-center gap-1.5 border border-dt-border bg-dt-bg px-2.5 py-1.5 font-mono text-xs text-dt-meta">
       <Database className="h-3 w-3 shrink-0" strokeWidth={1.5} />
       <span>
-        Data to <span className="text-dt-text">{dataUpdatedTo}</span>
+        Data to <span className="text-dt-text">{displayDate}</span>
       </span>
     </div>
   )
 }
 
-export function Header({ title, subtitle, action }: HeaderProps) {
+export function Header({ title, subtitle, action, dataDate }: HeaderProps) {
   return (
     <header className="border-b border-dt-border bg-dt-surface px-4 py-3 sm:px-5 sm:py-4 lg:px-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -37,12 +38,14 @@ export function Header({ title, subtitle, action }: HeaderProps) {
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
           {action ? (
-            <div className="w-full sm:w-auto [&_button]:w-full sm:[&_button]:w-auto [&_input]:w-full sm:[&_input]:w-auto">
+            <div className="w-full sm:w-auto">
               {action}
             </div>
           ) : null}
-          <DataDateBadge />
-          <LiveClock />
+          <div className="flex items-center gap-2">
+            <DataDateBadge dataDate={dataDate} />
+            <LiveClock />
+          </div>
         </div>
       </div>
     </header>

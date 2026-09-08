@@ -8,6 +8,8 @@ import { Login } from '@/pages/Login'
 import { Dashboard } from '@/pages/Dashboard'
 import { MoversPage } from '@/pages/MoversPage'
 import { StockDetail } from '@/pages/StockDetail'
+import { WatchlistPage } from '@/pages/WatchlistPage'
+import { ComparePage } from '@/pages/ComparePage'
 import { Portfolio } from '@/pages/Portfolio'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
@@ -56,6 +58,8 @@ export default function App() {
             <Route path="losers" element={<MoversPage type="loser" />} />
             <Route path="stock/:ticker" element={<StockDetail />} />
             <Route path="portfolio" element={<Portfolio />} />
+            <Route path="watchlist" element={<WatchlistPage />} />
+            <Route path="compare" element={<ComparePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Route>

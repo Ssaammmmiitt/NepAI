@@ -67,3 +67,34 @@ export function predictionLabel(day: number): string {
       return `Day ${day}`
   }
 }
+
+// ─── Export helpers ───────────────────────────────────────────────────────────
+
+import type { OHLCRow } from '@/types'
+
+const CSV_HEADER = 'date,open,high,low,close,volume,per_change'
+
+export function toCSV(rows: OHLCRow[]): string {
+  const lines = rows.map(
+    (r) =>
+      `${r.date},${r.open},${r.high},${r.low},${r.close},${r.volume},${r.per_change}`,
+  )
+  return [CSV_HEADER, ...lines].join('\n')
+}
+
+export function triggerDownload(
+  content: string,
+  filename: string,
+  mimeType = 'text/csv',
+): void {
+  const blob = new Blob([content], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+

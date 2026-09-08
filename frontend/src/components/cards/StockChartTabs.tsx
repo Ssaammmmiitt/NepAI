@@ -106,17 +106,29 @@ export function StockChartTabs({
   // Load full history when history tab is first opened
   useEffect(() => {
     if (activeTab !== 'history' || historyLoaded) return
-    setHistoryLoading(true)
-    stockAPI
-      .getHistory(ticker)
-      .then(({ data }) => {
-        setHistoryRows([...data.data].reverse())
-        setHistoryLoaded(true)
-      })
-      .catch(() => {
-        setHistoryLoaded(true)
-      })
-      .finally(() => setHistoryLoading(false))
+
+    let isMounted = true
+
+    const loadData = async () => {
+      if (isMounted) setHistoryLoading(true)
+      try {
+        const { data } = await stockAPI.getHistory(ticker)
+        if (isMounted) {
+          setHistoryRows([...data.data].reverse())
+          setHistoryLoaded(true)
+        }
+      } catch {
+        if (isMounted) setHistoryLoaded(true)
+      } finally {
+        if (isMounted) setHistoryLoading(false)
+      }
+    }
+
+    Promise.resolve().then(loadData)
+
+    return () => {
+      isMounted = false
+    }
   }, [activeTab, ticker, historyLoaded])
 
   // Chart tab: filter ohlc by period (anchored to latest data date, not today)
