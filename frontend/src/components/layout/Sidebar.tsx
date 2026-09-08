@@ -1,13 +1,15 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Briefcase, LogOut } from 'lucide-react'
+import { LayoutDashboard, Briefcase, Bookmark, GitCompare, LogOut } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/Button'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { BrandMark } from '@/components/layout/BrandMark'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/portfolio', label: 'Portfolio', icon: Briefcase, end: false },
+  { to: '/',          label: 'Dashboard', icon: LayoutDashboard, end: true  },
+  { to: '/portfolio', label: 'Portfolio', icon: Briefcase,       end: false },
+  { to: '/watchlist', label: 'Watchlist', icon: Bookmark,        end: false },
+  { to: '/compare',   label: 'Compare',   icon: GitCompare,      end: false },
 ]
 
 export function Sidebar() {

@@ -43,3 +43,14 @@ export function getChartTheme(isDark: boolean) {
     borderDownColor: chartColors.bearish,
   }
 }
+
+// ─── Compare chart — 5 distinct system-compliant colours ─────────────────────
+// Sources: dt-accent-bright, accent-orange, accent-cyan, warning, primary-active
+export const COMPARE_COLORS = [
+  '#10B981', // emerald — dt-accent-bright
+  '#ffc091', // peach   — accent-orange
+  '#38c8ff', // sky     — accent-cyan
+  '#ffd11a', // amber   — warning
+  '#cdffad', // lime    — primary-active
+] as const
+

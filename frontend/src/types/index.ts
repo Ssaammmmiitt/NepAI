@@ -135,3 +135,26 @@ export interface ApiError {
   error: string
   ticker?: string
 }
+
+// ─── Watchlist ───────────────────────────────────────────────────────────────
+
+export interface WatchlistItem {
+  ticker: string
+  addedAt: string // ISO date string
+}
+
+// ─── Compare ─────────────────────────────────────────────────────────────────
+
+export interface NormalisedPoint {
+  time: string
+  value: number
+}
+
+export interface CompareEntry {
+  ticker: string
+  color: string
+  data: OHLCRow[]
+  normalised: NormalisedPoint[]
+  summary: StockSummary | null
+  indicators: Indicators | null
+}

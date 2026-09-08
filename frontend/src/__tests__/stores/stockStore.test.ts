@@ -5,6 +5,9 @@ vi.mock('@/services/api', () => ({
   stockAPI: {
     listTickers: vi.fn(),
   },
+  healthAPI: {
+    check: vi.fn().mockResolvedValue({ data: { data_updated_to: '2026-01-01' } }),
+  },
 }))
 
 import { stockAPI } from '@/services/api'
