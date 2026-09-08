@@ -35,7 +35,11 @@ export function MoversList({ type }: MoversListProps) {
   const [sort, setSort] = useState<SortKey>('change')
 
   const stocks = useMemo(() => {
-    const filtered = tickers.filter((t) => (type === 'gainer' ? t.change > 0 : t.change < 0))
+    if (tickers.length === 0) return []
+    const latestDate = tickers.reduce((max, t) => (t.latest_date > max ? t.latest_date : max), '')
+    const activeTickers = tickers.filter((t) => t.latest_date === latestDate)
+
+    const filtered = activeTickers.filter((t) => (type === 'gainer' ? t.change > 0 : t.change < 0))
     return [...filtered].sort((a, b) => {
       switch (sort) {
         case 'ticker':
