@@ -27,7 +27,10 @@ const meta: Record<MoverType, { title: string; description: string }> = {
 export function TopMoversPanel({ type, compact = false, className = '' }: TopMoversPanelProps) {
   const { tickers } = useStockStore()
 
-  const stocks = [...tickers]
+  const latestDate = tickers.reduce((max, t) => (t.latest_date > max ? t.latest_date : max), '')
+  const activeTickers = tickers.filter((t) => t.latest_date === latestDate)
+
+  const stocks = [...activeTickers]
     .filter((t) => (type === 'gainer' ? t.change > 0 : t.change < 0))
     .sort((a, b) => (type === 'gainer' ? b.change - a.change : a.change - b.change))
     .slice(0, 5)

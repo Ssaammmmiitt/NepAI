@@ -20,12 +20,15 @@ export function MarketOverview({ activeMover }: MarketOverviewProps) {
   const containerRef = useRowEntrance('[data-animate]', { enabled: ready })
   const isDashboard = location.pathname === '/'
 
-  const gainers = tickers.filter((t) => t.change > 0).length
-  const losers = tickers.filter((t) => t.change < 0).length
-  const totalVolume = tickers.reduce((sum, t) => sum + t.volume, 0)
+  const latestDate = tickers.reduce((max, t) => (t.latest_date > max ? t.latest_date : max), '')
+  const activeTickers = tickers.filter((t) => t.latest_date === latestDate)
+
+  const gainers = activeTickers.filter((t) => t.change > 0).length
+  const losers = activeTickers.filter((t) => t.change < 0).length
+  const totalVolume = activeTickers.reduce((sum, t) => sum + t.volume, 0)
   const avgChange =
-    tickers.length > 0
-      ? tickers.reduce((sum, t) => sum + t.change, 0) / tickers.length
+    activeTickers.length > 0
+      ? activeTickers.reduce((sum, t) => sum + t.change, 0) / activeTickers.length
       : 0
 
   if (loading && tickers.length === 0) {

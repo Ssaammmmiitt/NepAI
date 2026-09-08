@@ -5,10 +5,13 @@ import { useStockStore } from '@/store/stockStore'
 export function SectorBreakdown() {
   const { tickers } = useStockStore()
 
-  const gainers = tickers.filter((t) => t.change > 0).length
-  const losers = tickers.filter((t) => t.change < 0).length
-  const neutral = tickers.filter((t) => t.change === 0).length
-  const total = tickers.length || 1
+  const latestDate = tickers.reduce((max, t) => (t.latest_date > max ? t.latest_date : max), '')
+  const activeTickers = tickers.filter((t) => t.latest_date === latestDate)
+
+  const gainers = activeTickers.filter((t) => t.change > 0).length
+  const losers = activeTickers.filter((t) => t.change < 0).length
+  const neutral = activeTickers.filter((t) => t.change === 0).length
+  const total = activeTickers.length || 1
 
   const segments = [
     {
