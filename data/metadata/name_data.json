@@ -2402,5 +2402,9 @@
   "NMBUR93_94": {
     "name": "4% NMB Urja Rinpatra (Energy Bond II) 2093/94",
     "sector": 6
+  },
+  "PBD93": {
+    "name": "6.25% Prime Bank Debenture 2093",
+    "sector": 6
   }
 }
