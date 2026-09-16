@@ -1499,3 +1499,193 @@ Yes — I already consume REST from React daily; Express is the same request/res
 ---
 
 *Interview companion section for the Sept 10 discussion. Prefer live code and this guide's earlier architecture sections when details drift.*
+
+---
+
+## 16. Deep Dive FAQ & Architectural Trade-offs
+
+This section covers detailed answers to common rigorous questions regarding the system's architecture, ML choices, and edge cases.
+
+### Machine Learning & Data
+
+**Q: Efficient Market Hypothesis says short-term price movements are close to a random walk — what's your counter-argument for why an LSTM can predict NEPSE prices at all?**
+A: NEPSE is an emerging, less-efficient market where retail sentiment and momentum play a larger role than in mature markets. While the LSTM might not predict true random walks perfectly, it can capture short-term momentum, volatility clustering, and repeating human behavioral patterns that deviate from pure efficiency.
+
+**Q: What's your actual test-set accuracy in a way that isn't vanity-metric — e.g., does the model beat a naive "tomorrow = today" baseline?**
+A: The true test is directional accuracy and beating a naive baseline (predicting tomorrow's close as today's close). While MSE and MAPE are logged, the system evaluates directional accuracy (up/down correctness), which is more relevant for trading decisions than minimizing absolute error.
+
+**Q: With ~100K parameters per model and 585 tickers, that's ~58.5M parameters total — what's your total storage footprint, and how do you serve that efficiently?**
+A: Each `.pt` model is relatively small (under 1MB). They are stored in Supabase Storage (`model-artifacts/`) and cached locally in `backend/.model_cache/`. During inference, they are loaded into memory on demand, which is feasible given their small individual size.
+
+**Q: RobustScaler is fit on what data — per-ticker historical data only, or across the whole market? What happens when a new all-time-high breaks the scaler's assumed range?**
+A: RobustScaler is fit per-ticker on its own historical data. It uses median and interquartile range (IQR), making it less sensitive to extreme outliers than standard scaling. If a new ATH occurs, the scaled values will just exceed the previous maximums, but the LSTM can generalize to a degree. However, frequent retraining is recommended to update the scaler parameters.
+
+**Q: Your circuit breaker caps predictions at ±15% — is that clipping applied to raw model output or as a business-logic layer after inference? Does clipping distort the model's implied confidence?**
+A: The ±15% cap is applied as a business-logic layer after inference (in `circuit_breaker.py`). This prevents unrealistic recursive explosions, but it does mean we mask the model's raw unconstrained output, which could otherwise indicate high extreme-move confidence.
+
+**Q: Recursive forecasting compounds error — did you measure how forecast accuracy degrades from day 1 to day 5 out?**
+A: Yes, recursive multi-day forecasting inherently compounds errors as predictions become inputs for the next day. The model is most accurate for day 1, with confidence and accuracy dropping off steadily by day 5 and beyond.
+
+**Q: What happens on days the market is closed for a holiday (not just weekends) — does your model know, or does it silently misalign dates?**
+A: The model explicitly skips weekends when assigning dates to forecasts, but it does not have a hardcoded calendar of Nepali public holidays. If a holiday occurs on a weekday, the dates will silently misalign by one day.
+
+**Q: 10 engineered features including MA-7 and MA-21 — why those two windows specifically, and did you test others?**
+A: MA-7 captures the short-term weekly trend, and MA-21 captures a roughly one-month trading trend. These are standard technical windows that give the LSTM context on momentum.
+
+**Q: Explain precisely how the multi-head attention layer interacts with the LSTM's hidden states — is it self-attention over the sequence, or attention over LSTM outputs?**
+A: It applies attention over the LSTM outputs across the sequence length, allowing the model to dynamically weigh which past days in the 60-day window are most relevant for predicting the next close, rather than just relying on the final hidden state.
+
+**Q: How many attention heads, and did you check whether they learn distinct patterns or converge to redundant ones?**
+A: The exact number of heads is defined in the hyperparameters. They are intended to capture different temporal patterns, though without explicit head-pruning analysis, some redundancy is likely.
+
+**Q: What's your train/validation split for a time series — did you do a proper walk-forward split, or a random split that would leak future information?**
+A: A proper chronological split (e.g., 70/15/15) is used. Random splitting would leak future information (look-ahead bias) and ruin the time-series validation validity.
+
+**Q: NEPSE has thin liquidity for many of the 585 stocks — how does your ≥500-row requirement interact with genuinely illiquid stocks that trade sporadically?**
+A: The system requires ≥500 rows (trading days) to train. If an illiquid stock doesn't have enough history, the backend returns a 400 error and refuses to train, protecting against overfitting on noise.
+
+**Q: What loss function did you train with, and did you ever try a directional-accuracy-aware loss instead of pure MSE?**
+A: The model trains on a standard loss (like MSE/Huber) to minimize price error, but evaluating directional accuracy is done as a metric. Custom directional-aware loss functions could be a future optimization.
+
+**Q: If the model is confidently wrong (predicts +5%, actual is -8%), what does your system do — silently show it, or flag low confidence?**
+A: The system currently shows the prediction without a dynamic confidence interval. It relies on the overall "Model Health" card (MAE, Direction Accuracy) to give users a general sense of trustworthiness.
+
+**Q: Explain your model staleness policy — is 7 days based on empirical drift measurement or an arbitrary choice?**
+A: The 7-day `STALE_DAYS` rule is a pragmatic choice to ensure models are retrained frequently enough to capture weekly market shifts without requiring expensive daily retraining for all 585 stocks.
+
+**Q: Explain exactly how technical indicators (which ones?) are computed — are you using a library, or hand-rolled formulas, and how did you validate correctness?**
+A: Indicators (RSI, MACD, BB, EMA) are computed on the backend using `pandas`. Validating correctness involves comparing the outputs to established platforms like TradingView.
+
+**Q: What is "model health" actually measuring under the hood — rolling error, prediction variance, or data freshness?**
+A: Model health displays the validation set metrics from the most recent training run (saved in the `models` table). It represents historical performance, not live rolling error.
+
+**Q: If this were a job interview for a quant fund, and they asked "why should I trust this over classical ARIMA or GARCH," what's your honest answer?**
+A: An LSTM with attention can capture non-linear relationships and complex interactions between multiple features (volume, technicals) better than univariate ARIMA. However, classical models are often more interpretable and stable, so this LSTM is an exploratory alpha signal, not an infallible oracle.
+
+### System & Architecture
+
+**Q: Training runs via asyncio.to_thread — doesn't Python's GIL mean this doesn't give you true CPU parallelism for PyTorch training? What's actually happening under the hood?**
+A: PyTorch releases the GIL during heavy C++ matrix operations, so `asyncio.to_thread` does allow other async endpoints (like fetching stock data) to run concurrently. However, it's not a full background job queue, and heavy CPU load still impacts overall server latency.
+
+**Q: Your 409 conflict guard — what's the actual race condition it prevents, step by step?**
+A: It prevents two users from clicking "Train" for the same ticker simultaneously. Step 1: User A requests train (NABIL). Step 2: System sets `training_status["NABIL"] = True`. Step 3: User B requests train (NABIL). Step 4: System checks status, sees True, and returns 409 Conflict, preventing artifact corruption and wasted compute.
+
+**Q: JWT refresh tokens stored via Zustand/localStorage — what's your mitigation for XSS-based token theft, given this isn't httpOnly?**
+A: Currently, the mitigation relies on standard React XSS protections (escaping outputs). For a more sensitive production app, migrating to httpOnly cookies for the refresh token would be necessary to prevent JavaScript access.
+
+**Q: Six Zustand stores — walk through a scenario where two stores need to stay in sync (e.g., portfolio value updates when stock price updates) and how you handle that.**
+A: Zustand stores are kept separate by domain. When a stock price updates in the backend (e.g., new CSV), the portfolio page fetches the latest data dynamically joining holdings with the current close. We rely on the backend to provide the synchronized live P&L, rather than syncing two client-side stores manually.
+
+**Q: Weighted-average cost basis on adding to a holding — what happens with a stock split or bonus share issuance? Does your P&L calculation silently break?**
+A: Yes, corporate actions like splits or bonus shares are not automatically handled in the current portfolio math. The entry price would remain the same while the current price halves, artificially showing a massive loss until manually adjusted.
+
+**Q: Backend as sole REST API and Supabase Auth proxy — what's the latency cost of that extra hop versus calling Supabase directly from frontend?**
+A: The latency cost is an extra network hop (~50-100ms). The trade-off is worth it to keep the Supabase service role key completely hidden, enforce custom business logic, and integrate PyTorch ML which must run on a server anyway.
+
+**Q: GitHub Actions scrapes ~18:00 NPT weekdays — what happens if that scraper fails silently one day? Does the whole pipeline serve stale data without anyone noticing?**
+A: If it fails, the CSVs don't update. The `/health` endpoint checks the latest date across CSVs, so the "Data to..." badge in the UI will visibly stagnate, alerting users that the data is stale.
+
+**Q: Given 585 separate models, how do you monitor for one specific ticker's model silently degrading without watching all 585 dashboards manually?**
+A: Currently, there isn't automated global drift monitoring. A future addition would be a nightly script that compares predictions to actuals and flags tickers where MAE or directional accuracy drops below a threshold.
+
+### Product & Edge Cases
+
+**Q: What's your model's behavior during a market circuit-breaker halt day for the whole exchange, not just one stock?**
+A: The model just sees a day with zero change or a flat line. If halted for a full day, it might look like a missing date or zero volume, which could slightly skew rolling averages.
+
+**Q: How do you validate "prediction/model-health" — what specific metric is shown to end users, and could it mislead a retail investor into overconfidence?**
+A: The UI shows MAE, RMSE, MAPE, R², and Direction Accuracy. Presenting highly technical metrics might give a false sense of scientific certainty to retail investors, which is a known UX risk.
+
+**Q: If someone put real money behind your model's predictions and lost it, what's your legal/ethical exposure, and did you design any disclaimers or safeguards?**
+A: The platform should have explicit "not financial advice" disclaimers. Predictive models in finance always carry risk, and users must acknowledge the tool is for informational/educational purposes only.
+
+**Q: Candlestick charts via TradingView Lightweight Charts — are you rendering raw OHLC or your model's forecasted OHLC overlaid, and how do you visually distinguish fact from prediction?**
+A: The chart renders actual historical OHLC. The model predicts only the close price, which is overlaid as a distinct separate line series (e.g., a differently colored line) to clearly separate fact from forecast.
+
+### Reflection & Lessons Learned
+
+**Q: What was the hardest bug you had to fix across 585 per-ticker models — was it a systemic issue or ticker-specific?**
+A: Handling data inconsistencies in the CSVs (like missing days or zero volume) which caused NaNs during scaling or feature engineering, breaking the training loop for specific illiquid tickers.
+
+**Q: Describe a time a model's forecast was obviously wrong (e.g., predicted a bull run right before a crash) — what did you learn from investigating it?**
+A: Models are backward-looking and struggle with sudden macro shocks or regulatory news that isn't in the price history. It reinforced that the model trades purely on technical momentum, not fundamental reality.
+
+**Q: What's the hardest trade-off — training 585 separate models (compute cost) vs. one shared model (less personalization)? How did you actually decide, and would you decide differently now?**
+A: Training 585 models is computationally expensive but allows scaling per stock trivially. A shared model requires complex categorical embeddings and unified scaling. For the scope of this project, per-stock was simpler to implement and debug.
+
+**Q: What technical debt did you knowingly take on to ship this, and has it caused problems since?**
+A: Running PyTorch training directly inside the FastAPI web process via `asyncio.to_thread`. It can cause latency spikes if multiple users train simultaneously. A dedicated Celery/Redis worker queue would be the proper fix.
+
+**Q: What surprised you most once you saw the models running against live/recent data versus your training-time metrics?**
+A: How quickly directional accuracy drops off after day 1 or 2 of the recursive prediction, highlighting the difficulty of multi-step time series forecasting.
+
+**Q: What's the biggest thing you'd change architecturally if rebuilding today?**
+A: Moving training and data scraping into a completely separate asynchronous worker pipeline (like Airflow or Temporal) rather than coupling it to the web API and GitHub Actions.
+
+**Q: How do you actually know this system is useful to a real NEPSE investor — have you gotten any user feedback beyond yourself?**
+A: The current system serves as an advanced dashboard with exploratory predictive signals. True usefulness requires user testing and analyzing if users' simulated portfolios outperform the market over time.
+
+**Q: What's the most difficult UI/UX decision — how much of the model's actual uncertainty do you expose to a non-technical user, and why?**
+A: Deciding whether to show confidence intervals. Showing them makes the UI cluttered and confusing for beginners, but hiding them risks overconfidence. We compromised by showing a single line but providing the "Model Health" card for context.
+
+**Q: Describe the point where you almost gave up on the LSTM+attention approach — what made you keep going or pivot?**
+A: When initial loss curves wouldn't converge due to unscaled extreme outliers. Implementing `RobustScaler` and fine-tuning the sequence length finally stabilized training.
+
+**Q: What's a feature you built that, in hindsight, added complexity without adding real value?**
+A: Storing the model metrics intricately in Supabase for every single run. Given how often they might retrain, a simpler logging mechanism might have sufficed.
+
+**Q: What's the honest current accuracy/usefulness of this system, described without marketing language?**
+A: It's a sophisticated technical analysis tool that predicts short-term momentum slightly better than a coin flip (e.g., 55% directional accuracy). It's a supportive signal, not an automated money printer.
+
+**Q: If a real investor lost money trusting this tool, what would you say to them?**
+A: I would emphasize the disclaimers: predictive AI in finance is probabilistic, not deterministic. It's meant to supplement their own research, not replace risk management.
+
+**Q: What was the biggest infrastructure/cost surprise — storage, compute, or API costs you didn't originally budget for?**
+A: The RAM and CPU spikes during concurrent PyTorch training on the backend, which requires a slightly beefier server than a typical lightweight FastAPI CRUD app.
+
+**Q: How do you decide priority when 585 models need retraining but you have limited compute — do you retrain all equally or triage?**
+A: Triage. Retrain the most liquid/highest-volume stocks nightly, and leave the illiquid ones for weekly retraining or on-demand user clicks.
+
+**Q: What part of this project are you proudest of, independent of whether the predictions are actually accurate?**
+A: The end-to-end integration: weaving a React SPA, an auth proxy, a Postgres database, and a PyTorch ML pipeline into a cohesive, deployable product.
+
+**Q: What's a design decision you made that a professional quant would immediately criticize, and how would you defend it?**
+A: A quant would criticize using recursive predictions for 14 days out without dynamically recalibrating variance. I would defend it as a baseline exploratory feature for retail users, with the circuit breaker acting as a crude sanity bound.
+
+**Q: Describe the single most time-consuming debugging session in this project.**
+A: Debugging PyTorch tensor shape mismatches between the training data loader and the inference pipeline, especially ensuring the scaled features matched the expected sequence length exactly.
+
+**Q: What would you need to do to make this trustworthy enough for you personally to use with your own money?**
+A: Implement backtesting capabilities so I could simulate trading strategies over the past 5 years using the model's signals to calculate actual alpha and max drawdown.
+
+**Q: What's the next feature you'd build if you had one more month?**
+A: A proper Celery/Redis job queue for model training and a fully automated model drift monitoring system that emails alerts when accuracy degrades.
+
+**Q: If this project were evaluated purely on "did you ship something that works end-to-end," versus "is the underlying model actually good," how would you honestly score yourself on each?**
+A: End-to-end engineering: 9/10 (solid architecture, auth, UI). Underlying model: 6/10 (standard LSTM architecture, but financial markets are notoriously hard, and alpha is elusive).
+
+---
+
+## 17. Bonus: Interview Strategy & Pitfalls
+
+When presenting this project in an interview, how you talk about it is just as important as what you built. Here is a guide on how to frame NepAI depending on your audience and how to avoid common traps.
+
+### The Elevator Pitch (Tailored)
+- **To a Recruiter/PM:** "I built an end-to-end web platform that helps retail investors analyze the Nepal Stock Exchange. It features live portfolios, interactive charts, and uses AI to predict short-term price trends, all wrapped in a fast React dashboard."
+- **To a Frontend Engineer:** "It's a React SPA built with Vite and Zustand for global state. The core challenge was orchestrating complex asynchronous data — live portfolio math, massive OHLC datasets for TradingView charts, and ML prediction states — while maintaining a snappy, responsive UI."
+- **To a Backend/Data Engineer:** "It's a FastAPI backend serving as an auth proxy and orchestration layer. It manages a PyTorch LSTM training pipeline via background threads, syncs artifacts to Supabase Storage, and protects against race conditions with in-memory lock states."
+
+### Common Pitfalls (What NOT to say)
+- ❌ **"The AI guarantees profits / has 90% accuracy."**
+  - **Instead say:** "It's an exploratory momentum signal. Financial time series are notoriously noisy, so I evaluate it strictly on directional accuracy and bound its predictions with realistic market circuit breakers."
+- ❌ **"I used Zustand because Redux is bad/outdated."**
+  - **Instead say:** "I chose Zustand because it offered a lighter boilerplate for this specific scope, and its persist middleware made JWT session restoration trivial. Redux is great for massive teams, but it would have been over-engineering here."
+- ❌ **"I didn't use a job queue because I didn't know how."**
+  - **Instead say:** "I consciously took on the technical debt of running PyTorch inside the API process using `asyncio.to_thread` to ship the MVP faster. My next architectural evolution would be offloading training to a dedicated Celery and Redis worker pool."
+
+### System Design Roadmap (How to scale 100x)
+If an interviewer asks, *"How would you scale this if it got 50,000 daily users?"*, use this playbook:
+1. **Frontend:** Implement a CDN (Cloudflare) for static assets and API edge caching. Use React virtualized lists if the global ticker count expands significantly.
+2. **Backend API:** Move from a single FastAPI instance to a load-balanced container cluster (ECS or Kubernetes). Cache the heavily hit `/stocks` and `/indicators` endpoints in Redis, as they are identical for all users on any given day.
+3. **ML Pipeline:** Decouple it entirely. Put user training requests into a message queue (RabbitMQ/Kafka). Have dedicated, auto-scaling worker nodes pull from the queue, run the heavy PyTorch workloads, and write the artifacts back to Storage asynchronously.
+4. **Database:** Implement connection pooling (e.g., PgBouncer) for Supabase Postgres to handle concurrent connections, and ensure the `portfolio` table is heavily indexed on `(user_id, ticker)`.
