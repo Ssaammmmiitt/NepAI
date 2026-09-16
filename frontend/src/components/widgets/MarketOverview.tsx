@@ -106,13 +106,13 @@ export function MarketOverview({ activeMover }: MarketOverviewProps) {
             {isLink ? (
               <Link
                 to={href}
-                className="dt-card block w-full cursor-pointer !p-4 transition-colors hover:border-dt-text hover:shadow-[4px_4px_0_0_var(--dt-shadow)] hover:-translate-x-0.5 hover:-translate-y-0.5"
+                className="dt-card block w-full cursor-pointer transition-colors hover:border-dt-text hover:shadow-[4px_4px_0_0_var(--dt-shadow)] hover:-translate-x-0.5 hover:-translate-y-0.5"
               >
                 {content}
               </Link>
             ) : (
               <Card
-                className={`!p-4 ${isActive ? 'border-dt-accent-bright bg-dt-accent-bright/5' : ''}`}
+                className={` ${isActive ? 'border-dt-accent-bright bg-dt-accent-bright/5' : ''}`}
               >
                 {content}
               </Card>
