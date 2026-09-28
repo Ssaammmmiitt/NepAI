@@ -2406,5 +2406,9 @@
   "PBD93": {
     "name": "6.25% Prime Bank Debenture 2093",
     "sector": 6
+  },
+  "LSD92": {
+    "name": "7% Laxmi Sunrise Debenture 2092",
+    "sector": 6
   }
 }
