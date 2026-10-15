@@ -2410,5 +2410,9 @@
   "LSD92": {
     "name": "7% Laxmi Sunrise Debenture 2092",
     "sector": 6
+  },
+  "BENH": {
+    "name": "Beni Hydropower Project Limited",
+    "sector": 2
   }
 }
